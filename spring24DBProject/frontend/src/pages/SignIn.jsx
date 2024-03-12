@@ -33,6 +33,17 @@ export default function SignIn() {
                     id="exampleInputPassword"
                   />
                 </div>
+
+                <div className="text-center">
+                  <div className="mt-5 pb-3">
+                    <p>
+                      New User?{" "}
+                      <a href="/signUp" className="text-decoration-none">
+                        Create an Account
+                      </a>
+                    </p>
+                  </div>
+                </div>
               </form>
             </div>
           </div>
