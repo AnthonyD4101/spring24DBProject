@@ -1,11 +1,11 @@
-import React from 'react';
+import React from "react";
 
 function GeneralCard() {
-    return(
-        <div className="genCard">
-    
-        </div>
-    )
+  return (
+    <div className="card">
+      <div className="card-body"></div>
+    </div>
+  );
 }
 
-export default GeneralCard
+export default GeneralCard;
