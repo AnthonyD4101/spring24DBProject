@@ -5,7 +5,7 @@ import Home from "./pages/Home";
 import EmployeeLanding from "./pages/EmployeeLanding";
 import CustomerLanding from "./pages/CustomerLanding";
 import SignIn from "./pages/SignIn";
-import signUp from "./pages/signUp";
+import SignUp from "./pages/signUp";
 import AccountSetup from "./pages/AccountSetup";
 
 import { Navbar } from "./components/Navbar";

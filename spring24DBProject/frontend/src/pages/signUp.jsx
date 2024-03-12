@@ -1,7 +1,7 @@
 import React from "react";
 
-import classes from "../components/UI/signUp.module.css";
+import classes from "../components/UI/SignUp.module.css";
 
-export default function signUp() {
+export default function SignUp() {
   return <h1>SignUp Page</h1>;
 }
