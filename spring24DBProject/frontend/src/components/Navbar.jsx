@@ -12,6 +12,9 @@ export const Navbar = () => {
           <div className="collapse navbar-collapse justify-content-end" id="navbarNav">
             <ul className="navbar-nav ml-auto">
               <li className="nav-item">
+                <a className="nav-link text-white" href="/">Home Page</a>
+              </li>
+              <li className="nav-item">
                 <a className="nav-link text-white" href="/parkInformation">Park Information</a>
               </li>
               <li className="nav-item">
