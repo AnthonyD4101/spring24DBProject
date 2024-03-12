@@ -1,0 +1,16 @@
+/* Navbar Component Styling */
+.navbar.navbar-expand-lg {
+    background-color: #33658A;
+    display: flex;
+    max-height: 60px;
+    overflow: hidden;
+}
+
+.nav-item {
+    margin-left: 30px;
+}
+
+.btn-warning {
+    background-color: #F6AE2D;
+    border-color: black;
+}
