@@ -1,0 +1,14 @@
+/* Card Styling */
+.signUpCard {
+    margin: auto;
+    margin-top: 15vh;
+    width: 120vh;
+    height: 60vh;
+    border-radius: 30px;
+}
+
+.signUpCardBody {
+    background-color: #86BBD8;
+    border-radius: 30px;
+}
+/* Card Styling */

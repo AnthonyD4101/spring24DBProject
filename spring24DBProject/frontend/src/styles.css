@@ -38,3 +38,10 @@ body {
     border-radius: 30px;
 }
 /* Card Styling */
+
+/* Sign Up Card */
+.sign-up {
+    margin-top: 10vh;
+    width: 190vh;
+    height: 70vh;
+}
