@@ -69,8 +69,11 @@ export default function SignIn() {
         <div className="container text-right">
           <span className="text-muted">
             <button type="button" className="btn btn-secondary">
-              <a href="/adminLogin" className="text-decoration-none text-white">
-                Admin Login
+              <a
+                href="/employeeSignIn"
+                className="text-decoration-none text-white"
+              >
+                Staff Login
               </a>
             </button>
           </span>
