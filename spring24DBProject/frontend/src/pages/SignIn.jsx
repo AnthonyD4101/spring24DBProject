@@ -4,7 +4,7 @@ export default function SignIn() {
   return (
     <div>
       <div className="row justify-content-center">
-        <div className="col-md-4 mb-4">
+        <div className="col-md-4 mb-8">
           <div className="card">
             <div className="card-body">
               <h1 className="my-4 text-center" style={{ color: "#2F4858" }}>
