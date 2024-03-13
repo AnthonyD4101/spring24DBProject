@@ -5,7 +5,7 @@ export default function MaintenancePage() {
   const navigate = useNavigate(); // For React Router v6
 
   const handleClickNewRequest = () => {
-    navigate("/signUp"); // For React Router v6
+    navigate("/signIn"); // For React Router v6
   };
   return (
     <>
