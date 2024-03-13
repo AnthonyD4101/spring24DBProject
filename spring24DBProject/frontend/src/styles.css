@@ -21,13 +21,14 @@ body {
 .btn-warning {
     background-color: #F6AE2D;
     border-color: black;
+    border-width: 2px;
 }
 /* Navbar Component Styling */
 
 /* Card Styling */
 .card {
     margin: auto;
-    margin-top: 15vh;
+    margin-top: 10vh;
     width: 70vh;
     height: 60vh;
     border-radius: 30px;
@@ -44,4 +45,16 @@ body {
     margin-top: 10vh;
     width: 190vh;
     height: 70vh;
+}
+/* */
+
+.btn-secondary {
+    border-width: 2px;
+    border-color: black;
+    background-color: #2F4858;
+}
+
+.btn-secondary:hover {
+    background-color: #2F4858;
+    border-color: #2F4858;
 }

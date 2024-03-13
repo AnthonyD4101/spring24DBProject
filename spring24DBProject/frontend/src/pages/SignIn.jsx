@@ -55,6 +55,27 @@ export default function SignIn() {
           </div>
         </div>
       </div>
+      <footer
+        className="footer py-3"
+        style={{
+          position: "absolute",
+          bottom: 0,
+          right: 0,
+          backgroundColor: "#33658A",
+          width: "100%",
+          textAlign: "right",
+        }}
+      >
+        <div className="container text-right">
+          <span className="text-muted">
+            <button type="button" className="btn btn-secondary">
+              <a href="/adminLogin" className="text-decoration-none text-white">
+                Admin Login
+              </a>
+            </button>
+          </span>
+        </div>
+      </footer>
     </div>
   );
 }
