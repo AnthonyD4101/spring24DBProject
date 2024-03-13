@@ -1,6 +1,7 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
-export default function SignIn() {
+export default function EmployeeSignIn() {
   return (
     <div>
       <div className="row justify-content-center">
@@ -8,7 +9,7 @@ export default function SignIn() {
           <div className="card">
             <div className="card-body">
               <h1 className="my-4 text-center" style={{ color: "#2F4858" }}>
-                Sign In
+                Staff Portal Sign In
               </h1>
               <form>
                 <div className="mb-3">
@@ -34,51 +35,16 @@ export default function SignIn() {
                   />
                 </div>
 
-                <div className="mt-3 text-center">
-                  <button type="submit" className="btn btn-primary">
+                <div className="mt-5 text-center">
+                  <Link to="/employeeLanding" className="btn btn-primary">
                     Sign In
-                  </button>
-                </div>
-
-                <div className="text-center">
-                  <div className="mt-5 pb-3">
-                    <p>
-                      New User?{" "}
-                      <a href="/signUp" className="text-decoration-none">
-                        Create an Account
-                      </a>
-                    </p>
-                  </div>
+                  </Link>
                 </div>
               </form>
             </div>
           </div>
         </div>
       </div>
-      <footer
-        className="footer py-3"
-        style={{
-          position: "absolute",
-          bottom: 0,
-          right: 0,
-          backgroundColor: "#33658A",
-          width: "100%",
-          textAlign: "right",
-        }}
-      >
-        <div className="container text-right">
-          <span className="text-muted">
-            <button type="button" className="btn btn-secondary">
-              <a
-                href="/employeeSignIn"
-                className="text-decoration-none text-white"
-              >
-                Staff Login
-              </a>
-            </button>
-          </span>
-        </div>
-      </footer>
     </div>
   );
 }
