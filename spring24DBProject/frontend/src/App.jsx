@@ -17,6 +17,7 @@ import AccountSetup from "./pages/AccountSetup";
 import EmployeeDashboard from "./pages/EmployeeDashboard";
 import EmployeeDataReports from "./pages/EmployeeDataReports";
 import EmployeeDepManagement from "./pages/EmployeeDepManagement";
+import TicketPurchase from "./pages/TicketPurchase";
 
 import { Navbar } from "./components/Navbar";
 import { StaffNavbar } from "./components/StaffNavbar";
@@ -44,6 +45,7 @@ function App() {
           <Route path="/dashboard" element={<EmployeeDashboard />} />
           <Route path="/dataReports" element={<EmployeeDataReports />} />
           <Route path="/depManagement" element={<EmployeeDepManagement />} />
+          <Route path="/ticketPurchase" element={<TicketPurchase />} />
         </Routes>
       </div>
     </>
