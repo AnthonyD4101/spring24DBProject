@@ -14,6 +14,7 @@ import EmployeeSignIn from "./pages/EmployeeSignIn";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import AccountSetup from "./pages/AccountSetup";
+import TicketPurchase from "./pages/TicketPurchase";
 
 import { Navbar } from "./components/Navbar";
 import { StaffNavbar } from "./components/StaffNavbar";
@@ -38,6 +39,7 @@ function App() {
           <Route path="/signIn" element={<SignIn />} />
           <Route path="/signUp" element={<SignUp />} />
           <Route path="/accountSetup" element={<AccountSetup />} />
+          <Route path="/ticketPurchase" element={<TicketPurchase />} />
         </Routes>
       </div>
     </>
