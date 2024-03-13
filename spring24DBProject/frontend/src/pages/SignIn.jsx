@@ -70,7 +70,7 @@ export default function SignIn() {
           <span className="text-muted">
             <button type="button" className="btn btn-secondary">
               <a
-                href="/employeeSignIn"
+                href="/staffSignIn"
                 className="text-decoration-none text-white"
               >
                 Staff Login

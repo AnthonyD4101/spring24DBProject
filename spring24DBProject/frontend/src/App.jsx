@@ -7,17 +7,17 @@ import {
 } from "react-router-dom";
 
 import Home from "./pages/Home";
-import EmployeeLanding from "./pages/EmployeeLanding";
-import CustomerLanding from "./pages/CustomerLanding";
 import ParkInformation from "./pages/ParkInformation";
-import EmployeeSignIn from "./pages/EmployeeSignIn";
+import StaffSignIn from "./pages/StaffSignIn";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/signUp";
-import AccountSetup from "./pages/AccountSetup";
-import EmployeeDashboard from "./pages/EmployeeDashboard";
-import EmployeeDataReports from "./pages/EmployeeDataReports";
-import EmployeeDepManagement from "./pages/EmployeeDepManagement";
 import TicketPurchase from "./pages/TicketPurchase";
+
+import AdminLanding from "./pages/AdminLanding";
+import AdminDashboard from "./pages/AdminDashboard";
+import AdminDataReports from "./pages/AdminDataReports";
+import AdminDepManagement from "./pages/AdminDepManagement";
+import AdminMainReports from "./pages/AdminMainReports";
 
 import { Navbar } from "./components/Navbar";
 import { StaffNavbar } from "./components/StaffNavbar";
@@ -25,7 +25,7 @@ import { StaffNavbar } from "./components/StaffNavbar";
 function App() {
   const location = useLocation();
 
-  const staffPaths = ["/employeeLanding"];
+  const staffPaths = ["/adminLanding"];
 
   const isStaffPage = staffPaths.includes(location.pathname);
 
@@ -35,17 +35,16 @@ function App() {
         {isStaffPage ? <StaffNavbar /> : <Navbar />}
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/employeeLanding" element={<EmployeeLanding />} />
-          <Route path="/customerLanding" element={<CustomerLanding />} />
           <Route path="/parkInformation" element={<ParkInformation />} />
-          <Route path="/employeeSignIn" element={<EmployeeSignIn />} />
+          <Route path="/staffSignIn" element={<StaffSignIn />} />
           <Route path="/signIn" element={<SignIn />} />
           <Route path="/signUp" element={<SignUp />} />
-          <Route path="/accountSetup" element={<AccountSetup />} />
-          <Route path="/dashboard" element={<EmployeeDashboard />} />
-          <Route path="/dataReports" element={<EmployeeDataReports />} />
-          <Route path="/depManagement" element={<EmployeeDepManagement />} />
           <Route path="/ticketPurchase" element={<TicketPurchase />} />
+          <Route path="/adminLanding" element={<AdminLanding />} />
+          <Route path="/dashboard" element={<AdminDashboard />} />
+          <Route path="/dataReports" element={<AdminDataReports />} />
+          <Route path="/depManagement" element={<AdminDepManagement />} />
+          <Route path="/mainReports" element={<AdminMainReports />} />
         </Routes>
       </div>
     </>

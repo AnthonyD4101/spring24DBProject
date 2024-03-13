@@ -44,6 +44,12 @@ const StaffSideNavbar = ({ onItemClick }) => {
             </ul>
           )}
         </li>
+        <li
+          className="list-group-item"
+          onClick={() => onItemClick("Maintenance Reports")}
+        >
+          Maintenance Reports
+        </li>
       </ul>
     </div>
   );

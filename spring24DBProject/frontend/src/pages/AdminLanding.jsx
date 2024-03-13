@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import StaffSideNavbar from "../components/StaffSideNavbar";
-import EmployeeDashboard from "./EmployeeDashboard";
-import EmployeeDataReports from "./EmployeeDataReports";
-import EmployeeDepManagement from "./EmployeeDepManagement";
+import AdminDashboard from "./AdminDashboard";
+import AdminDataReports from "./AdminDataReports";
+import AdminDepManagement from "./AdminDepManagement";
+import AdminMainReports from "./AdminMainReports";
 
-const EmployeeLanding = () => {
+const AdminLanding = () => {
   const [selectedPage, setSelectedPage] = useState("Dashboard");
 
   const handleItemClick = (pageName) => {
@@ -22,11 +23,10 @@ const EmployeeLanding = () => {
         <div className="col-md-9">
           <div className="main-content">
             {/* Render the selected page */}
-            {selectedPage === "Dashboard" && <EmployeeDashboard />}
-            {selectedPage === "Department Management" && (
-              <EmployeeDepManagement />
-            )}
-            {selectedPage === "Data Reports" && <EmployeeDataReports />}
+            {selectedPage === "Dashboard" && <AdminDashboard />}
+            {selectedPage === "Department Management" && <AdminDepManagement />}
+            {selectedPage === "Data Reports" && <AdminDataReports />}
+            {selectedPage === "Maintenance Reports" && <AdminMainReports />}
             {/* Add more pages as needed */}
           </div>
         </div>
@@ -35,4 +35,4 @@ const EmployeeLanding = () => {
   );
 };
 
-export default EmployeeLanding;
+export default AdminLanding;

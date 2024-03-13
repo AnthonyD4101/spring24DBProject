@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-export default function EmployeeSignIn() {
+export default function StaffSignIn() {
   return (
     <div>
       <div className="row justify-content-center">
@@ -36,7 +36,7 @@ export default function EmployeeSignIn() {
                 </div>
 
                 <div className="mt-5 text-center">
-                  <Link to="/employeeLanding" className="btn btn-primary">
+                  <Link to="/adminLanding" className="btn btn-primary">
                     Sign In
                   </Link>
                 </div>
