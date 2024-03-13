@@ -1,6 +1,12 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function MaintenancePage() {
+  const navigate = useNavigate(); // For React Router v6
+
+  const handleClickNewRequest = () => {
+    navigate("/signUp"); // For React Router v6
+  };
   return (
     <>
       <div className="justify">
@@ -18,7 +24,12 @@ export default function MaintenancePage() {
           <div className="col-md-5 mb-1">
             <div className="blank-card">
               <div className="blank-card-body d-flex flex-column align-items-center">
-                <button className="button styled-button">New Request</button>
+                <button
+                  className="button styled-button"
+                  onClick={handleClickNewRequest}
+                >
+                  New Request
+                </button>
                 <button className="button styled-button">Update Request</button>
                 <button className="button styled-button">
                   Complete Request
