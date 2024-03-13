@@ -5,7 +5,7 @@ import EmployeeDataReports from "./EmployeeDataReports";
 import EmployeeDepManagement from "./EmployeeDepManagement";
 
 const EmployeeLanding = () => {
-  const [selectedPage, setSelectedPage] = useState("");
+  const [selectedPage, setSelectedPage] = useState("Dashboard");
 
   const handleItemClick = (pageName) => {
     setSelectedPage(pageName);
@@ -22,10 +22,8 @@ const EmployeeLanding = () => {
         <div className="col-md-9">
           <div className="main-content">
             {/* Render the selected page */}
-            {selectedPage === "Dashboard" && <EmployeeDashboardDashboard />}
-            {selectedPage === "Data Reports" && (
-              <EmployeeDataReportsDataReports />
-            )}
+            {selectedPage === "Dashboard" && <EmployeeDashboard />}
+            {selectedPage === "Data Reports" && <EmployeeDataReports />}
             {selectedPage === "Department Management" && (
               <EmployeeDepManagement />
             )}

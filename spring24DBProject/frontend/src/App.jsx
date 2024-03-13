@@ -12,7 +12,7 @@ import CustomerLanding from "./pages/CustomerLanding";
 import ParkInformation from "./pages/ParkInformation";
 import EmployeeSignIn from "./pages/EmployeeSignIn";
 import SignIn from "./pages/SignIn";
-import SignUp from "./pages/SignUp";
+import SignUp from "./pages/signUp";
 import AccountSetup from "./pages/AccountSetup";
 import EmployeeDashboard from "./pages/EmployeeDashboard";
 import EmployeeDataReports from "./pages/EmployeeDataReports";
