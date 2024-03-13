@@ -34,6 +34,12 @@ export default function SignIn() {
                   />
                 </div>
 
+                <div className="mt-3 text-center">
+                  <button type="submit" className="btn btn-primary">
+                    Sign In
+                  </button>
+                </div>
+
                 <div className="text-center">
                   <div className="mt-5 pb-3">
                     <p>
