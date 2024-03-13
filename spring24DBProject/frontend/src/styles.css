@@ -58,3 +58,23 @@ body {
     background-color: #2F4858;
     border-color: #2F4858;
 }
+
+/* Staff Sidebar Styling */
+.sidebar {
+    position: fixed;
+    left: 0;
+    height: 100vh;
+    width: 40vh;
+
+    background-color: #86BBD8; 
+    border: 1px solid #dee2e6; 
+    padding: 10px; /* Padding */
+  }
+  
+  .list-group-item {
+    border: none; /* Remove default border */
+  }
+  
+  .list-group-item:not(:last-child) {
+    border-bottom: 1px solid #dee2e6; /* Add bottom border to separate items */
+  }

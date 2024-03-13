@@ -14,6 +14,9 @@ import EmployeeSignIn from "./pages/EmployeeSignIn";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import AccountSetup from "./pages/AccountSetup";
+import EmployeeDashboard from "./pages/EmployeeDashboard";
+import EmployeeDataReports from "./pages/EmployeeDataReports";
+import EmployeeDepManagement from "./pages/EmployeeDepManagement";
 
 import { Navbar } from "./components/Navbar";
 import { StaffNavbar } from "./components/StaffNavbar";
@@ -38,6 +41,9 @@ function App() {
           <Route path="/signIn" element={<SignIn />} />
           <Route path="/signUp" element={<SignUp />} />
           <Route path="/accountSetup" element={<AccountSetup />} />
+          <Route path="/dashboard" element={<EmployeeDashboard />} />
+          <Route path="/dataReports" element={<EmployeeDataReports />} />
+          <Route path="/depManagement" element={<EmployeeDepManagement />} />
         </Routes>
       </div>
     </>
