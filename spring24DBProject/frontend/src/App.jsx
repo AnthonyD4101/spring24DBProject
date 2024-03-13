@@ -18,7 +18,6 @@ import AdminDashboard from "./pages/AdminDashboard";
 import AdminDataReports from "./pages/AdminDataReports";
 import AdminDepManagement from "./pages/AdminDepManagement";
 import AdminMainReports from "./pages/AdminMainReports";
-import MaintenanceLanding from "./pages/MaintenanceLanding";
 
 import { Navbar } from "./components/Navbar";
 import { StaffNavbar } from "./components/StaffNavbar";
@@ -46,7 +45,6 @@ function App() {
           <Route path="/dataReports" element={<AdminDataReports />} />
           <Route path="/depManagement" element={<AdminDepManagement />} />
           <Route path="/mainReports" element={<AdminMainReports />} />
-          <Route path="/maintenanceLanding" element={<MaintenanceLanding />} />
         </Routes>
       </div>
     </>
