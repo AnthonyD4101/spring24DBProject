@@ -23,10 +23,10 @@ const EmployeeLanding = () => {
           <div className="main-content">
             {/* Render the selected page */}
             {selectedPage === "Dashboard" && <EmployeeDashboard />}
-            {selectedPage === "Data Reports" && <EmployeeDataReports />}
             {selectedPage === "Department Management" && (
               <EmployeeDepManagement />
             )}
+            {selectedPage === "Data Reports" && <EmployeeDataReports />}
             {/* Add more pages as needed */}
           </div>
         </div>

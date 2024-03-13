@@ -68,13 +68,48 @@ body {
 
     background-color: #86BBD8; 
     border: 1px solid #dee2e6; 
-    padding: 10px; /* Padding */
-  }
+    padding: 10px; 
+
+    overflow: hidden;
+    transition: width 0.3s ease;
+}
   
-  .list-group-item {
-    border: none; /* Remove default border */
-  }
-  
-  .list-group-item:not(:last-child) {
-    border-bottom: 1px solid #dee2e6; /* Add bottom border to separate items */
-  }
+.list-group-item {
+    cursor: pointer;
+    padding: 10px 15px;
+    color: black;
+    border: none;
+    background-color: #86BBD8;
+    transition: background-color 0.3s ease;
+}
+
+.list-group-item:hover {
+    background-color: #adcbe3;
+}
+
+.list-group-item.active {
+    background-color: #86BBD8;
+    color: black;
+}
+
+.list-group-item:not(:last-child) {
+    border-bottom: 1px solid black; /* Change border color here */
+}
+
+.list-group-submenu {
+    list-style: "-";
+    padding-top: 5px;
+    padding-left: 15px;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+}
+
+.list-group-submenu-item {
+    cursor: pointer;
+    padding: 5px 10px;
+    color: black;
+}
+
+.list-group-submenu-item:hover {
+    background-color: #adcbe3;
+}

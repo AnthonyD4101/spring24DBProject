@@ -27,22 +27,23 @@ const StaffSideNavbar = ({ onItemClick }) => {
           onClick={toggleDataReportsDropdown}
         >
           Data Reports
-          <ul className={`dropdown-menu ${isDataReportsOpen ? "show" : ""}`}>
-            <li
-              className="list-group-item"
-              onClick={() => onItemClick("Daily Rides")}
-            >
-              Daily Rides
-            </li>
-            <li
-              className="list-group-item"
-              onClick={() => onItemClick("Daily Profit")}
-            >
-              Daily Profit
-            </li>
-          </ul>
+          {isDataReportsOpen && (
+            <ul className="list-group-submenu">
+              <li
+                className="list-group-submenu-item"
+                onClick={() => onItemClick("Daily Rides")}
+              >
+                Daily Rides
+              </li>
+              <li
+                className="list-group-submenu-item"
+                onClick={() => onItemClick("Daily Profit")}
+              >
+                Daily Profit
+              </li>
+            </ul>
+          )}
         </li>
-        {/* Add more items as needed */}
       </ul>
     </div>
   );
