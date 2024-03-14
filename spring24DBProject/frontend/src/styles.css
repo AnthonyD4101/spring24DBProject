@@ -113,3 +113,52 @@ body {
 .list-group-submenu-item:hover {
     background-color: #adcbe3;
 }
+
+/*Dashboard Styling*/
+.dashboard {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+.personal-info, .schedule-calendar, .feedback {
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+.schedule-calendar {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.schedule-header {
+    display: flex;
+    justify-content: space-around;
+    background-color: #f0f0f0;
+    padding: 5px;
+    font-weight: bold;
+}
+
+.schedule-week {
+    display: flex;
+    justify-content: space-around;
+    padding: 5px;
+}
+
+.schedule-day {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 5px;
+}
+
+.highlight {
+    background-color: #ffcc00; /* Highlight color for the current day */
+}
