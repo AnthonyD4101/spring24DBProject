@@ -2,10 +2,10 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function AdminMainReports() {
-  const navigate = useNavigate(); // For React Router v6
+  const navigate = useNavigate();
 
   const handleClickNewRequest = () => {
-    navigate("/signIn"); // For React Router v6
+    navigate("/maintenanceRequestForm");
   };
   return (
     <>
