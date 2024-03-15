@@ -19,6 +19,7 @@ import AdminDataReports from "./pages/AdminDataReports";
 import AdminDepManagement from "./pages/AdminDepManagement";
 import AdminMainReports from "./pages/AdminMainReports";
 import MaintenanceRequestForm from "./pages/MaintenanceRequestForm";
+import MaintenanceUpReq from "./pages/MaintenanceUpdateRequest";
 
 import TicketDataReports from "./pages/TicketDataReports";
 import RideDataReports from "./pages/RideDataReports";
@@ -57,6 +58,10 @@ function App() {
           <Route path="/ticketDataReports" element={<TicketDataReports />} />
           <Route path="/rideDataReports" element={<RideDataReports />} />
           <Route path="/revenueDataReports" element={<RevenueDataReports />} />
+          <Route
+            path="/maintenanceUpdateRequest"
+            element={<MaintenanceUpReq />}
+          />
         </Routes>
       </div>
     </>
