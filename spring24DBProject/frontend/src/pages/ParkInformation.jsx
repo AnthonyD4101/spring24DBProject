@@ -21,9 +21,6 @@ export default function ParkInformation() {
             <li>
               <a href="#parking">Parking Information</a>
             </li>
-            <li>
-              <a href="#closed">Retired Attractions</a>
-            </li>
           </ul>
         </nav>
       </header>
@@ -36,12 +33,51 @@ export default function ParkInformation() {
           
         </section>
         <section id="parking" className={classes.about}>
-          
-        </section>
-        <section id="closed" className={classes.about}>
-          
-        </section>
+        <h2>
+          Parking Information
+        </h2>
+        <p>
+          Our theme park has four parkimng lots, three of which are accessible for all visitors. Please see your parking options listed below!
+        </p>
+        
+        <h3>
+          Parking Zone A - Premium Parking
+        </h3>
+        <p>
+          Parking Zone A is our premium parking area, offering shaded parking spots closest to the entrance. 
+          It's the ideal choice for guests seeking convenience and comfort. 
+          While parking here comes at a premium, you'll enjoy the benefit of quick access to the park, making it perfect for those who prioritize ease of entry.
+        </p>
+        <p>
+          Parking in this zone costs $30 per day.
+        </p>
 
+        <h3>
+          Parking Zone B - Free Parking
+        </h3>
+        <p>
+          Parking Zone B is our largest parking area and it's completely free! 
+          Although it's not as close to the entrance as Zone A, it provides ample space for parking and is still within a 
+          reasonable walking distance to the park.
+        </p>
+
+        <h3>
+          Parking Zone C - Free Parking
+        </h3>
+        <p>
+          Parking Zone C is a smaller free parking area, located slightly further from the entrance compared to Zones A and B. 
+          While it may not offer as many parking spots, it's still a viable choice for guests looking for complimentary parking options. 
+        </p>
+
+        <h3>
+          Parking Zone D - Employees Only
+        </h3>
+        <p>
+          Please note that Zone D is reserved exclusively for employees of the theme park. 
+          This ensures that our staff have convenient parking access while they work hard to make your visit enjoyable.
+        </p>
+
+        </section>
       </main>
 
 
