@@ -163,7 +163,7 @@ body {
     background-color: #ffcc00; /* Highlight color for the current day */
 }
 
-/* Ticket Data Report Styling */
+/* Data Reports Styling */
 .ticket-report-container {
     margin-top: 3%;
     margin-left: 3%;
@@ -171,6 +171,12 @@ body {
 }
 
 .ride-report-container {
+    margin-top: 3%;
+    margin-left: 3%;
+    margin-right: 10%;
+}
+
+.revenue-report-container {
     margin-top: 3%;
     margin-left: 3%;
     margin-right: 10%;
