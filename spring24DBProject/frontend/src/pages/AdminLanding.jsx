@@ -7,6 +7,9 @@ import AdminMainReports from "./AdminMainReports";
 import TicketDataReports from "./TicketDataReports";
 import RideDataReports from "./RideDataReports";
 import RevenueDataReports from "./RevenueDataReports";
+import AddEmployee from "./AddEmployeeDataEntryForm";
+import UpdateEmployee from "./UpdateEmployeeDataEntryForm";
+import DeleteEmployee from "./DeleteEmployeeDataEntryForm";
 
 const AdminLanding = () => {
   const [selectedPage, setSelectedPage] = useState("Dashboard");
@@ -33,6 +36,9 @@ const AdminLanding = () => {
             {selectedPage === "Ticket Data Reports" && <TicketDataReports />}
             {selectedPage === "Ride Data Reports" && <RideDataReports />}
             {selectedPage === "Revenue Data Reports" && <RevenueDataReports />}
+            {selectedPage === "Add Employee Data Entry Form" && <AddEmployee />}
+            {selectedPage === "Update Employee Data Entry Form" && <UpdateEmployee />}
+            {selectedPage === "Delete Employee Data Entry Form" && <DeleteEmployee />}
             {/* Add more pages as needed */}
           </div>
         </div>
