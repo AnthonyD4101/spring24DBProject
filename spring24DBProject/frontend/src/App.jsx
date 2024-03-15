@@ -20,6 +20,8 @@ import AdminDepManagement from "./pages/AdminDepManagement";
 import AdminMainReports from "./pages/AdminMainReports";
 import MaintenanceRequestForm from "./pages/MaintenanceRequestForm";
 import MaintenanceUpReq from "./pages/MaintenanceUpdateRequest";
+import MaintenanceCompReq from "./pages/MaintenanceCompleteRequest";
+import GenerateMaintRep from "./pages/GenerateMaintenanceReport";
 
 import { Navbar } from "./components/Navbar";
 import { StaffNavbar } from "./components/StaffNavbar";
@@ -48,12 +50,20 @@ function App() {
           <Route path="/depManagement" element={<AdminDepManagement />} />
           <Route path="/mainReports" element={<AdminMainReports />} />
           <Route
-            path="/maintenanceRequestForm"
+            path="/adminLanding/maintenanceRequestForm"
             element={<MaintenanceRequestForm />}
           />
           <Route
-            path="/maintenanceUpdateRequest"
+            path="/adminLanding/maintenanceUpdateRequest"
             element={<MaintenanceUpReq />}
+          />
+          <Route
+            path="/adminLanding/maintenanceCompleteRequest"
+            element={<MaintenanceCompReq />}
+          />
+          <Route
+            path="/adminLanding/GenerateMaintenanceReport"
+            element={<GenerateMaintRep />}
           />
         </Routes>
       </div>

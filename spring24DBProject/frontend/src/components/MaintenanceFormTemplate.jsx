@@ -94,7 +94,7 @@ export default function MaintenanceFormTemplate({ onSubmit }) {
                   fontWeight: "bold",
                 }}
               >
-                Briefly Describe the Problem*
+                Reason for Request*
               </label>
               <div class="mb-3">
                 <textarea
@@ -188,7 +188,7 @@ export default function MaintenanceFormTemplate({ onSubmit }) {
                       fontWeight: "bold",
                     }}
                   >
-                    Cost of Maintenance*
+                    Total Cost of Maintenance*
                   </label>
                   <input
                     className="form-control"
