@@ -7,16 +7,17 @@ export default function TicketDataReports() {
   const [ticketType, setTicketType] = useState("all");
   const [ticketData, setTicketData] = useState([]);
   const [totalTickets, setTotalTickets] = useState(0);
+  const [totalRevenue, setTotalRevenue] = useState(0);
 
   const handleGenerateReport = () => {
     // Perform data fetching based on startDate and endDate
     // Replace this with your actual data fetching logic
     const fetchedData = [
-      { date: "2024-03-10", type: "GA", tickets: 15 },
-      { date: "2024-03-10", type: "KI", tickets: 5 },
-      { date: "2024-03-11", type: "KI", tickets: 20 },
-      { date: "2024-03-12", type: "GA", tickets: 18 },
-      { date: "2024-03-12", type: "KI", tickets: 8 },
+      { date: "2024-03-10", type: "GA", tickets: 15, price: 55 },
+      { date: "2024-03-10", type: "KI", tickets: 5, price: 35 },
+      { date: "2024-03-11", type: "KI", tickets: 20, price: 35 },
+      { date: "2024-03-12", type: "GA", tickets: 18, price: 55 },
+      { date: "2024-03-12", type: "KI", tickets: 8, price: 35 },
     ];
 
     // Filter fetched data based on ticketType
@@ -25,7 +26,6 @@ export default function TicketDataReports() {
       filteredData = fetchedData.filter((entry) => entry.type === ticketType);
     }
 
-    // Generate an array of dates between startDate and endDate (inclusive)
     // Generate an array of dates between startDate and endDate (inclusive)
     const dateRange = [];
     let currentDate = new Date(startDate);
@@ -49,30 +49,52 @@ export default function TicketDataReports() {
         // Process the data for this date
         let gaTickets = 0;
         let kiTickets = 0;
+        let gaRevenue = 0;
+        let kiRevenue = 0;
         filteredData.forEach((entry) => {
           if (entry.date === date) {
             if (entry.type === "GA") {
               gaTickets += entry.tickets;
+              gaRevenue += entry.tickets * entry.price;
             } else if (entry.type === "KI") {
               kiTickets += entry.tickets;
+              kiRevenue += entry.tickets * entry.price;
             }
           }
         });
         // Add the processed data to flattenedData
         if (gaTickets > 0) {
-          flattenedData.push({ date, type: "GA", tickets: gaTickets });
+          flattenedData.push({
+            date,
+            type: "GA",
+            tickets: gaTickets,
+            revenue: gaRevenue,
+          });
         }
         if (kiTickets > 0) {
-          flattenedData.push({ date, type: "KI", tickets: kiTickets });
+          flattenedData.push({
+            date,
+            type: "KI",
+            tickets: kiTickets,
+            revenue: kiRevenue,
+          });
         }
         // Add the date to the set of processed dates
         processedDates.add(date);
       }
     });
 
-    // Set the total tickets
-    const total = flattenedData.reduce((acc, curr) => acc + curr.tickets, 0);
-    setTotalTickets(total);
+    // Set the total tickets and total revenue
+    const totalTickets = flattenedData.reduce(
+      (acc, curr) => acc + curr.tickets,
+      0
+    );
+    const totalRevenue = flattenedData.reduce(
+      (acc, curr) => acc + curr.revenue,
+      0
+    );
+    setTotalTickets(totalTickets);
+    setTotalRevenue(totalRevenue);
 
     setTicketData(flattenedData);
   };
@@ -124,6 +146,7 @@ export default function TicketDataReports() {
             <th>Date</th>
             <th>Ticket Type</th>
             <th>Tickets Bought</th>
+            <th>Ticket Revenue</th>
           </tr>
         </thead>
         <tbody>
@@ -132,14 +155,15 @@ export default function TicketDataReports() {
               <td>{entry.date}</td>
               <td>{entry.type}</td>
               <td>{entry.tickets}</td>
+              <td>${entry.revenue}</td>
             </tr>
           ))}
           <tr>
-            <td colSpan="2">
+            <td colSpan="3">
               <b>Total</b>
             </td>
             <td>
-              <b>{totalTickets}</b>
+              <b>${totalRevenue}</b>
             </td>
           </tr>
         </tbody>
