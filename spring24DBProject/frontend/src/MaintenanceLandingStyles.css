@@ -38,10 +38,20 @@
   }
 /* Button Styling */
 
-/* Sign Up Card */
+/* Maintenance Request Card */
 .MaintReq {
   margin-top: 10vh;
   width: 100vh;
   height: 60vh;
 }
-/* */
+/* Maintenance Request Card */
+
+/* Card Styling */
+.MaintReqUp {
+  margin: auto;
+  margin-top: 10vh;
+  width: 70vh;
+  height: 60vh;
+  border-radius: 30px;
+}
+/* Card Styling */

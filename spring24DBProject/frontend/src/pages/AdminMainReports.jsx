@@ -3,9 +3,13 @@ import { useNavigate } from "react-router-dom";
 
 export default function AdminMainReports() {
   const navigate = useNavigate();
+  const navigate2 = useNavigate();
 
   const handleClickNewRequest = () => {
     navigate("/maintenanceRequestForm");
+  };
+  const handleClickUpdateRequest = () => {
+    navigate2("/maintenanceUpdateRequest");
   };
   return (
     <>
@@ -30,7 +34,12 @@ export default function AdminMainReports() {
                 >
                   New Request
                 </button>
-                <button className="button styled-button">Update Request</button>
+                <button
+                  className="button styled-button"
+                  onClick={handleClickUpdateRequest}
+                >
+                  Update Request
+                </button>
                 <button className="button styled-button">
                   Complete Request
                 </button>
