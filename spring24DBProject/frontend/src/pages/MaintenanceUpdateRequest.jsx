@@ -60,6 +60,13 @@ export default function MaintUpReq() {
               <option value="2">Two</option>
               <option value="3">Three</option>
             </select>
+
+            <div className="mt-3 text-center">
+              <img
+                src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMXp3cXM3aXNqZ21kajNwZWJvcWFqZzF5NHR1c3ByM3l0aTM0OTduMiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/G0bGhDeDDJhub3y6Ai/giphy-downsized-large.gif"
+                alt="Description of the GIF"
+              />
+            </div>
           </div>
         </div>
       </div>
