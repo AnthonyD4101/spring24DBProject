@@ -232,7 +232,12 @@ export default function TicketPurchase() {
                   Total Amount = ${totalPrice}
                 </div>
                 <div className="w-full px-3 text-center">
-                  <button className="btn btn-primary mx-auto mt-3" onClick={() => alert("Tickets have been purchased!")}>Purchase</button>
+                  <button
+                    className="btn btn-primary mx-auto mt-3"
+                    onClick={() => alert("Tickets have been purchased!")}
+                  >
+                    Purchase
+                  </button>
                 </div>
               </>
             )}
