@@ -20,6 +20,10 @@ import AdminDepManagement from "./pages/AdminDepManagement";
 import AdminMainReports from "./pages/AdminMainReports";
 import MaintenanceRequestForm from "./pages/MaintenanceRequestForm";
 
+import TicketDataReports from "./pages/TicketDataReports";
+import RideDataReports from "./pages/RideDataReports";
+import RevenueDataReports from "./pages/RevenueDataReports";
+
 import { Navbar } from "./components/Navbar";
 import { StaffNavbar } from "./components/StaffNavbar";
 
@@ -50,6 +54,9 @@ function App() {
             path="/maintenanceRequestForm"
             element={<MaintenanceRequestForm />}
           />
+          <Route path="/ticketDataReports" element={<TicketDataReports />} />
+          <Route path="/rideDataReports" element={<RideDataReports />} />
+          <Route path="/revenueDataReports" element={<RevenueDataReports />} />
         </Routes>
       </div>
     </>

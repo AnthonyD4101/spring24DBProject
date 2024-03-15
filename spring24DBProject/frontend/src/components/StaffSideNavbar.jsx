@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const StaffSideNavbar = ({ onItemClick }) => {
   const [isDataReportsOpen, setIsDataReportsOpen] = useState(false);
@@ -31,15 +32,21 @@ const StaffSideNavbar = ({ onItemClick }) => {
             <ul className="list-group-submenu">
               <li
                 className="list-group-submenu-item"
-                onClick={() => onItemClick("Daily Rides")}
+                onClick={() => onItemClick("Ticket Data Reports")}
               >
-                Daily Rides
+                Ticket Reports
               </li>
               <li
                 className="list-group-submenu-item"
-                onClick={() => onItemClick("Daily Profit")}
+                onClick={() => onItemClick("Ride Data Reports")}
               >
-                Daily Profit
+                Ride Reports
+              </li>
+              <li
+                className="list-group-submenu-item"
+                onClick={() => onItemClick("Revenue Data Reports")}
+              >
+                Revenue Reports
               </li>
             </ul>
           )}
