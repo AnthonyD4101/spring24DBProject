@@ -2,14 +2,29 @@
 .blank-card {
     margin: auto;
     margin-top: 10vh;
-    width: 70vh;
-    height: 60vh;
-    border-radius: 30px;
+    width: auto;
+    height: auto;
+    border-radius: auto;
 }
 
 .blank-card-body {
     background-color: #E7EEEF;
     border-radius: 30px;
+}
+/* Blank Card Styling */
+
+/* Blank Card Styling */
+.report-card {
+  margin: auto;
+  margin-top: 10vh;
+  width: 180vh;
+  height: auto;
+  border-radius: auto;
+}
+
+.report-card-body {
+  background-color: #E7EEEF;
+  border-radius: 30px;
 }
 /* Blank Card Styling */
 
@@ -19,7 +34,7 @@
     color: #2F4858; /* For readability on dark background */
     border: none;
     margin: 1rem; /* Adjust space between buttons */
-    padding: 10px 15px; /* Adjust padding */
+    padding: 5px 5px; /* Adjust padding */
     cursor: pointer;
     border-radius: 30px; /* Rounded corners */
     font-family: 'Arial', sans-serif; /* Match font family of "Current Requests" */
@@ -28,9 +43,8 @@
     white-space: nowrap; /* Prevent text from wrapping */
     box-sizing: border-box; /* Include padding and border in the width and height */
     height: 11vh;
-    width: 70vh; /* Set a fixed width for all buttons */
+    width: 60vh; /* Set a fixed width for all buttons */
     text-align: center; /* Center the text inside the button */
-    display: block; /* Make the buttons block elements */
   }
   
   .styled-button:hover {
@@ -55,3 +69,10 @@
   border-radius: 30px;
 }
 /* Card Styling */
+
+h28 {
+  font-family: 'Arial';
+  color: #2F4858;
+  font-size: 40px;
+  font-weight: bold;
+}
