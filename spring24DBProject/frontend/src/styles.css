@@ -78,7 +78,7 @@ body {
     border: 1px solid #dee2e6; 
     padding: 10px; 
 
-    overflow: hidden;
+    overflow-x: hidden; 
     transition: width 0.3s ease;
 }
   
@@ -197,3 +197,16 @@ body {
     border-radius: 5px; /* Adjust border-radius to make the box rounded */
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Optional: Add shadow for depth */
   }
+
+  .sidenav {
+    height: 100%; /* Full-height: remove this if you want "auto" height */
+    width: 160px; /* Set the width of the sidebar */
+    position: fixed; /* Fixed Sidebar (stay in place on scroll) */
+    z-index: 1; /* Stay on top */
+    top: 0; /* Stay at the top */
+    left: 0;
+    background-color: #111; /* Black */
+    overflow-x: hidden; /* Disable horizontal scroll */
+    padding-top: 20px;
+  }
+  
