@@ -158,11 +158,13 @@ export default function GenerateMaintRep() {
               <table class="table table-success table-striped">
                 <thead>
                   <tr>
-                    <th scope="col">ID #</th>
-                    <th scope="col">Attraction Name</th>
-                    <th scope="col">Status</th>
+                    <th scope="col">Maintenance ID</th>
+                    <th scope="col">Attraction Name / ID</th>
                     <th scope="col">Start Date</th>
                     <th scope="col">Completion Date</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Requested By</th>
+                    <th scope="col">Total Cost</th>
                     <th scope="col">Description</th>
                   </tr>
                 </thead>
