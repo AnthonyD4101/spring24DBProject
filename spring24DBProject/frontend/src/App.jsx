@@ -38,6 +38,8 @@ import UpdateVendor from "./pages/UpdateVendorDataEntryForm";
 import DeleteVendor from "./pages/DeleteVendorDataEntryForm";
 import AddAttractionLog from "./pages/AddAttractionLogDataEntryForm";
 import AddWeatherLog from "./pages/AddWeatherLogDataEntryForm";
+import AddDepartment from "./pages/AddDepartmentDataEntryForm.";
+import UpdateDepartment from "./pages/UpdateDepartmentDataEntryForm";
 
 import { Navbar } from "./components/Navbar";
 import { StaffNavbar } from "./components/StaffNavbar";
@@ -84,6 +86,8 @@ function App() {
           <Route path="/deletevendordataentryform" element={<DeleteVendor />} />
           <Route path="/addattractionlogdataentryform" element={<AddAttractionLog />} />
           <Route path="/addweatherlogdataentryform" element={<AddWeatherLog />} />
+          <Route path="/adddepartmentlogdataentryform" element={<AddDepartment />} />
+          <Route path="/updatedepartmentlogdataentryform" element={<UpdateDepartment />} />
         </Routes>
       </div>
     </>

@@ -95,6 +95,18 @@ const StaffSideNavbar = ({ onItemClick }) => {
               >
                 Add to Weather Log
               </li>
+              <li
+                className="list-group-submenu-item"
+                onClick={() => onItemClick("Add Department Data Entry Form")}
+              >
+                Add Department
+              </li>
+              <li
+                className="list-group-submenu-item"
+                onClick={() => onItemClick("Update Department Data Entry Form")}
+              >
+                Update Department
+              </li>
             </ul>
           )}
         </li>
