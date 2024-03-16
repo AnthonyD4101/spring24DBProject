@@ -137,7 +137,7 @@ export default function GenerateMaintRep() {
               <select
                 class="form-select"
                 aria-label="Default select example"
-                style={{ marginBottom: "10vh" }}
+                style={{ marginBottom: "10px" }}
                 value={selectedStatus}
                 onChange={handleStatusChange}
               >
@@ -146,6 +146,14 @@ export default function GenerateMaintRep() {
                 <option value="2">Active</option>
                 <option value="3">Completed</option>
               </select>
+
+              <button
+                class="btn btn-primary"
+                type="button"
+                style={{ marginBottom: "10vh" }}
+              >
+                Generate Report
+              </button>
 
               <table class="table table-success table-striped">
                 <thead>
