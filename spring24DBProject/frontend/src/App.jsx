@@ -61,15 +61,15 @@ function App() {
           <Route path="/adminLanding" element={<AdminLanding />} />
           <Route path="/dashboard" element={<AdminDashboard />} />
           <Route path="/dataReports" element={<AdminDataReports />} />
+          <Route path="/ticketDataReports" element={<TicketDataReports />} />
+          <Route path="/rideDataReports" element={<RideDataReports />} />
+          <Route path="/revenueDataReports" element={<RevenueDataReports />} />
           <Route path="/depManagement" element={<AdminDepManagement />} />
           <Route path="/mainReports" element={<AdminMainReports />} />
           <Route
             path="/adminLanding/maintenanceRequestForm"
             element={<MaintenanceRequestForm />}
           />
-          <Route path="/ticketDataReports" element={<TicketDataReports />} />
-          <Route path="/rideDataReports" element={<RideDataReports />} />
-          <Route path="/revenueDataReports" element={<RevenueDataReports />} />
           <Route
             path="/adminLanding/maintenanceUpdateRequest"
             element={<MaintenanceUpReq />}
@@ -82,6 +82,7 @@ function App() {
             path="/adminLanding/GenerateMaintenanceReport"
             element={<GenerateMaintRep />}
           />
+          <Route path="/depManagement" element={<AdminDepManagement />} />
           <Route path="/addemployeedataentryform" element={<AddEmployee />} />
           <Route
             path="/updateemployeedataentryform"
