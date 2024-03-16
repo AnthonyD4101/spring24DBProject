@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-export default function TicketPurchase() {
+export default function StaffTicketPurchase() {
   // State variables to manage form inputs
   const [numTickets, setNumTickets] = useState("");
   const [ticketType, setTicketType] = useState([]);
@@ -11,8 +11,8 @@ export default function TicketPurchase() {
   const [totalPrice, setTotalPrice] = useState("");
 
   const prices = new Map([
-    ["GA", 60],
-    ["KI", 40],
+    ["DG", 48],
+    ["DK", 32],
     ["NA", 0],
     ["AB", 15],
     ["DF", 25],
@@ -71,17 +71,20 @@ export default function TicketPurchase() {
   return (
     <div className="row justify-content-center">
       <div className="col md-4 mb-4">
-        <div className="card sign-up">
+        <div className="card dataEntryForm">
           <div className="card-body">
             <h1 className="my-2 text-center" style={{ color: "#2F4858" }}>
               Purchase Tickets
             </h1>
-            <div className="text-center">
-              General Admission Tickets (GA): $60, for all customers above 10
+            <div className="text-center mb-1">
+              All employees enjoy a 20% discount on ticket prices
+            </div>
+            <div className="text-center mb-1">
+              General Admission Tickets (GA): $48, for all customers above 10
               years old
             </div>
-            <div className="text-center">
-              Kid Tickets (KI): $40, for all customers between 3 and 10 years
+            <div className="text-center mb-1">
+              Kid Tickets (KI): $32, for all customers between 3 and 10 years
               old
             </div>
             <div className="text-center">
@@ -140,8 +143,8 @@ export default function TicketPurchase() {
                       required
                     ></input>
                     <datalist id={`datalistOptions${index}`}>
-                      <option value="GA">General Admission (10+)</option>
-                      <option value="KI">Kids (3-10)</option>
+                      <option value="DG">General Admission (10+)</option>
+                      <option value="DK">Kids (3-10)</option>
                     </datalist>
                   </div>
                 ))}

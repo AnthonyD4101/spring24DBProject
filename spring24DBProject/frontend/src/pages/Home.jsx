@@ -173,14 +173,14 @@ export default function Home() {
             <h3>General Admission</h3>
             <p>
               General Admission tickets are for all customers above the age of
-              10. General Admission tickets are $55 for each day.
+              10. General Admission tickets are $60 for each day.
             </p>
           </div>
           <div>
             <h3>Kids</h3>
             <p>
               Kid tickets are for all customers between the ages of 3 and 10.
-              Kid tickets are $35 for each day.
+              Kid tickets are $40 for each day.
             </p>
           </div>
           <div>

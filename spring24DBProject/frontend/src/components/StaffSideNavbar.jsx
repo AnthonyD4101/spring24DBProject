@@ -23,6 +23,12 @@ const StaffSideNavbar = ({ onItemClick }) => {
           Dashboard
         </li>
         <li
+          className="list-group-item"
+          onClick={() => onItemClick("Purchase Tickets")}
+        >
+          Purchase Tickets
+        </li>
+        <li
           className={`list-group-item ${isDataEntryFormsOpen ? "active" : ""}`}
           onClick={toggleDataEntryFormsDropdown}
         >

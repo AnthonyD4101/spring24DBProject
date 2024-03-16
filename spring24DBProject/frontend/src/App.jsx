@@ -22,6 +22,7 @@ import MaintenanceRequestForm from "./pages/MaintenanceRequestForm";
 import MaintenanceUpReq from "./pages/MaintenanceUpdateRequest";
 import MaintenanceCompReq from "./pages/MaintenanceCompleteRequest";
 import GenerateMaintRep from "./pages/GenerateMaintenanceReport";
+import StaffTicketPurchase from "./pages/StaffTicketPurchase";
 
 import TicketDataReports from "./pages/TicketDataReports";
 import RideDataReports from "./pages/RideDataReports";
@@ -65,6 +66,7 @@ function App() {
           <Route path="/signIn" element={<SignIn />} />
           <Route path="/signUp" element={<SignUp />} />
           <Route path="/ticketPurchase" element={<TicketPurchase />} />
+          <Route path="/staffticketpurchase" element={<StaffTicketPurchase />} />
           <Route path="/adminLanding" element={<AdminLanding />} />
           <Route path="/dashboard" element={<AdminDashboard />} />
           <Route path="/dataReports" element={<AdminDataReports />} />
