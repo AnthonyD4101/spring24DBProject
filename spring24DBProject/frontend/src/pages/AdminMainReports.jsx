@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios"; // Ensure you've installed axios for fetching
 
 export default function AdminMainReports() {
   const navigate = useNavigate();
