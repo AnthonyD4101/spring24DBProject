@@ -189,3 +189,11 @@ body {
     margin-left: 3%;
     margin-right: 10%;
 }
+
+.dateBox {
+    display: block;
+    padding: 8px 16px; /* Adjust padding as needed */
+    background-color: white;
+    border-radius: 5px; /* Adjust border-radius to make the box rounded */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Optional: Add shadow for depth */
+  }

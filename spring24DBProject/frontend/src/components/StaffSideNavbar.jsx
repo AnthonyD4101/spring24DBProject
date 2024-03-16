@@ -83,6 +83,12 @@ const StaffSideNavbar = ({ onItemClick }) => {
               >
                 Delete Vendor
               </li>
+              <li
+                className="list-group-submenu-item"
+                onClick={() => onItemClick("Add Attraction Log Data Entry Form")}
+              >
+                Add to Attraction Log
+              </li>
             </ul>
           )}
         </li>

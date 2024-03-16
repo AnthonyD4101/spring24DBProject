@@ -16,6 +16,7 @@ import DeleteAttraction from "./DeleteAttractionDataEntryForm";
 import AddVendor from "./AddVendorDataEntryForm";
 import UpdateVendor from "./UpdateVendorDataEntryForm";
 import DeleteVendor from "./DeleteVendorDataEntryForm";
+import AddAttractionLog from "./AddAttractionLogDataEntryForm";
 
 const AdminLanding = () => {
   const [selectedPage, setSelectedPage] = useState("Dashboard");
@@ -51,6 +52,7 @@ const AdminLanding = () => {
             {selectedPage === "Add Vendor Data Entry Form" && <AddVendor />}
             {selectedPage === "Update Vendor Data Entry Form" && <UpdateVendor />}
             {selectedPage === "Delete Vendor Data Entry Form" && <DeleteVendor />}
+            {selectedPage === "Add Attraction Log Data Entry Form" && <AddAttractionLog />}
             {/* Add more pages as needed */}
           </div>
         </div>

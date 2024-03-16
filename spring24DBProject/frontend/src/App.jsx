@@ -36,6 +36,7 @@ import DeleteAttraction from "./pages/DeleteAttractionDataEntryForm";
 import AddVendor from "./pages/AddVendorDataEntryForm";
 import UpdateVendor from "./pages/UpdateVendorDataEntryForm";
 import DeleteVendor from "./pages/DeleteVendorDataEntryForm";
+import AddAttractionLog from "./pages/AddAttractionLogDataEntryForm";
 
 import { Navbar } from "./components/Navbar";
 import { StaffNavbar } from "./components/StaffNavbar";
@@ -66,47 +67,21 @@ function App() {
           <Route path="/revenueDataReports" element={<RevenueDataReports />} />
           <Route path="/depManagement" element={<AdminDepManagement />} />
           <Route path="/mainReports" element={<AdminMainReports />} />
-          <Route
-            path="/adminLanding/maintenanceRequestForm"
-            element={<MaintenanceRequestForm />}
-          />
-          <Route
-            path="/adminLanding/maintenanceUpdateRequest"
-            element={<MaintenanceUpReq />}
-          />
-          <Route
-            path="/adminLanding/maintenanceCompleteRequest"
-            element={<MaintenanceCompReq />}
-          />
-          <Route
-            path="/adminLanding/GenerateMaintenanceReport"
-            element={<GenerateMaintRep />}
-          />
+          <Route path="/adminLanding/maintenanceRequestForm" element={<MaintenanceRequestForm />} />
+          <Route path="/adminLanding/maintenanceUpdateRequest" element={<MaintenanceUpReq />} />
+          <Route path="/adminLanding/maintenanceCompleteRequest" element={<MaintenanceCompReq />} />
+          <Route path="/adminLanding/GenerateMaintenanceReport" element={<GenerateMaintRep />} />
           <Route path="/depManagement" element={<AdminDepManagement />} />
           <Route path="/addemployeedataentryform" element={<AddEmployee />} />
-          <Route
-            path="/updateemployeedataentryform"
-            element={<UpdateEmployee />}
-          />
-          <Route
-            path="/deleteemployeedataentryform"
-            element={<DeleteEmployee />}
-          />
-          <Route
-            path="/addattractiondataentryform"
-            element={<AddAttraction />}
-          />
-          <Route
-            path="/updateattractiondataentryform"
-            element={<UpdateAttraction />}
-          />
-          <Route
-            path="/deleteattractiondataentryform"
-            element={<DeleteAttraction />}
-          />
+          <Route path="/updateemployeedataentryform" element={<UpdateEmployee />} />
+          <Route path="/deleteemployeedataentryform" element={<DeleteEmployee />} />
+          <Route path="/addattractiondataentryform" element={<AddAttraction />} />
+          <Route path="/updateattractiondataentryform" element={<UpdateAttraction />} />
+          <Route path="/deleteattractiondataentryform" element={<DeleteAttraction />}/>
           <Route path="/addvendordataentryform" element={<AddVendor />} />
           <Route path="/updatevendordataentryform" element={<UpdateVendor />} />
           <Route path="/deletevendordataentryform" element={<DeleteVendor />} />
+          <Route path="/addattractionlogdataentryform" element={<AddAttractionLog />} />
         </Routes>
       </div>
     </>
