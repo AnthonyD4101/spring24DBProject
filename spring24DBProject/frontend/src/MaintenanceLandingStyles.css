@@ -13,6 +13,21 @@
 }
 /* Blank Card Styling */
 
+/* Blank Card Styling */
+.report-card {
+  margin: auto;
+  margin-top: 10vh;
+  width: 180vh;
+  height: auto;
+  border-radius: auto;
+}
+
+.report-card-body {
+  background-color: #E7EEEF;
+  border-radius: 30px;
+}
+/* Blank Card Styling */
+
 /* Button Styling */
 .styled-button {
     background-color: #86BBD8; /* Match card color */
@@ -54,3 +69,10 @@
   border-radius: 30px;
 }
 /* Card Styling */
+
+h28 {
+  font-family: 'Arial';
+  color: #2F4858;
+  font-size: 40px;
+  font-weight: bold;
+}
