@@ -6,39 +6,45 @@ export default function RevenueDataReports() {
   const [endDate, setEndDate] = useState("");
   const [revenueSource, setRevenueSource] = useState("All");
   const [ticketType, setTicketType] = useState("NA");
+  const [foodBundleType, setFoodBundleType] = useState("NA"); // New state for Food bundle type
+  const [merchBundleType, setMerchBundleType] = useState("NA"); // New state for Merchandise bundle type
   const [revenueData, setRevenueData] = useState([]);
   const [totalRevenue, setTotalRevenue] = useState(0);
 
   const handleGenerateReport = () => {
-    // Perform data fetching based on startDate and endDate
-    // Replace this with your actual data fetching logic
+    // Data fetching logic
     const fetchedData = [
-      { date: "2024-03-10", source: "Tickets", type: "GA", revenue: 500 },
-      { date: "2024-03-10", source: "Food", type: "Beverages", revenue: 200 },
-      {
-        date: "2024-03-11",
-        source: "Merchandise",
-        type: "Souvenirs",
-        revenue: 300,
-      },
-      { date: "2024-03-12", source: "Tickets", type: "KI", revenue: 700 },
-      { date: "2024-03-12", source: "Food", type: "Snacks", revenue: 250 },
+      { date: "2024-03-10", source: "Tickets", type: "GA", revenue: 55 },
+      { date: "2024-03-10", source: "Food", type: "AB", revenue: 15 },
+      { date: "2024-03-10", source: "Food", type: "DF", revenue: 25 },
+      { date: "2024-03-10", source: "Merchandise", type: "FF", revenue: 15 },
+      { date: "2024-03-11", source: "Merchandise", type: "MM", revenue: 20 },
+      { date: "2024-03-12", source: "Tickets", type: "KI", revenue: 35 },
+      { date: "2024-03-12", source: "Food", type: "GG", revenue: 20 },
+      { date: "2024-03-12", source: "Merchandise", type: "EE", revenue: 25 },
     ];
 
     // Filter fetched data based on date range and revenue source
-    let filteredData = [...fetchedData]; // Create a copy of fetchedData
-
+    let filteredData = [...fetchedData];
     if (revenueSource !== "All") {
       filteredData = filteredData.filter(
         (entry) => entry.source === revenueSource
       );
     }
 
-    if (ticketType !== "NA") {
+    if (revenueSource === "Tickets" && ticketType !== "NA") {
       filteredData = filteredData.filter((entry) => entry.type === ticketType);
+    } else if (revenueSource === "Food" && foodBundleType !== "NA") {
+      filteredData = filteredData.filter(
+        (entry) => entry.type === foodBundleType
+      );
+    } else if (revenueSource === "Merchandise" && merchBundleType !== "NA") {
+      filteredData = filteredData.filter(
+        (entry) => entry.type === merchBundleType
+      );
     }
 
-    // Sum up total revenue
+    // Calculate total revenue
     const total = filteredData.reduce((acc, curr) => acc + curr.revenue, 0);
     setTotalRevenue(total);
 
@@ -88,6 +94,34 @@ export default function RevenueDataReports() {
               <option value="NA">All</option>
               <option value="GA">General Admission</option>
               <option value="KI">Kid Tickets</option>
+            </Form.Select>
+          </Form.Group>
+        )}
+        {revenueSource === "Food" && (
+          <Form.Group controlId="foodBundleType" className="mb-3">
+            <Form.Label>Food Bundle Type</Form.Label>
+            <Form.Select
+              value={foodBundleType}
+              onChange={(e) => setFoodBundleType(e.target.value)}
+            >
+              <option value="NA">All</option>
+              <option value="AB">Adventure Bites Eatery Bundle</option>
+              <option value="DF">Dragon's Flame Tavern Bundle</option>
+              <option value="GG">Galactic Grub Hub Bundle</option>
+            </Form.Select>
+          </Form.Group>
+        )}
+        {revenueSource === "Merchandise" && (
+          <Form.Group controlId="merchBundleType" className="mb-3">
+            <Form.Label>Merchandise Bundle Type</Form.Label>
+            <Form.Select
+              value={merchBundleType}
+              onChange={(e) => setMerchBundleType(e.target.value)}
+            >
+              <option value="NA">All</option>
+              <option value="FF">Fantasy Finds Boutique Bundle</option>
+              <option value="EE">Enchanted Emporium Bundle</option>
+              <option value="MM">Mystic Marvels Marketplace Bundle</option>
             </Form.Select>
           </Form.Group>
         )}
