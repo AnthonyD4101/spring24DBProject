@@ -10,6 +10,9 @@ import RevenueDataReports from "./RevenueDataReports";
 import AddEmployee from "./AddEmployeeDataEntryForm";
 import UpdateEmployee from "./UpdateEmployeeDataEntryForm";
 import DeleteEmployee from "./DeleteEmployeeDataEntryForm";
+import AddAttraction from "./AddAttractionDataEntryForm";
+import UpdateAttraction from "./UpdateAttractionDataEntryForm";
+import DeleteAttraction from "./DeleteAttractionDataEntryForm";
 
 const AdminLanding = () => {
   const [selectedPage, setSelectedPage] = useState("Dashboard");
@@ -39,6 +42,9 @@ const AdminLanding = () => {
             {selectedPage === "Add Employee Data Entry Form" && <AddEmployee />}
             {selectedPage === "Update Employee Data Entry Form" && <UpdateEmployee />}
             {selectedPage === "Delete Employee Data Entry Form" && <DeleteEmployee />}
+            {selectedPage === "Add Attraction Data Entry Form" && <AddAttraction />}
+            {selectedPage === "Update Attraction Data Entry Form" && <UpdateAttraction />}
+            {selectedPage === "Delete Attraction Data Entry Form" && <DeleteAttraction />}
             {/* Add more pages as needed */}
           </div>
         </div>
