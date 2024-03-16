@@ -20,6 +20,9 @@ import AddAttractionLog from "./AddAttractionLogDataEntryForm";
 import AddWeatherLog from "./AddWeatherLogDataEntryForm";
 import AddDepartment from "./AddDepartmentDataEntryForm.";
 import UpdateDepartment from "./UpdateDepartmentDataEntryForm";
+import AddProduct from "./AddProductDataEntryForm";
+import UpdateProduct from "./UpdateProductDataEntryForm";
+import DeleteProduct from "./DeleteProductDataEntryForm";
 
 const AdminLanding = () => {
   const [selectedPage, setSelectedPage] = useState("Dashboard");
@@ -59,6 +62,9 @@ const AdminLanding = () => {
             {selectedPage === "Add Weather Log Data Entry Form" && <AddWeatherLog />}
             {selectedPage === "Add Department Data Entry Form" && <AddDepartment />}
             {selectedPage === "Update Department Data Entry Form" && <UpdateDepartment />}
+            {selectedPage === "Add Product Data Entry Form" && <AddProduct />}
+            {selectedPage === "Update Product Data Entry Form" && <UpdateProduct />}
+            {selectedPage === "Delete Product Data Entry Form" && <DeleteProduct />}
             {/* Add more pages as needed */}
           </div>
         </div>

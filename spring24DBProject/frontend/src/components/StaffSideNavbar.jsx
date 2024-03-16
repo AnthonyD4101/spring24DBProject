@@ -107,6 +107,24 @@ const StaffSideNavbar = ({ onItemClick }) => {
               >
                 Update Department
               </li>
+              <li
+                className="list-group-submenu-item"
+                onClick={() => onItemClick("Add Product Data Entry Form")}
+              >
+                Add Product
+              </li>
+              <li
+                className="list-group-submenu-item"
+                onClick={() => onItemClick("Update Product Data Entry Form")}
+              >
+                Update Product
+              </li>
+              <li
+                className="list-group-submenu-item"
+                onClick={() => onItemClick("Delete Product Data Entry Form")}
+              >
+                Delete Product
+              </li>
             </ul>
           )}
         </li>
