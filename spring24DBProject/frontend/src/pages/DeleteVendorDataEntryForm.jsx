@@ -1,21 +1,21 @@
 import React, { useState } from "react";
 
-export default function DeleteEmployee() {
-  const [employeeID, setEmployeeID] = useState("");
+export default function DeleteVendor() {
+  const [vendorID, setVendorID] = useState("");
   const [status, setStatus] = useState("");
 
-  const reasons = ["Retired", "Inactive"];
+  const reasons = ["Out of Order", "Inactive"];
 
   const handleSubmit = (event) => {
     event.preventDefault();
 
     const formData = {
-      employeeID, 
-      status
+      vendorID,
+      status,
     };
 
     console.log(formData);
-    alert("Employee has been Deleted");
+    alert("Vendor has been Deleted");
   };
 
   return (
@@ -24,53 +24,53 @@ export default function DeleteEmployee() {
         <div className="card dataEntryForm">
           <div className="card-body">
             <h1 className="my-2 text-center" style={{ color: "#2F4858" }}>
-              Delete Employee
+              Delete Vendor
             </h1>
             <div className="text-center">
-              Please enter the Employee ID of the Employee you would like to
+              Please enter the Vendor ID of the Vendor you would like to
               delete.
             </div>
             <form onSubmit={handleSubmit}>
               <div className="mb-3 mt-3">
-                <label htmlFor="employeeID" className="form-label">
-                  Employee ID:
+                <label htmlFor="vendorID" className="form-label">
+                  Vendor ID:
                 </label>
                 <input
                   type="number"
                   className="form-control"
-                  id="employeeID"
-                  name="employeeID"
+                  id="vendorID"
+                  name="vendorID"
                   placeholder="12345"
                   maxLength="10"
                   required
-                  value={employeeID}
-                  onChange={(e) => setEmployeeID(e.target.value)}
+                  value={vendorID}
+                  onChange={(e) => setVendorID(e.target.value)}
                 />
               </div>
               <div className="mb-3 mt-3">
-              <label htmlFor="status" className="form-label">
-                Reason:
-              </label>
-              <input
-                list="reasons"
-                className="form-control"
-                id="status"
-                name="status"
-                placeholder="Type to search..."
-                required
-                value={status}
-                onChange={(e) => setStatus(e.target.value)}
-              />
-              <datalist id="reasons">
-                {reasons.map((status, index) => (
-                  <option key={index} value={status} />
-                ))}
-              </datalist>
+                <label htmlFor="status" className="form-label">
+                  Reason:
+                </label>
+                <input
+                  list="reasons"
+                  className="form-control"
+                  id="status"
+                  name="status"
+                  placeholder="Type to search..."
+                  required
+                  value={status}
+                  onChange={(e) => setStatus(e.target.value)}
+                />
+                <datalist id="reasons">
+                  {reasons.map((status, index) => (
+                    <option key={index} value={status} />
+                  ))}
+                </datalist>
               </div>
               <div className="flex flex-wrap -mx-3 mt-6">
                 <div className="w-full px-3 text-center">
                   <button id="button" type="submit" className="btn btn-primary">
-                    Delete Employee
+                    Delete Vendor
                   </button>
                 </div>
               </div>

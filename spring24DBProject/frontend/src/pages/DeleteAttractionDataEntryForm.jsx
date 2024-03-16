@@ -70,7 +70,7 @@ export default function DeleteAttraction() {
               <div className="flex flex-wrap -mx-3 mt-6">
                 <div className="w-full px-3 text-center">
                   <button id="button" type="submit" className="btn btn-primary">
-                    Submit
+                    Delete Attraction
                   </button>
                 </div>
               </div>

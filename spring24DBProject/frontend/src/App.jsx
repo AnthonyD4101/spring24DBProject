@@ -33,6 +33,9 @@ import DeleteEmployee from "./pages/DeleteEmployeeDataEntryForm";
 import AddAttraction from "./pages/AddAttractionDataEntryForm";
 import UpdateAttraction from "./pages/UpdateAttractionDataEntryForm";
 import DeleteAttraction from "./pages/DeleteAttractionDataEntryForm";
+import AddVendor from "./pages/AddVendorDataEntryForm";
+import UpdateVendor from "./pages/UpdateVendorDataEntryForm";
+import DeleteVendor from "./pages/DeleteVendorDataEntryForm";
 
 import { Navbar } from "./components/Navbar";
 import { StaffNavbar } from "./components/StaffNavbar";
@@ -71,6 +74,14 @@ function App() {
             path="/adminLanding/maintenanceUpdateRequest"
             element={<MaintenanceUpReq />}
           />
+          <Route
+            path="/adminLanding/maintenanceCompleteRequest"
+            element={<MaintenanceCompReq />}
+          />
+          <Route
+            path="/adminLanding/GenerateMaintenanceReport"
+            element={<GenerateMaintRep />}
+          />
           <Route path="/addemployeedataentryform" element={<AddEmployee />} />
           <Route
             path="/updateemployeedataentryform"
@@ -92,14 +103,9 @@ function App() {
             path="/deleteattractiondataentryform"
             element={<DeleteAttraction />}
           />
-          <Route
-            path="/adminLanding/maintenanceCompleteRequest"
-            element={<MaintenanceCompReq />}
-          />
-          <Route
-            path="/adminLanding/GenerateMaintenanceReport"
-            element={<GenerateMaintRep />}
-          />
+          <Route path="/addvendordataentryform" element={<AddVendor />} />
+          <Route path="/updatevendordataentryform" element={<UpdateVendor />} />
+          <Route path="/deletevendordataentryform" element={<DeleteVendor />} />
         </Routes>
       </div>
     </>
