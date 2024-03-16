@@ -28,6 +28,9 @@ import RevenueDataReports from "./pages/RevenueDataReports";
 import AddEmployee from "./pages/AddEmployeeDataEntryForm";
 import UpdateEmployee from "./pages/UpdateEmployeeDataEntryForm";
 import DeleteEmployee from "./pages/DeleteEmployeeDataEntryForm";
+import AddAttraction from "./pages/AddAttractionDataEntryForm";
+import UpdateAttraction from "./pages/UpdateAttractionDataEntryForm";
+import DeleteAttraction from "./pages/DeleteAttractionDataEntryForm";
 
 import { Navbar } from "./components/Navbar";
 import { StaffNavbar } from "./components/StaffNavbar";
@@ -69,6 +72,9 @@ function App() {
           <Route path="/addemployeedataentryform" element={<AddEmployee />} />
           <Route path="/updateemployeedataentryform" element={<UpdateEmployee />} />
           <Route path="/deleteemployeedataentryform" element={<DeleteEmployee />} />
+          <Route path="/addattractiondataentryform" element={<AddAttraction />} />
+          <Route path="/updateattractiondataentryform" element={<UpdateAttraction />} />
+          <Route path="/deleteattractiondataentryform" element={<DeleteAttraction />} />
         </Routes>
       </div>
     </>
