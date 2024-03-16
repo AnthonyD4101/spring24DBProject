@@ -3,9 +3,14 @@ import { useNavigate } from "react-router-dom";
 
 const StaffSideNavbar = ({ onItemClick }) => {
   const [isDataReportsOpen, setIsDataReportsOpen] = useState(false);
+  const [isDataEntryFormsOpen, setIsDataEntryFormsOpen] = useState(false);
 
   const toggleDataReportsDropdown = () => {
     setIsDataReportsOpen(!isDataReportsOpen);
+  };
+
+  const toggleDataEntryFormsDropdown = () => {
+    setIsDataEntryFormsOpen(!isDataEntryFormsOpen);
   };
 
   return (
@@ -18,10 +23,32 @@ const StaffSideNavbar = ({ onItemClick }) => {
           Dashboard
         </li>
         <li
-          className="list-group-item"
-          onClick={() => onItemClick("Department Management")}
+          className={`list-group-item ${isDataEntryFormsOpen ? "active" : ""}`}
+          onClick={toggleDataEntryFormsDropdown}
         >
           Department Management
+          {isDataEntryFormsOpen && (
+            <ul className="list-group-submenu">
+              <li
+                className="list-group-submenu-item"
+                onClick={() => onItemClick("Add Employee Data Entry Form")}
+              >
+                Add Employee
+              </li>
+              <li
+                className="list-group-submenu-item"
+                onClick={() => onItemClick("Update Employee Data Entry Form")}
+              >
+                Update Employee
+              </li>
+              <li
+                className="list-group-submenu-item"
+                onClick={() => onItemClick("Delete Employee Data Entry Form")}
+              >
+                Delete Employee
+              </li>
+            </ul>
+          )}
         </li>
         <li
           className={`list-group-item ${isDataReportsOpen ? "active" : ""}`}

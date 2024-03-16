@@ -25,6 +25,10 @@ import TicketDataReports from "./pages/TicketDataReports";
 import RideDataReports from "./pages/RideDataReports";
 import RevenueDataReports from "./pages/RevenueDataReports";
 
+import AddEmployee from "./pages/AddEmployeeDataEntryForm";
+import UpdateEmployee from "./pages/UpdateEmployeeDataEntryForm";
+import DeleteEmployee from "./pages/DeleteEmployeeDataEntryForm";
+
 import { Navbar } from "./components/Navbar";
 import { StaffNavbar } from "./components/StaffNavbar";
 
@@ -62,6 +66,9 @@ function App() {
             path="/maintenanceUpdateRequest"
             element={<MaintenanceUpReq />}
           />
+          <Route path="/addemployeedataentryform" element={<AddEmployee />} />
+          <Route path="/updateemployeedataentryform" element={<UpdateEmployee />} />
+          <Route path="/deleteemployeedataentryform" element={<DeleteEmployee />} />
         </Routes>
       </div>
     </>

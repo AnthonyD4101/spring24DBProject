@@ -48,6 +48,14 @@ body {
 }
 /* */
 
+/*Data Entry Form Styling*/
+.dataEntryForm {
+    margin-top: 10vh;
+    width: 130vh;
+    height: 70vh;
+}
+/*  */
+
 .btn-secondary {
     border-width: 2px;
     border-color: black;
