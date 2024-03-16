@@ -89,6 +89,12 @@ const StaffSideNavbar = ({ onItemClick }) => {
               >
                 Add to Attraction Log
               </li>
+              <li
+                className="list-group-submenu-item"
+                onClick={() => onItemClick("Add Weather Log Data Entry Form")}
+              >
+                Add to Weather Log
+              </li>
             </ul>
           )}
         </li>
