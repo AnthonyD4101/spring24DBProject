@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 const StaffSideNavbar = ({ onItemClick }) => {
   const [isDataReportsOpen, setIsDataReportsOpen] = useState(false);
   const [isDataEntryFormsOpen, setIsDataEntryFormsOpen] = useState(false);
+  const [isMaintenanceReportsOpen, setIsMaintenanceReportsOpen] =
+    useState(false);
 
   const toggleDataReportsDropdown = () => {
     setIsDataReportsOpen(!isDataReportsOpen);
@@ -11,6 +13,10 @@ const StaffSideNavbar = ({ onItemClick }) => {
 
   const toggleDataEntryFormsDropdown = () => {
     setIsDataEntryFormsOpen(!isDataEntryFormsOpen);
+  };
+
+  const toggleMaintenanceReportsDropdown = () => {
+    setIsMaintenanceReportsOpen(!isMaintenanceReportsOpen);
   };
 
   return (
@@ -115,10 +121,42 @@ const StaffSideNavbar = ({ onItemClick }) => {
           )}
         </li>
         <li
-          className="list-group-item"
-          onClick={() => onItemClick("Maintenance Reports")}
+          className={`list-group-item ${
+            isMaintenanceReportsOpen ? "active" : ""
+          }`}
+          onClick={toggleMaintenanceReportsDropdown}
         >
           Maintenance Reports
+          {isMaintenanceReportsOpen && (
+            <ul className="list-group-submenu">
+              <li
+                className="list-group-submenu-item"
+                onClick={() => onItemClick("Create New Maintenance Request")}
+              >
+                Create New Request
+              </li>
+              <li
+                className="list-group-submenu-item"
+                onClick={() => onItemClick("Edit Existing Maintenance Request")}
+              >
+                Edit Existing Request
+              </li>
+              <li
+                className="list-group-submenu-item"
+                onClick={() =>
+                  onItemClick("Complete Existing Maintenance Request")
+                }
+              >
+                Complete Existing Request
+              </li>
+              <li
+                className="list-group-submenu-item"
+                onClick={() => onItemClick("Maintenance Reporting Portal")}
+              >
+                Maintenance Reporting Portal
+              </li>
+            </ul>
+          )}
         </li>
       </ul>
     </div>

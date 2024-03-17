@@ -3,7 +3,6 @@ import StaffSideNavbar from "../components/StaffSideNavbar";
 import AdminDashboard from "./AdminDashboard";
 import AdminDataReports from "./AdminDataReports";
 import AdminDepManagement from "./AdminDepManagement";
-import AdminMainReports from "./AdminMainReports";
 import TicketDataReports from "./TicketDataReports";
 import RideDataReports from "./RideDataReports";
 import RevenueDataReports from "./RevenueDataReports";
@@ -16,6 +15,10 @@ import DeleteAttraction from "./DeleteAttractionDataEntryForm";
 import AddVendor from "./AddVendorDataEntryForm";
 import UpdateVendor from "./UpdateVendorDataEntryForm";
 import DeleteVendor from "./DeleteVendorDataEntryForm";
+import MaintenanceRequestForm from "./MaintenanceRequestForm";
+import MaintenanceUpReq from "./MaintenanceUpdateRequest";
+import MaintenanceCompReq from "./MaintenanceCompleteRequest";
+import GenerateMaintRep from "./GenerateMaintenanceReport";
 
 const AdminLanding = () => {
   const [selectedPage, setSelectedPage] = useState("Dashboard");
@@ -43,14 +46,40 @@ const AdminLanding = () => {
             {selectedPage === "Ride Data Reports" && <RideDataReports />}
             {selectedPage === "Revenue Data Reports" && <RevenueDataReports />}
             {selectedPage === "Add Employee Data Entry Form" && <AddEmployee />}
-            {selectedPage === "Update Employee Data Entry Form" && <UpdateEmployee />}
-            {selectedPage === "Delete Employee Data Entry Form" && <DeleteEmployee />}
-            {selectedPage === "Add Attraction Data Entry Form" && <AddAttraction />}
-            {selectedPage === "Update Attraction Data Entry Form" && <UpdateAttraction />}
-            {selectedPage === "Delete Attraction Data Entry Form" && <DeleteAttraction />}
+            {selectedPage === "Update Employee Data Entry Form" && (
+              <UpdateEmployee />
+            )}
+            {selectedPage === "Delete Employee Data Entry Form" && (
+              <DeleteEmployee />
+            )}
+            {selectedPage === "Add Attraction Data Entry Form" && (
+              <AddAttraction />
+            )}
+            {selectedPage === "Update Attraction Data Entry Form" && (
+              <UpdateAttraction />
+            )}
+            {selectedPage === "Delete Attraction Data Entry Form" && (
+              <DeleteAttraction />
+            )}
             {selectedPage === "Add Vendor Data Entry Form" && <AddVendor />}
-            {selectedPage === "Update Vendor Data Entry Form" && <UpdateVendor />}
-            {selectedPage === "Delete Vendor Data Entry Form" && <DeleteVendor />}
+            {selectedPage === "Update Vendor Data Entry Form" && (
+              <UpdateVendor />
+            )}
+            {selectedPage === "Delete Vendor Data Entry Form" && (
+              <DeleteVendor />
+            )}
+            {selectedPage === "Create New Maintenance Request" && (
+              <MaintenanceRequestForm />
+            )}
+            {selectedPage === "Edit Existing Maintenance Request" && (
+              <MaintenanceUpReq />
+            )}
+            {selectedPage === "Complete Existing Maintenance Request" && (
+              <MaintenanceCompReq />
+            )}
+            {selectedPage === "Maintenance Reporting Portal" && (
+              <GenerateMaintRep />
+            )}
             {/* Add more pages as needed */}
           </div>
         </div>

@@ -17,7 +17,6 @@ import AdminLanding from "./pages/AdminLanding";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminDataReports from "./pages/AdminDataReports";
 import AdminDepManagement from "./pages/AdminDepManagement";
-import AdminMainReports from "./pages/AdminMainReports";
 import MaintenanceRequestForm from "./pages/MaintenanceRequestForm";
 import MaintenanceUpReq from "./pages/MaintenanceUpdateRequest";
 import MaintenanceCompReq from "./pages/MaintenanceCompleteRequest";
@@ -64,22 +63,20 @@ function App() {
           <Route path="/ticketDataReports" element={<TicketDataReports />} />
           <Route path="/rideDataReports" element={<RideDataReports />} />
           <Route path="/revenueDataReports" element={<RevenueDataReports />} />
-          <Route path="/depManagement" element={<AdminDepManagement />} />
-          <Route path="/mainReports" element={<AdminMainReports />} />
           <Route
-            path="/adminLanding/maintenanceRequestForm"
+            path="/maintenanceRequestForm"
             element={<MaintenanceRequestForm />}
           />
           <Route
-            path="/adminLanding/maintenanceUpdateRequest"
+            path="/maintenanceUpdateRequest"
             element={<MaintenanceUpReq />}
           />
           <Route
-            path="/adminLanding/maintenanceCompleteRequest"
+            path="/maintenanceCompleteRequest"
             element={<MaintenanceCompReq />}
           />
           <Route
-            path="/adminLanding/GenerateMaintenanceReport"
+            path="/GenerateMaintenanceReport"
             element={<GenerateMaintRep />}
           />
           <Route path="/depManagement" element={<AdminDepManagement />} />
