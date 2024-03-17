@@ -2,17 +2,16 @@ const http = require('http');
 const mysql = require('mysql');
 const url = require('url');
 const fs = require('fs');
+require('dotenv').config();
 
-// Read the CA certificate file
 const caCert = fs.readFileSync('DigiCertGlobalRootCA.crt.pem');
 
-// Create MySQL connection pool with SSL options
 const pool = mysql.createPool({
   connectionLimit: 10,
-  host: 'team8-mysql-server.mysql.database.azure.com',
-  user: 'team8admin',
-  password: 'admin-3380',
-  database: 'parkdb',
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
   ssl: {
     ca: caCert
   }
