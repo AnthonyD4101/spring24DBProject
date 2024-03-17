@@ -17,7 +17,6 @@ import AdminLanding from "./pages/AdminLanding";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminDataReports from "./pages/AdminDataReports";
 import AdminDepManagement from "./pages/AdminDepManagement";
-import AdminMainReports from "./pages/AdminMainReports";
 import MaintenanceRequestForm from "./pages/MaintenanceRequestForm";
 import MaintenanceUpReq from "./pages/MaintenanceUpdateRequest";
 import MaintenanceCompReq from "./pages/MaintenanceCompleteRequest";
@@ -66,36 +65,82 @@ function App() {
           <Route path="/signIn" element={<SignIn />} />
           <Route path="/signUp" element={<SignUp />} />
           <Route path="/ticketPurchase" element={<TicketPurchase />} />
-          <Route path="/staffticketpurchase" element={<StaffTicketPurchase />} />
+          <Route
+            path="/staffticketpurchase"
+            element={<StaffTicketPurchase />}
+          />
           <Route path="/adminLanding" element={<AdminLanding />} />
           <Route path="/dashboard" element={<AdminDashboard />} />
           <Route path="/dataReports" element={<AdminDataReports />} />
           <Route path="/ticketDataReports" element={<TicketDataReports />} />
           <Route path="/rideDataReports" element={<RideDataReports />} />
           <Route path="/revenueDataReports" element={<RevenueDataReports />} />
-          <Route path="/depManagement" element={<AdminDepManagement />} />
-          <Route path="/mainReports" element={<AdminMainReports />} />
-          <Route path="/adminLanding/maintenanceRequestForm" element={<MaintenanceRequestForm />} />
-          <Route path="/adminLanding/maintenanceUpdateRequest" element={<MaintenanceUpReq />} />
-          <Route path="/adminLanding/maintenanceCompleteRequest" element={<MaintenanceCompReq />} />
-          <Route path="/adminLanding/GenerateMaintenanceReport" element={<GenerateMaintRep />} />
+          <Route
+            path="/maintenanceRequestForm"
+            element={<MaintenanceRequestForm />}
+          />
+          <Route
+            path="/maintenanceUpdateRequest"
+            element={<MaintenanceUpReq />}
+          />
+          <Route
+            path="/maintenanceCompleteRequest"
+            element={<MaintenanceCompReq />}
+          />
+          <Route
+            path="/GenerateMaintenanceReport"
+            element={<GenerateMaintRep />}
+          />
           <Route path="/depManagement" element={<AdminDepManagement />} />
           <Route path="/addemployeedataentryform" element={<AddEmployee />} />
-          <Route path="/updateemployeedataentryform" element={<UpdateEmployee />} />
-          <Route path="/deleteemployeedataentryform" element={<DeleteEmployee />} />
-          <Route path="/addattractiondataentryform" element={<AddAttraction />} />
-          <Route path="/updateattractiondataentryform" element={<UpdateAttraction />} />
-          <Route path="/deleteattractiondataentryform" element={<DeleteAttraction />}/>
+          <Route
+            path="/updateemployeedataentryform"
+            element={<UpdateEmployee />}
+          />
+          <Route
+            path="/deleteemployeedataentryform"
+            element={<DeleteEmployee />}
+          />
+          <Route
+            path="/addattractiondataentryform"
+            element={<AddAttraction />}
+          />
+          <Route
+            path="/updateattractiondataentryform"
+            element={<UpdateAttraction />}
+          />
+          <Route
+            path="/deleteattractiondataentryform"
+            element={<DeleteAttraction />}
+          />
           <Route path="/addvendordataentryform" element={<AddVendor />} />
           <Route path="/updatevendordataentryform" element={<UpdateVendor />} />
           <Route path="/deletevendordataentryform" element={<DeleteVendor />} />
-          <Route path="/addattractionlogdataentryform" element={<AddAttractionLog />} />
-          <Route path="/addweatherlogdataentryform" element={<AddWeatherLog />} />
-          <Route path="/adddepartmentlogdataentryform" element={<AddDepartment />} />
-          <Route path="/updatedepartmentlogdataentryform" element={<UpdateDepartment />} />
+          <Route
+            path="/addattractionlogdataentryform"
+            element={<AddAttractionLog />}
+          />
+          <Route
+            path="/addweatherlogdataentryform"
+            element={<AddWeatherLog />}
+          />
+          <Route
+            path="/adddepartmentlogdataentryform"
+            element={<AddDepartment />}
+          />
+          <Route
+            path="/updatedepartmentlogdataentryform"
+            element={<UpdateDepartment />}
+          />
           <Route path="/addproductdataentryform" element={<AddProduct />} />
-          <Route path="/updateproductdataentryform" element={<UpdateProduct />} />
-          <Route path="/deleteproductdataentryform" element={<DeleteProduct />} />
+          <Route
+            path="/updateproductdataentryform"
+            element={<UpdateProduct />}
+          />
+          <Route
+            path="/deleteproductdataentryform"
+            element={<DeleteProduct />}
+          />
         </Routes>
       </div>
     </>
