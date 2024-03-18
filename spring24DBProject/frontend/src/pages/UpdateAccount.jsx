@@ -1,52 +1,9 @@
 import React, { useState } from "react";
 
-export default function SignUp() {
-
-  
-  const [creationSuccess, setCreationSuccess] = useState(false);
-
-  const [formData, setFormData] = useState({
-    firstName: "",
-    middleName: "",
-    lastName: "",
-    email: "",
-    phoneNumber: "",
-    password: "",
-    confirmPassword: "",
-  });
+//import styles from "../styles.css";
 
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    if(value != "")
-      setFormData((prevState) => ({
-        ...prevState,
-        [name]: value,
-      }));
-  };
-
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    try {
-      const response = await fetch("http://localhost:3001/api/signUp", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
-      if (!response.ok) {
-        throw new Error("Failed to create account");
-      }
-      setCreationSuccess(true);
-    } catch (error) {
-      console.error("Error:", error.message);
-    }
-  };
-
-
+export default function UpdateAccount() {
   return (
     <div className="row justify-content-center">
       <div className="col md-4 mb-4">
@@ -55,7 +12,7 @@ export default function SignUp() {
             <h1 className="my-2 text-center" style={{ color: "#2F4858" }}>
               Update Account
             </h1>
-            <form onSubmit={handleSubmit}>
+            <form>
               <div className="row mt-5 mb-3">
                 <div className="col">
                   <label htmlFor="firstName" className="form-label">
@@ -66,8 +23,6 @@ export default function SignUp() {
                     className="form-control"
                     id="firstName"
                     name="firstName"
-                    value={formData.firstName} // Bind value to formData state
-                    onChange={handleInputChange} // Handle input change
                   />
                 </div>
                 <div className="col-auto">
@@ -79,8 +34,6 @@ export default function SignUp() {
                     className="form-control"
                     id="middleName"
                     name="middleName"
-                    value={formData.middleName} // Bind value to formData state
-                    onChange={handleInputChange} // Handle input change
                   />
                 </div>
                 <div className="col">
@@ -92,8 +45,6 @@ export default function SignUp() {
                     className="form-control"
                     id="lastName"
                     name="lastName"
-                    value={formData.lastName} // Bind value to formData state
-                    onChange={handleInputChange} // Handle input change
                   />
                 </div>
               </div>
@@ -108,8 +59,6 @@ export default function SignUp() {
                     className="form-control"
                     id="email"
                     name="email"
-                    value={formData.email} // Bind value to formData state
-                    onChange={handleInputChange} // Handle input change
                   />
                 </div>
                 <div className="col">
@@ -121,8 +70,6 @@ export default function SignUp() {
                     className="form-control"
                     id="phoneNumber"
                     name="phoneNumber"
-                    value={formData.phoneNumber} // Bind value to formData state
-                    onChange={handleInputChange} // Handle input change
                   />
                 </div>
               </div>
@@ -133,11 +80,6 @@ export default function SignUp() {
                 </button>
               </div>
             </form>
-            {creationSuccess && (
-              <div className="alert alert-success my-3" role="alert">
-                Account created successfully!
-              </div>
-            )}
           </div>
         </div>
       </div>
