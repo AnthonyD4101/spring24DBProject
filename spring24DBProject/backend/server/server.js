@@ -1,6 +1,6 @@
 const http = require('http');
-const { handleSignUpRequest } = require('./handlers/SignUpHandler');
-const { handleSignInRequest } = require('./handlers/SignInHandler');
+const { handleSignUpRequest } = require('../handlers/SignUpHandler');
+const { handleSignInRequest } = require('../handlers/SignInHandler');
 
 const server = http.createServer((req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
