@@ -1,5 +1,5 @@
 const mysql = require('mysql');
-const poolConnection = require('../database')
+const poolConnection = require('../server/database')
 
 function handleSignUpRequest(req, res) {
   let requestBody = '';

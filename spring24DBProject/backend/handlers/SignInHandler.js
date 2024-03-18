@@ -1,4 +1,4 @@
-const poolConnection = require('../database');
+const poolConnection = require('../server/database');
 
 function handleSignInRequest(req, res) {
     let body = '';
