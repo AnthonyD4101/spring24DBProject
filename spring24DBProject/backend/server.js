@@ -1,45 +1,28 @@
 const http = require('http');
-const mysql = require('mysql');
-const url = require('url');
-const fs = require('fs');
-require('dotenv').config();
-
-const caCert = fs.readFileSync('DigiCertGlobalRootCA.crt.pem');
-
-const pool = mysql.createPool({
-  connectionLimit: 10,
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
-  ssl: {
-    ca: caCert
-  }
-});
+const { handleSignUpRequest } = require('./handlers/SignUpHandler');
 
 const server = http.createServer((req, res) => {
-  const parsedUrl = url.parse(req.url, true);
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
-  if (parsedUrl.pathname === '/api/accountInfo' && req.method === 'GET') {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    
-    pool.query('SELECT * FROM Account', (error, results) => {
-        if (error) {
-            console.error('Database error:', error);
-            res.writeHead(500);
-            res.end('Server error');
-            return;
-        }
-      res.writeHead(200, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify(results));
-    });
+  if (req.method === 'OPTIONS') {
+    res.writeHead(200);
+    res.end();
+    return;
+  }
+
+  // Route requests to appropriate handlers
+  if (req.method === 'POST' && req.url === '/api/signUp') {
+    handleSignUpRequest(req, res);
   } else {
+    // Handle other routes
     res.writeHead(404);
     res.end('Not Found');
   }
 });
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.DB_PORT;
 server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
