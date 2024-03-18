@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 export default function SignUp() {
 
-  /*
+  
   const [creationSuccess, setCreationSuccess] = useState(false);
 
   const [formData, setFormData] = useState({
@@ -15,13 +15,16 @@ export default function SignUp() {
     confirmPassword: "",
   });
 
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
+    if(value != "")
+      setFormData((prevState) => ({
+        ...prevState,
+        [name]: value,
+      }));
   };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -42,7 +45,8 @@ export default function SignUp() {
       console.error("Error:", error.message);
     }
   };
-  */
+
+
   return (
     <div className="row justify-content-center">
       <div className="col md-4 mb-4">
