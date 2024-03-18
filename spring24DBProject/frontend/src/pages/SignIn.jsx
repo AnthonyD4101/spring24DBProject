@@ -1,6 +1,50 @@
-import React from "react";
+import React, { useState } from "react";
 
 export default function SignIn() {
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log("Form data submitted:", formData); // Log form data for debugging
+
+    try {
+      const { email, password } = formData;
+
+      const response = await fetch("http://localhost:3001/api/signIn", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to sign in");
+      }
+
+      console.log("Sign in successful:", data.message);
+      window.alert("Login successful!");
+      window.location.href = "/";
+    } catch (error) {
+      console.error("Error:", error.message);
+    }
+  };
+
+  console.log("Rendering SignIn component"); // Log component rendering for debugging
+
   return (
     <div>
       <div className="row justify-content-center">
@@ -10,7 +54,7 @@ export default function SignIn() {
               <h1 className="my-4 text-center" style={{ color: "#2F4858" }}>
                 Sign In
               </h1>
-              <form>
+              <form onSubmit={handleSubmit}>
                 <div className="mb-3">
                   <label htmlFor="exampleInputEmail" className="form-label">
                     Email address
@@ -19,7 +63,11 @@ export default function SignIn() {
                     type="email"
                     className="form-control"
                     id="exampleInputEmail"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
                     aria-describedby="emailHelp"
+                    required
                   />
                 </div>
 
@@ -31,11 +79,19 @@ export default function SignIn() {
                     type="password"
                     className="form-control"
                     id="exampleInputPassword"
+                    name="password"
+                    value={formData.password}
+                    onChange={handleInputChange}
+                    required
                   />
                 </div>
 
                 <div className="mt-3 text-center">
-                  <button type="submit" className="btn btn-primary">
+                  <button
+                    type="submit"
+                    className="btn btn-primary"
+                    onClick={() => console.log("Sign In button clicked")}
+                  >
                     Sign In
                   </button>
                 </div>

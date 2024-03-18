@@ -1,20 +1,5 @@
 const mysql = require('mysql');
-const fs = require('fs');
-
-require('dotenv').config();
-
-const caCert = fs.readFileSync('DigiCertGlobalRootCA.crt.pem');
-
-const pool = mysql.createPool({
-    connectionLimit: 10,
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
-    ssl: {
-      ca: caCert
-    }
-});
+const poolConnection = require('../database')
 
 function handleSignUpRequest(req, res) {
   let requestBody = '';
@@ -26,7 +11,7 @@ function handleSignUpRequest(req, res) {
     const formData = JSON.parse(requestBody);
     const { firstName, middleName, lastName, email, phoneNumber, password } = formData;
 
-    pool.query(
+    poolConnection.query(
       'INSERT INTO Account (AccountType, FirstName, MiddleName, LastName, PhoneNumber, Email, Password) VALUES (?, ?, ?, ?, ?, ?, ?)',
       ['Customer', firstName, middleName, lastName, phoneNumber, email, password],
       (error, results) => {
