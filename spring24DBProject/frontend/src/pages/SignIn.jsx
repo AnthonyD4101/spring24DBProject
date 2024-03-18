@@ -1,49 +1,34 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 export default function SignIn() {
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const navigate = useNavigate();
+  const { signIn } = useAuth();
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  };
+  const handleSignIn = async (event) => {
+    event.preventDefault();
+    const response = await fetch("http://localhost:3001/signin", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+    });
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    console.log("Form data submitted:", formData); // Log form data for debugging
+    const data = await response.json();
+    console.log("Sign-in data:", data);
 
-    try {
-      const { email, password } = formData;
-
-      const response = await fetch("http://localhost:3001/api/signIn", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || "Failed to sign in");
-      }
-
-      console.log("Sign in successful:", data.message);
-      window.alert("Login successful!");
-      window.location.href = "/";
-    } catch (error) {
-      console.error("Error:", error.message);
+    if (response.status === 200) {
+      navigate("/");
+      signIn({ FirstName: data.firstName, LastName: data.lastName });
+    } else {
+      setErrorMessage(data.message || "Incorrect User ID or Password");
     }
   };
-
-  console.log("Rendering SignIn component"); // Log component rendering for debugging
 
   return (
     <div>
@@ -54,7 +39,7 @@ export default function SignIn() {
               <h1 className="my-4 text-center" style={{ color: "#2F4858" }}>
                 Sign In
               </h1>
-              <form onSubmit={handleSubmit}>
+              <form onSubmit={handleSignIn}>
                 <div className="mb-3">
                   <label htmlFor="exampleInputEmail" className="form-label">
                     Email address
@@ -63,11 +48,9 @@ export default function SignIn() {
                     type="email"
                     className="form-control"
                     id="exampleInputEmail"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleInputChange}
                     aria-describedby="emailHelp"
-                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                   />
                 </div>
 
@@ -79,22 +62,22 @@ export default function SignIn() {
                     type="password"
                     className="form-control"
                     id="exampleInputPassword"
-                    name="password"
-                    value={formData.password}
-                    onChange={handleInputChange}
-                    required
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                   />
                 </div>
 
                 <div className="mt-3 text-center">
-                  <button
-                    type="submit"
-                    className="btn btn-primary"
-                    onClick={() => console.log("Sign In button clicked")}
-                  >
+                  <button type="submit" className="btn btn-primary">
                     Sign In
                   </button>
                 </div>
+
+                {errorMessage && (
+                  <div className="alert alert-danger" role="alert">
+                    {errorMessage}
+                  </div>
+                )}
 
                 <div className="text-center">
                   <div className="mt-5 pb-3">

@@ -1,31 +1,43 @@
-const mysql = require('mysql');
 const poolConnection = require('../server/database')
+const bcrypt = require("bcryptjs");
 
-function handleSignUpRequest(req, res) {
-  let requestBody = '';
-  req.on('data', chunk => {
-    requestBody += chunk.toString();
+function handleSignUp(req, res, connection) {
+  let body = "";
+
+  req.on("data", (chunk) => {
+    body += chunk.toString();
   });
 
-  req.on('end', () => {
-    const formData = JSON.parse(requestBody);
-    const { firstName, middleName, lastName, email, phoneNumber, password } = formData;
+  req.on("end", () => {
+    const { firstName, middleName, lastName, email, phoneNumber, password } =
+      JSON.parse(body);
+
+    // Add server-side password strength validation if necessary
+
+    const hashedPassword = bcrypt.hashSync(password, 10);
+    const query =
+      "INSERT INTO Account (firstName, middleName, lastName, email, phoneNumber, password) VALUES (?, ?, ?, ?, ?, ?)";
 
     poolConnection.query(
-      'INSERT INTO Account (AccountType, FirstName, MiddleName, LastName, PhoneNumber, Email, Password) VALUES (?, ?, ?, ?, ?, ?, ?)',
-      ['Customer', firstName, middleName, lastName, phoneNumber, email, password],
+      query,
+      [firstName, middleName, lastName, email, phoneNumber, hashedPassword],
       (error, results) => {
         if (error) {
-          console.error('Database error:', error);
-          res.writeHead(500);
-          res.end('Server error');
+          console.error("Error inserting user into the database:", error);
+          res.writeHead(500, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ message: "Error creating user" }));
           return;
         }
-        res.writeHead(200, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ message: 'Account created successfully' }));
+        res.writeHead(200, { "Content-Type": "application/json" });
+        res.end(
+          JSON.stringify({
+            message: "User created successfully",
+            userId: results.insertId,
+          })
+        );
       }
     );
   });
 }
 
-module.exports = { handleSignUpRequest };
+module.exports = handleSignUp;

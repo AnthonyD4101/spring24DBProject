@@ -1,5 +1,4 @@
 import React from "react";
-
 import classes from "../components/UI/Home.module.css";
 
 export default function Home() {

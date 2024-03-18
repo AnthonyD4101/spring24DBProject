@@ -1,7 +1,17 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 export const Navbar = () => {
+  const { currentUser, signOut } = useAuth();
+  console.log("Current user:", currentUser);
+
+  const handleSignOut = () => {
+    signOut();
+    // Redirect to sign-in page.
+    window.location.href = "/signIn";
+  };
   return (
     <nav className="navbar navbar-expand-lg">
       <div className="container">
@@ -39,17 +49,37 @@ export const Navbar = () => {
                 Buy Tickets
               </a>
             </li>
-            <li className="nav-item">
-              <button className="btn btn-warning">
-                <Link
-                  className="text-black"
-                  to="/signIn"
-                  style={{ textDecoration: "none " }}
-                >
-                  Sign In
-                </Link>
-              </button>
-            </li>
+            {currentUser ? (
+              <>
+                <li className="nav-item">
+                  <p className="nav-link text-white">
+                    Welcome, {currentUser.FirstName} {currentUser.LastName}
+                  </p>
+                </li>
+                <li className="nav-item">
+                  <button
+                    type="button"
+                    className="btn text-white"
+                    onClick={handleSignOut}
+                    style={{ textDecoration: "underline", color: "blue" }}
+                  >
+                    Sign Out
+                  </button>
+                </li>
+              </>
+            ) : (
+              <li className="nav-item">
+                <button className="btn btn-warning">
+                  <Link
+                    className="text-black"
+                    to="/signIn"
+                    style={{ textDecoration: "none " }}
+                  >
+                    Sign In
+                  </Link>
+                </button>
+              </li>
+            )}
           </ul>
         </div>
       </div>

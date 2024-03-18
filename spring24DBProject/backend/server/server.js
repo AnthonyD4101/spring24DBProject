@@ -1,6 +1,7 @@
 const http = require('http');
-const { handleSignUpRequest } = require('../handlers/SignUpHandler');
-const { handleSignInRequest } = require('../handlers/SignInHandler');
+const url = require('url');
+const handleSignUp = require('../handlers/SignUpHandler');
+const handleSignIn = require('../handlers/SignInHandler');
 
 const server = http.createServer((req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -13,10 +14,10 @@ const server = http.createServer((req, res) => {
     return;
   }
 
-  if (req.method === 'POST' && req.url === '/api/signUp') {
-    handleSignUpRequest(req, res);
-  } else if(req.method === 'POST' && req.url === '/api/signIn') {
-    handleSignInRequest(req, res)
+  if (req.method === "POST" && url.parse(req.url).pathname === "/signup") {
+    handleSignUp(req, res);
+  } else if(req.method === "POST" && url.parse(req.url).pathname === "/signin") {
+    handleSignIn(req, res)
   } else {
     res.writeHead(404);
     res.end('Not Found');

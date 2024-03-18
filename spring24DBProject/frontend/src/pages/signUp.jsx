@@ -1,43 +1,34 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function SignUp() {
-  const [creationSuccess, setCreationSuccess] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const navigate = useNavigate(); // This hook provides imperative navigation
 
-  const [formData, setFormData] = useState({
-    firstName: "",
-    middleName: "",
-    lastName: "",
-    email: "",
-    phoneNumber: "",
-    password: "",
-    confirmPassword: "",
-  });
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const formData = new FormData(event.target);
+    const data = Object.fromEntries(formData.entries());
 
     try {
-      const response = await fetch("http://localhost:3001/api/signUp", {
+      const response = await fetch("http://localhost:3001/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(data),
       });
-      if (!response.ok) {
-        throw new Error("Failed to create account");
+
+      if (response.ok) {
+        // Redirect user to the sign-in page
+        navigate("/signIn");
+      } else {
+        // Set error message state to show to the user
+        setErrorMessage("Signup unsuccessful, try again later");
       }
-      setCreationSuccess(true);
     } catch (error) {
-      console.error("Error:", error.message);
+      console.error("Error:", error);
+      setErrorMessage("Signup unsuccessful, try again later");
     }
   };
 
@@ -49,6 +40,11 @@ export default function SignUp() {
             <h1 className="my-2 text-center" style={{ color: "#2F4858" }}>
               Create Account
             </h1>
+            {errorMessage && (
+              <div className="alert alert-danger" role="alert">
+                {errorMessage}
+              </div>
+            )}
             <form onSubmit={handleSubmit}>
               <div className="row mt-5 mb-3">
                 <div className="col">
@@ -60,8 +56,6 @@ export default function SignUp() {
                     className="form-control"
                     id="firstName"
                     name="firstName"
-                    value={formData.firstName} // Bind value to formData state
-                    onChange={handleInputChange} // Handle input change
                     required
                   />
                 </div>
@@ -74,8 +68,6 @@ export default function SignUp() {
                     className="form-control"
                     id="middleName"
                     name="middleName"
-                    value={formData.middleName} // Bind value to formData state
-                    onChange={handleInputChange} // Handle input change
                     required
                   />
                 </div>
@@ -88,8 +80,6 @@ export default function SignUp() {
                     className="form-control"
                     id="lastName"
                     name="lastName"
-                    value={formData.lastName} // Bind value to formData state
-                    onChange={handleInputChange} // Handle input change
                     required
                   />
                 </div>
@@ -105,8 +95,6 @@ export default function SignUp() {
                     className="form-control"
                     id="email"
                     name="email"
-                    value={formData.email} // Bind value to formData state
-                    onChange={handleInputChange} // Handle input change
                     required
                   />
                 </div>
@@ -119,8 +107,6 @@ export default function SignUp() {
                     className="form-control"
                     id="phoneNumber"
                     name="phoneNumber"
-                    value={formData.phoneNumber} // Bind value to formData state
-                    onChange={handleInputChange} // Handle input change
                     required
                   />
                 </div>
@@ -136,8 +122,6 @@ export default function SignUp() {
                     className="form-control"
                     id="password"
                     name="password"
-                    value={formData.password} // Bind value to formData state
-                    onChange={handleInputChange} // Handle input change
                     required
                   />
                 </div>
@@ -150,8 +134,6 @@ export default function SignUp() {
                     className="form-control"
                     id="confirmPassword"
                     name="confirmPassword"
-                    value={formData.confirmPassword} // Bind value to formData state
-                    onChange={handleInputChange} // Handle input change
                     required
                   />
                 </div>
@@ -163,11 +145,6 @@ export default function SignUp() {
                 </button>
               </div>
             </form>
-            {creationSuccess && (
-              <div className="alert alert-success my-3" role="alert">
-                Account created successfully!
-              </div>
-            )}
           </div>
         </div>
       </div>
