@@ -1,0 +1,18 @@
+{
+    "sqltools.connections": [
+        {
+            "mysqlOptions": {
+                "authProtocol": "default",
+                "enableSsl": "Disabled"
+            },
+            "previewLimit": 50,
+            "server": "team8-mysql-server.mysql.database.azure.com",
+            "port": 3306,
+            "driver": "MySQL",
+            "name": "ThemeParkDB",
+            "database": "parkdb",
+            "username": "team8admin",
+            "askForPassword": true
+        }
+    ]
+}
