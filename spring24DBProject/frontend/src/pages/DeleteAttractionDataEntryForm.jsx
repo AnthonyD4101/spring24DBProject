@@ -1,21 +1,66 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 export default function DeleteAttraction() {
-    const [attractionID, setAttractionID] = useState("");
-    const [status, setStatus] = useState("");
+    const [attractionName, setAttractionName] = useState("");
+    const [status, setStatus] = useState("Inactive");
+    const [attractions, setAttractions] = useState(null);
+    const [isSet, setIsSet] = useState(false);
+    const [creationSuccess, setCreationSuccess] = useState(false);
 
-    const reasons = ["Out of Order", "Inactive"];
+    useEffect(() => {
+      // Fetch attraction data from your backend based on the attractionID to be implemented later (backend)
+      const fetchAttractions = async () => {
+        const response = await fetch("http://localhost:3001/getAttractions", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+  
+        const json = await response.json();
+        console.log(json);
+  
+        if (!response.ok) {
+          console.log("Failed to fetch attraction data");
+        }
+        if (response.ok) {
+          setAttractions(json);
+          setIsSet(true);
+        }
+      };
+  
+      fetchAttractions();
+    }, []);
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
+        setCreationSuccess(false);
     
         const formData = {
-            attractionID, 
+          attractionName, 
           status
         };
     
-        console.log(formData);
-        alert("Attraction has been Deleted");
+        try {
+          const response = await fetch(`http://localhost:3001/deleteAttraction/${encodeURIComponent(attractionName)}`, {
+            method: "PUT",
+            body: JSON.stringify(formData),
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+    
+          const json = await response.json();
+    
+          if (!response.ok) {
+            console.log(`Error: ${response.message}`)
+          }
+          if (response.ok) {
+            setCreationSuccess(true);
+          }
+        } catch (error) {
+          console.log("Error:", error.message);
+        }
       };
 
     return (
@@ -27,45 +72,28 @@ export default function DeleteAttraction() {
               Delete Attraction
             </h1>
             <div className="text-center">
-              Please enter the Attraction ID of the Attraction you would like to
-              delete.
+              Please select the name of the Attraction you would like to delete.
             </div>
+            
+            {isSet && (
             <form onSubmit={handleSubmit}>
               <div className="mb-3 mt-3">
-                <label htmlFor="attractionID" className="form-label">
-                  Attraction ID:
+              <label htmlFor="attractionName" className="form-label">
+                  Select Attraction Name:
                 </label>
                 <input
-                  type="number"
+                  list="attractions"
                   className="form-control"
-                  id="attractionID"
-                  name="attractionID"
-                  placeholder="12345"
-                  maxLength="10"
-                  required
-                  value={attractionID}
-                  onChange={(e) => setAttractionID(e.target.value)}
+                  id="attractionName"
+                  name="attractionName"
+                  value={attractionName}
+                  onChange={(e) => setAttractionName(e.target.value)}
                 />
-              </div>
-              <div className="mb-3 mt-3">
-              <label htmlFor="status" className="form-label">
-                Reason:
-              </label>
-              <input
-                list="reasons"
-                className="form-control"
-                id="status"
-                name="status"
-                placeholder="Type to search..."
-                required
-                value={status}
-                onChange={(e) => setStatus(e.target.value)}
-              />
-              <datalist id="reasons">
-                {reasons.map((status, index) => (
-                  <option key={index} value={status} />
-                ))}
-              </datalist>
+                <datalist id="attractions">
+                  {attractions.map((type, index) => (
+                    <option key={index} value={type.NameOfAttraction} />
+                  ))}
+                </datalist>
               </div>
               <div className="flex flex-wrap -mx-3 mt-6">
                 <div className="w-full px-3 text-center">
@@ -74,7 +102,13 @@ export default function DeleteAttraction() {
                   </button>
                 </div>
               </div>
-            </form>
+            </form>)}
+
+            {creationSuccess && (
+              <div className="alert alert-success my-3" role="alert">
+                Attraction Deleted Successfully!
+              </div>
+            )}
           </div>
         </div>
       </div>
