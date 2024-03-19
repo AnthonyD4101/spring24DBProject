@@ -1,7 +1,9 @@
 -- @block
 SELECT *
-FROM account -- @block
-    DROP TABLE IF EXISTS Account;
+FROM account 
+
+-- @block
+DROP TABLE IF EXISTS Account;
 CREATE TABLE Account (
     UserID INT AUTO_INCREMENT PRIMARY KEY,
     AccountType ENUM(
