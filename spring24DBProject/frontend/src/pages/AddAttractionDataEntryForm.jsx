@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 
 export default function AddAttraction() {
+  const [creationSuccess, setCreationSuccess] = useState(false);
+
   const [startOperatingHour, setStartOperatingHour] = useState("");
   const [endOperatingHour, setEndOperatingHour] = useState("");
   const [name, setName] = useState("");
@@ -11,24 +13,57 @@ export default function AddAttraction() {
   const [status, setStatus] = useState("Active");
   const [department, setDepartment] = useState("Attraction");
 
-  const attractionTypes = ["Ride", "Show"]
+  const [errors, setErrors] = useState([]);
+  const [errorFields, setErrorFields] = useState([]);
 
-  const handleSubmit = (event) => {
+  const attractionTypes = ["Ride", "Show"];
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
+    setCreationSuccess(false);
     // Submit data to backend or perform further processing
     const formData = {
-        startOperatingHour,
-        endOperatingHour,
-        name,
-        type,
-        height,
-        weight,
-        capacity,
-        status,
-        department,
+      startOperatingHour,
+      endOperatingHour,
+      name,
+      type,
+      height,
+      weight,
+      capacity,
+      status,
+      department,
     };
-    console.log(formData);
-    alert("Attraction has been added");
+
+    try {
+      const response = await fetch("http://localhost:3001/addAttraction", {
+        method: "POST",
+        body: JSON.stringify(formData),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const json = await response.json();
+
+      if (!response.ok) {
+        setErrors(json.errors);
+        setErrorFields(json.errorFields);
+      }
+      if (response.ok) {
+        setStartOperatingHour("");
+        setEndOperatingHour("");
+        setName("");
+        setType("");
+        setHeight("");
+        setWeight("");
+        setCapacity("");
+        setErrors([]);
+        setErrorFields([]);
+        setCreationSuccess(true);
+      }
+    } catch (error) {
+      console.log("Error:", error.message);
+    }
   };
 
   return (
@@ -47,7 +82,11 @@ export default function AddAttraction() {
                   </label>
                   <input
                     type="time"
-                    className="form-control"
+                    className={
+                      errorFields.includes("startOperatingHour")
+                        ? "error form-control"
+                        : "form-control"
+                    }
                     id="startOH"
                     name="startOH"
                     required
@@ -61,7 +100,11 @@ export default function AddAttraction() {
                   </label>
                   <input
                     type="time"
-                    className="form-control"
+                    className={
+                      errorFields.includes("endOperatingHour")
+                        ? "error form-control"
+                        : "form-control"
+                    }
                     id="endOH"
                     name="endOH"
                     required
@@ -92,7 +135,11 @@ export default function AddAttraction() {
                   </label>
                   <input
                     list="types"
-                    className="form-control"
+                    className={
+                      errorFields.includes("type")
+                        ? "error form-control"
+                        : "form-control"
+                    }
                     id="type"
                     name="type"
                     placeholder="Type to search..."
@@ -110,11 +157,16 @@ export default function AddAttraction() {
               <div className="row mb-3">
                 <div className="col">
                   <label htmlFor="height" className="form-label">
-                    Height Requirement in Feet (Enter 0 if no Height Requirement):
+                    Height Requirement in Inches (Enter 0 if no Height
+                    Requirement):
                   </label>
                   <input
                     type="number"
-                    className="form-control"
+                    className={
+                      errorFields.includes("height")
+                        ? "error form-control"
+                        : "form-control"
+                    }
                     id="height"
                     name="height"
                     placeholder="4.0"
@@ -129,7 +181,11 @@ export default function AddAttraction() {
                   </label>
                   <input
                     type="number"
-                    className="form-control"
+                    className={
+                      errorFields.includes("weight")
+                        ? "error form-control"
+                        : "form-control"
+                    }
                     id="weight"
                     name="weight"
                     placeholder="355"
@@ -146,7 +202,11 @@ export default function AddAttraction() {
                   </label>
                   <input
                     type="number"
-                    className="form-control"
+                    className={
+                      errorFields.includes("capacity")
+                        ? "error form-control"
+                        : "form-control"
+                    }
                     id="capacity"
                     name="capacity"
                     placeholder="1000"
@@ -163,7 +223,19 @@ export default function AddAttraction() {
                   </button>
                 </div>
               </div>
+              {errors.length>0 ?  (
+                <ul className="error">
+                  {errors.map((error, index) => (
+                    <li key={index}>{error}</li>
+                  ))}
+                </ul>
+              ) : ""}
             </form>
+            {creationSuccess && (
+              <div className="alert alert-success my-3" role="alert">
+                Attraction Created Successfully!
+              </div>
+            )}
           </div>
         </div>
       </div>

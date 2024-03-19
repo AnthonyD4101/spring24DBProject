@@ -209,4 +209,18 @@ body {
     overflow-x: hidden; /* Disable horizontal scroll */
     padding-top: 20px;
   }
+
+  ul.error {
+    padding: 10px;
+    padding-left: 25px;
+    background: #ffefef;
+    border: 1px solid red;
+    color: red;
+    border-radius: 4px;
+    margin: 20px 0;
+  }
+
+  input.error {
+    border: 1px solid red;
+  }
   
