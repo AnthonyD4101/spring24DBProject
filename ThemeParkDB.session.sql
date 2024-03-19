@@ -3,6 +3,10 @@ SELECT *
 FROM account 
 
 -- @block
+SELECT *
+FROM customer
+
+-- @block
 DROP TABLE IF EXISTS Account;
 CREATE TABLE Account (
     UserID INT AUTO_INCREMENT PRIMARY KEY,
