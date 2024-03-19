@@ -99,6 +99,18 @@ export default function SignUp() {
                   />
                 </div>
                 <div className="col">
+                  <label htmlFor="dateOfBirth" className="form-label">
+                    Date of Birth
+                  </label>
+                  <input
+                    type="date"
+                    className="form-control"
+                    id="dateOfBirth"
+                    name="dateOfBirth"
+                    required
+                  />
+                </div>
+                <div className="col">
                   <label htmlFor="phoneNumber" className="form-label">
                     Phone Number
                   </label>

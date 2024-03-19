@@ -9,18 +9,18 @@ function handleSignUp(req, res, connection) {
   });
 
   req.on("end", () => {
-    const { firstName, middleName, lastName, email, phoneNumber, password } =
+    const { firstName, middleName, lastName, email, dateOfBirth, phoneNumber, password } =
       JSON.parse(body);
 
-    // Add server-side password strength validation if necessary
+    const accountType = "Customer";
 
     const hashedPassword = bcrypt.hashSync(password, 10);
     const query =
-      "INSERT INTO Account (firstName, middleName, lastName, email, phoneNumber, password) VALUES (?, ?, ?, ?, ?, ?)";
+      "INSERT INTO Account (accountType, firstName, middleName, lastName, email, dateOfBirth, phoneNumber, password) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
     poolConnection.query(
       query,
-      [firstName, middleName, lastName, email, phoneNumber, hashedPassword],
+      [accountType, firstName, middleName, lastName, email, dateOfBirth, phoneNumber, hashedPassword],
       (error, results) => {
         if (error) {
           console.error("Error inserting user into the database:", error);
