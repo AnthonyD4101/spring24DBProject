@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 export default function DeleteVendor() {
   const [vendorName, setVendorName] = useState("");
@@ -19,16 +19,14 @@ export default function DeleteVendor() {
         },
       });
 
-      const json = await response.json();
-      console.log(json);
-
       if (!response.ok) {
-        console.log("Failed to fetch attraction data");
+        console.error("Failed to fetch vendor data");
+        return;
       }
-      if (response.ok) {
-        setAttractions(json);
-        setIsSet(true);
-      }
+
+      const json = await response.json();
+      setVendors(json);
+      setIsSet(true);
     };
 
     fetchVendors();
@@ -127,7 +125,7 @@ export default function DeleteVendor() {
 
             {creationSuccess && (
               <div className="alert alert-success my-3" role="alert">
-                Attraction Deleted Successfully!
+                Vendor Deleted Successfully!
               </div>
             )}
           </div>
