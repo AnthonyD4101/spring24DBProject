@@ -1,15 +1,20 @@
 import React, { useState } from "react";
 
 export default function AddVendor() {
+  const [creationSuccess, setCreationSuccess] = useState(false);
   const [name, setName] = useState("");
   const [type, setType] = useState("");
   const [status, setStatus] = useState("Active");
   const [department, setDepartment] = useState("Vendor");
 
+  const [errors, setErrors] = useState([]);
+  const [errorFields, setErrorFields] = useState([]);
+
   const vendorTypes = ["Concession Stand", "Gift Shop"]
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
+    setCreationSuccess(false);
     // Submit data to backend or perform further processing
     const formData = {
       name,
@@ -17,9 +22,36 @@ export default function AddVendor() {
       status,
       department,
     };
-    console.log(formData);
-    alert("Vendor has been added");
-  };
+    //console.log(formData);
+    //alert("Vendor has been added");
+
+
+  try {
+    const response = await fetch("http://localhost:3001/addVendor", {
+      method: "POST",
+      body: JSON.stringify(formData),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    const json = await response.json();
+
+    if (!response.ok) {
+      setErrors(json.errors);
+      setErrorFields(json.errorFields);
+    }
+    if (response.ok) {
+      setName("");
+      setType("");
+      setErrors([]);
+      setErrorFields([]);
+      setCreationSuccess(true);
+    }
+  } catch (error) {
+    console.log("Error:", error.message);
+  }
+};
 
   return (
     <div className="row justify-content-center">
@@ -74,7 +106,19 @@ export default function AddVendor() {
                   </button>
                 </div>
               </div>
+              {errors.length>0 ?  (
+                <ul className="error">
+                  {errors.map((error, index) => (
+                    <li key={index}>{error}</li>
+                  ))}
+                </ul>
+              ) : ""}
             </form>
+            {creationSuccess && (
+              <div className="alert alert-success my-3" role="alert">
+                Vendor Added Successfully!
+              </div>
+            )}
           </div>
         </div>
       </div>

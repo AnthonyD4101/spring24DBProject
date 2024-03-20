@@ -6,8 +6,8 @@ const handleEmployeeAccountSignUp = require("../handlers/CreateEmployeeAccountHa
 const handleAddEmployee = require("../handlers/AddEmployeeHandler");
 const handleStaffSignIn = require("../handlers/StaffSignInHandler");
 const { handleAddAttraction, handleGetAllAttractions, handleGetAttraction, handleUpdateAttraction, handleDeleteAttraction } = require('../handlers/AttractionHandler');
-const { handleGetEmployee, handleGetAccount, handleUpdateEmployee, handleDeleteEmployee } = require('../handlers/EmployeeHandler');
-const { handleGetAllDepartments } = require('../handlers/DepartmentHandler');
+const { handleAddVendor,handleGetAllVendors, handleGetVendor, handleUpdateVendor,handleDeleteVendor } = require('../handlers/VendorHandler');
+
 
 const server = http.createServer((req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -50,6 +50,16 @@ const server = http.createServer((req, res) => {
     handleDeleteAttraction(req, res);
   } else if(req.method === "PUT" && url.parse(req.url).pathname.match("^\/deleteEmployee\/.+")) {
     handleDeleteEmployee(req, res);
+  } else if(req.method === "POST" && url.parse(req.url).pathname === "/addVendor") {
+    handleAddVendor(req, res);
+  } else if(req.method === "GET" && url.parse(req.url).pathname === "/getVendors") {
+    handleGetAllVendors(req, res);
+  } else if(req.method === "GET" && url.parse(req.url).pathname.match("^\/getVendor\/.+")) {
+    handleGetVendor(req, res);
+  } else if(req.method === "PUT" && url.parse(req.url).pathname.match("^\/updateVendor\/.+")) {
+    handleUpdateVendor(req, res);
+  } else if(req.method === "PUT" && url.parse(req.url).pathname.match("^\/deleteVendor\/.+")) {
+    handleDeleteVendor(req, res);
   } else {
     res.writeHead(404);
     res.end("Not Found");
