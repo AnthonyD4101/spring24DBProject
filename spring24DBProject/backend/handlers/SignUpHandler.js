@@ -1,4 +1,4 @@
-const poolConnection = require('../server/database')
+const poolConnection = require("../server/database");
 const bcrypt = require("bcryptjs");
 
 function handleSignUp(req, res, connection) {
@@ -9,8 +9,15 @@ function handleSignUp(req, res, connection) {
   });
 
   req.on("end", () => {
-    const { firstName, middleName, lastName, email, dateOfBirth, phoneNumber, password } =
-      JSON.parse(body);
+    const {
+      firstName,
+      middleName,
+      lastName,
+      email,
+      dateOfBirth,
+      phoneNumber,
+      password,
+    } = JSON.parse(body);
 
     const accountType = "Customer";
 
@@ -20,7 +27,16 @@ function handleSignUp(req, res, connection) {
 
     poolConnection.query(
       query,
-      [accountType, firstName, middleName, lastName, email, dateOfBirth, phoneNumber, hashedPassword],
+      [
+        accountType,
+        firstName,
+        middleName,
+        lastName,
+        email,
+        dateOfBirth,
+        phoneNumber,
+        hashedPassword,
+      ],
       (error, results) => {
         if (error) {
           console.error("Error inserting user into the database:", error);

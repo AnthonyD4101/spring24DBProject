@@ -4,45 +4,39 @@ import { useNavigate } from "react-router-dom";
 export default function AddEmployee({ employeeData = {} }) {
   console.log("Received employeeData:", employeeData);
   const {
-    userID = "",
+    userId: initialUserID = "",
     firstName = "",
     middleName = "",
     lastName = "",
     phoneNumber = "",
     email = "",
-    position = "",
-    supervisorUserId = "",
-    salary = "",
-    department = "",
-    address: { street = "", city = "", state = "", zipcode = "" } = {},
   } = employeeData;
 
   const navigate = useNavigate();
 
   // Initialize state with the destructured values
-  const [userId, setUserId] = useState(userID);
+  const [userIDState, setUserIDState] = useState(initialUserID);
   const [firstNameState, setFirstName] = useState(firstName);
   const [middleNameState, setMiddleName] = useState(middleName);
   const [lastNameState, setLastName] = useState(lastName);
   const [phoneNumberState, setPhoneNumber] = useState(phoneNumber);
   const [emailState, setEmail] = useState(email);
-  const [positionState, setPosition] = useState(position);
-  const [supervisorUserIdState, setSupervisorUserId] =
-    useState(supervisorUserId);
-  const [salaryState, setSalary] = useState(salary);
-  const [departmentState, setDepartment] = useState(department);
+  const [positionState, setPosition] = useState("");
+  const [supervisorUserIdState, setSupervisorUserId] = useState("");
+  const [salaryState, setSalary] = useState("");
+  const [departmentState, setDepartment] = useState("");
 
   const [addressState, setAddress] = useState({
-    street,
-    city,
-    state,
-    zipcode,
+    street: "",
+    city: "",
+    state: "",
+    zipcode: "",
   });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const employee = {
-      userId: userId,
+      userId: userIDState,
       firstName: firstNameState,
       middleName: middleNameState,
       lastName: lastNameState,
@@ -52,6 +46,7 @@ export default function AddEmployee({ employeeData = {} }) {
       supervisorUserId: supervisorUserIdState,
       salary: salaryState,
       address: addressState,
+      department: departmentState,
       // status and department were not included in the destructuring,
       // Assuming they are handled elsewhere or not needed for initialization.
     };
@@ -71,7 +66,7 @@ export default function AddEmployee({ employeeData = {} }) {
         const responseData = await response.json();
         console.log("Employee added successfully:", responseData);
         // Navigate to another route upon success
-        navigate("/path-to-success");
+        navigate("/staffSignIn");
       } else {
         // Handle server-side validation errors or other issues
         console.error("Failed to add employee.");
@@ -112,8 +107,8 @@ export default function AddEmployee({ employeeData = {} }) {
                     name="userID"
                     placeholder="User ID"
                     required
-                    value={userID}
-                    onChange={(e) => setUserID(e.target.value)}
+                    value={userIDState} // Use the renamed state variable
+                    onChange={(e) => setUserIDState(e.target.value)} // Use the renamed setter function
                   />
                 </div>
               </div>
@@ -130,7 +125,7 @@ export default function AddEmployee({ employeeData = {} }) {
                     placeholder="John"
                     maxLength="30"
                     required
-                    value={firstName}
+                    value={firstNameState} // Use the state variable
                     onChange={(e) => setFirstName(e.target.value)}
                   />
                 </div>
@@ -210,7 +205,7 @@ export default function AddEmployee({ employeeData = {} }) {
                     name="position"
                     placeholder="Type to search..."
                     required
-                    value={position}
+                    value={positionState}
                     onChange={(e) => setPosition(e.target.value)}
                   />
                   <datalist id="positions">
@@ -230,7 +225,7 @@ export default function AddEmployee({ employeeData = {} }) {
                     name="supUserID"
                     placeholder="12345"
                     required
-                    value={supervisorUserId}
+                    value={supervisorUserIdState}
                     onChange={(e) => setSupervisorUserId(e.target.value)}
                   />
                 </div>
@@ -247,7 +242,7 @@ export default function AddEmployee({ employeeData = {} }) {
                     name="salary"
                     placeholder="65000"
                     required
-                    value={salary}
+                    value={salaryState}
                     onChange={(e) => setSalary(e.target.value)}
                   />
                 </div>
