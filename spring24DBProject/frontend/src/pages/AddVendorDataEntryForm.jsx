@@ -7,6 +7,9 @@ export default function AddVendor() {
   const [status, setStatus] = useState("Active");
   const [department, setDepartment] = useState("Vendor");
 
+  const [errors, setErrors] = useState([]);
+  const [errorFields, setErrorFields] = useState([]);
+
   const vendorTypes = ["Concession Stand", "Gift Shop"]
 
   const handleSubmit = async (event) => {
