@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
 export default function AddVendor() {
+  const [creationSuccess, setCreationSuccess] = useState(false);
   const [name, setName] = useState("");
   const [type, setType] = useState("");
   const [status, setStatus] = useState("Active");
@@ -10,6 +11,7 @@ export default function AddVendor() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setCreationSuccess(false);
     // Submit data to backend or perform further processing
     const formData = {
       name,
@@ -108,7 +110,7 @@ export default function AddVendor() {
             </form>
             {creationSuccess && (
               <div className="alert alert-success my-3" role="alert">
-                Attraction Created Successfully!
+                Vendor Added Successfully!
               </div>
             )}
           </div>
