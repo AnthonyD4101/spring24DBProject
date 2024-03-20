@@ -3,7 +3,7 @@ const url = require('url');
 const handleSignUp = require('../handlers/SignUpHandler');
 const handleSignIn = require('../handlers/SignInHandler');
 const { handleAddAttraction, handleGetAllAttractions, handleGetAttraction, handleUpdateAttraction, handleDeleteAttraction } = require('../handlers/AttractionHandler');
-const {handleAddVendor} = require('../handlers/VendorHandler');
+const {handleAddVendor,handleGetAllVendors, handleGetVendor, handleUpdateVendor,handleDeleteVendor} = require('../handlers/VendorHandler');
 
 
 const server = http.createServer((req, res) => {
@@ -31,9 +31,17 @@ const server = http.createServer((req, res) => {
     handleUpdateAttraction(req, res);
   } else if(req.method === "PUT" && url.parse(req.url).pathname.match("^\/deleteAttraction\/.+")) {
     handleDeleteAttraction(req, res);
-  }else if(req.method === "POST" && url.parse(req.url).pathname === "/addVendor") {
+  } else if(req.method === "POST" && url.parse(req.url).pathname === "/addVendor") {
     handleAddVendor(req, res);
-  }else {
+  } else if(req.method === "GET" && url.parse(req.url).pathname === "/getVendors") {
+    handleGetAllVendors(req, res);
+  } else if(req.method === "GET" && url.parse(req.url).pathname.match("^\/getVendor\/.+")) {
+    handleGetVendor(req, res);
+  } else if(req.method === "PUT" && url.parse(req.url).pathname.match("^\/updateVendor\/.+")) {
+    handleUpdateVendor(req, res);
+  } else if(req.method === "PUT" && url.parse(req.url).pathname.match("^\/deleteVendor\/.+")) {
+    handleDeleteVendor(req, res);
+  } else {
     res.writeHead(404);
     res.end('Not Found');
   }
