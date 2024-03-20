@@ -130,19 +130,17 @@ export default function TicketPurchase() {
                     >
                       Ticket {index + 1} Type
                     </label>
-                    <input
+                    <select
                       className="form-control"
-                      list={`datalistOptions${index}`}
                       id={`ticketType${index}`}
-                      placeholder="Type to search..."
                       value={ticketType[index]}
                       onChange={(e) => handleTicketTypeChange(e, index)}
                       required
-                    ></input>
-                    <datalist id={`datalistOptions${index}`}>
+                    >
+                      <option value="">Select Ticket Type</option>
                       <option value="GA">General Admission (10+)</option>
                       <option value="KI">Kids (3-10)</option>
-                    </datalist>
+                    </select>
                   </div>
                 ))}
               </div>

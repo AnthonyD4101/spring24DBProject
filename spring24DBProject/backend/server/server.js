@@ -3,6 +3,7 @@ const url = require('url');
 const handleSignUp = require('../handlers/SignUpHandler');
 const handleSignIn = require('../handlers/SignInHandler');
 const { handleAddAttraction, handleGetAllAttractions, handleGetAttraction, handleUpdateAttraction, handleDeleteAttraction } = require('../handlers/AttractionHandler');
+const handleTicketPurchase = require('../handlers/TicketPurchaseHandler');
 
 
 const server = http.createServer((req, res) => {
@@ -30,7 +31,9 @@ const server = http.createServer((req, res) => {
     handleUpdateAttraction(req, res);
   } else if(req.method === "PUT" && url.parse(req.url).pathname.match("^\/deleteAttraction\/.+")) {
     handleDeleteAttraction(req, res);
-  }else {
+  } else if(req.method === "POST" && url.parse(req.url).pathname === "buyTicket") {
+    handleTicketPurchase(req, res);
+  } else {
     res.writeHead(404);
     res.end('Not Found');
   }
