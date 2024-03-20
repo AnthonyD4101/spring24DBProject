@@ -176,7 +176,7 @@ export default function UpdateVendor() {
             )}
             {creationSuccess && (
               <div className="alert alert-success my-3" role="alert">
-                Attraction Updated Successfully!
+                Vendor Updated Successfully!
               </div>
             )}
           </div>
