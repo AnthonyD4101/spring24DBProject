@@ -27,7 +27,8 @@ import TicketDataReports from "./pages/TicketDataReports";
 import RideDataReports from "./pages/RideDataReports";
 import RevenueDataReports from "./pages/RevenueDataReports";
 
-import AddEmployee from "./pages/AddEmployeeDataEntryForm";
+import CreateEmployeeAccount from "./pages/CreateEmployeeAccount";
+import AddEmployee from "./pages/AddEmployee";
 import UpdateEmployee from "./pages/UpdateEmployeeDataEntryForm";
 import DeleteEmployee from "./pages/DeleteEmployeeDataEntryForm";
 import AddAttraction from "./pages/AddAttractionDataEntryForm";
@@ -92,7 +93,11 @@ function App() {
             element={<GenerateMaintRep />}
           />
           <Route path="/depManagement" element={<AdminDepManagement />} />
-          <Route path="/addemployeedataentryform" element={<AddEmployee />} />
+          <Route
+            path="/CreateEmployeeAccount"
+            element={<CreateEmployeeAccount />}
+          />
+          <Route path="/AddEmployee" element={<AddEmployee />} />
           <Route
             path="/updateemployeedataentryform"
             element={<UpdateEmployee />}
