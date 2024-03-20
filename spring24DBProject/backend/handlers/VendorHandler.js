@@ -102,18 +102,26 @@ function handleGetVendor(req, res){
         poolConnection.query(query, [name], (error, results) => {
             if (error) {
                 console.error("Database error:", error);
-                res.status(500).json({ message: "Server error" });
+                res.statusCode = 500;
+                res.setHeader("Content-Type", "application/json");
+                res.end(JSON.stringify({ message: "Server error" }));
             } else {
                 if (results.length === 0) {
-                    res.status(404).json({ message: "Vendor not found" });
+                    res.statusCode = 404;
+                    res.setHeader("Content-Type", "application/json");
+                    res.end(JSON.stringify({ message: "Vendor not found" }));
                 } else {
-                    res.status(200).json(results);
+                    res.statusCode = 200;
+                    res.setHeader("Content-Type", "application/json");
+                    res.end(JSON.stringify(results));
                 }
             }
         });
     } catch (error) {
         console.error("Error processing request:", error);
-        res.status(500).json({ message: "An unexpected error occurred" });
+        res.statusCode = 500;
+        res.setHeader("Content-Type", "application/json");
+        res.end(JSON.stringify({ message: "An unexpected error occurred" }));
     }
 }
 
