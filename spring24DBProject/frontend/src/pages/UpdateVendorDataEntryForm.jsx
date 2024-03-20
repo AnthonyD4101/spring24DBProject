@@ -6,7 +6,7 @@ export default function UpdateVendor() {
   const [isSubmitted, setisSubmitted] = useState(false);
   const [error, setError] = useState(null);
 
-  const [vendors, setVendors] = useState(null);
+  const [attractions, setVendors] = useState(null);
   const [isSet, setIsSet] = useState(false);
   const [creationSuccess, setCreationSuccess] = useState(false);
   const [errors, setErrors] = useState([]);
@@ -27,7 +27,7 @@ export default function UpdateVendor() {
       console.log(json);
 
       if (!response.ok) {
-        console.log("Failed to fetch vendor data");
+        console.log("Failed to fetch attraction data");
       }
       if (response.ok) {
         setVendors(json);
@@ -43,8 +43,6 @@ export default function UpdateVendor() {
     setVendorData(null);
     setisSubmitted(false);
 
-    // Form submission logic
-    console.log(vendorData);
     try {
       const response = await fetch(`http://localhost:3001/getVendor/${encodeURIComponent(vendorName)}`, {
         method: "GET",
@@ -57,10 +55,10 @@ export default function UpdateVendor() {
       console.log(json);
 
       if (!response.ok) {
-        console.log("Failed to fetch vendor data");
+        console.log("Failed to fetch attraction data");
       }
       if (response.ok) {
-        setAttractionData(json[0]);
+        setVendorData(json[0]);
         setisSubmitted(true);
       }
     } catch (error) {
@@ -71,11 +69,9 @@ export default function UpdateVendor() {
   const handleSubmitTwo = async (e) => {
     e.preventDefault();
     setCreationSuccess(false);
-    // Form submission logic
-    console.log(vendorData);
-    alert("Vendor Information has been Updated");
 
     const formData = vendorData;
+
     try {
       const response = await fetch(`http://localhost:3001/updateVendor/${encodeURIComponent(vendorName)}`, {
         method: "PUT",
@@ -122,8 +118,8 @@ export default function UpdateVendor() {
                   className="form-control"
                   id="vendorName"
                   name="vendorName"
-                  //placeholder="12345"
-                  maxLength="15"
+                  placeholder="ABC"
+                  maxLength="10"
                   required
                   value={vendorName}
                   onChange={(e) => setVendorName(e.target.value)}
@@ -143,7 +139,7 @@ export default function UpdateVendor() {
                 <div className="row mb-3 mt-3">
                   <div className="col">
                     <label htmlFor="name" className="form-label">
-                      Name of Vendor:
+                      Enter a new name for the Vendor:
                     </label>
                     <input
                       type="text"
@@ -156,27 +152,7 @@ export default function UpdateVendor() {
                       }
                     />
                   </div>
-                  <div className="col">
-                    <label htmlFor="type" className="form-label">
-                      Vendor Type:
-                    </label>
-                    <input
-                      list="types"
-                      className="form-control"
-                      id="type"
-                      name="type"
-                      placeholder="Type to search..."
-                      value={vendorData.type}
-                      onChange={(e) =>
-                        setVendorData({ ...vendorData, type: e.target.value })
-                      }
-                    />
-                    <datalist id="types">
-                      {vendorTypes.map((type, index) => (
-                        <option key={index} value={type} />
-                      ))}
-                    </datalist>
-                  </div>
+                  
                 </div>
                 <div className="flex flex-wrap -mx-3 mt-6">
                   <div className="w-full px-3 text-center">
@@ -200,7 +176,7 @@ export default function UpdateVendor() {
             )}
             {creationSuccess && (
               <div className="alert alert-success my-3" role="alert">
-                Vendor Updated Successfully!
+                Attraction Updated Successfully!
               </div>
             )}
           </div>
@@ -209,3 +185,4 @@ export default function UpdateVendor() {
     </div>
   );
 }
+

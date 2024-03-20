@@ -134,12 +134,8 @@ function handleUpdateVendor(req, res) {
     req.on("end", () => {
         const formData = JSON.parse(requestBody);
         const {
-            name,
-            type,
-            status,
-            department
+            name
         } = formData;
-
         let errors = [];
         let errorFields = [];
 
@@ -148,11 +144,11 @@ function handleUpdateVendor(req, res) {
         errors.push("Name is required");
         errorFields.push("name");
     }
-    if(!type)
+    /*if(!pname)
     {
-        errors.push("Type is required.");
-        errorFields.push("type");
-    }
+        errors.push("Name is required.");
+        errorFields.push("pname");
+    }*/
     if (errors.length > 0) {
       res.writeHead(400, { "Content-Type": "application/json" });
       res.end(JSON.stringify({ errors, errorFields }));
@@ -161,15 +157,12 @@ function handleUpdateVendor(req, res) {
 
     //Query the database to add the new vendor
     const pathname = url.parse(req.url).pathname;
-    const pname = decodeURIComponent(pathname.substring("/updateVendor/".length));
-
-    const query = "UPDATE Vendor SET NameOfVendor=?, VendorType=?, VendorStatus=? WHERE NameOfVendor=?";
+    const pname1 = decodeURIComponent(pathname.substring("/updateVendor/".length));
+    const query = "UPDATE Vendor SET NameOfVendor=? WHERE NameOfVendor=?";
     poolConnection.query(query,
       [
         name,
-        type,
-        status,
-        pname
+        pname1
       ],
       (error, results) => {
         if (error) {
