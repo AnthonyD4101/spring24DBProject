@@ -1,21 +1,68 @@
 import React, { useState } from "react";
 
 export default function DeleteVendor() {
-  const [vendorID, setVendorID] = useState("");
-  const [status, setStatus] = useState("");
+  const [vendorName, setVendorName] = useState("");
+  const [status, setStatus] = useState("Inactive");
+  const [vendors, setVendors] = useState(null);
+  const [isSet, setIsSet] = useState(false);
+  const [creationSuccess, setCreationSuccess] = useState(false);
 
   const reasons = ["Out of Order", "Inactive"];
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
+  useEffect(() => {
+    // Fetch vendor data from your backend based on the vendorName to be implemented later (backend)
+    const fetchVendors = async () => {
+      const response = await fetch("http://localhost:3001/getVendors", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
-    const formData = {
-      vendorID,
-      status,
+      const json = await response.json();
+      console.log(json);
+
+      if (!response.ok) {
+        console.log("Failed to fetch attraction data");
+      }
+      if (response.ok) {
+        setAttractions(json);
+        setIsSet(true);
+      }
     };
 
-    console.log(formData);
-    alert("Vendor has been Deleted");
+    fetchVendors();
+  }, []);
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setCreationSuccess(false);
+
+    const formData = {
+      vendorName,
+      status
+    };
+
+    try {
+      const response = await fetch(`http://localhost:3001/deleteVendor/${encodeURIComponent(vendorName)}`, {
+        method: "PUT",
+        body: JSON.stringify(formData),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const json = await response.json();
+
+      if (!response.ok) {
+        console.log(`Error: ${response.message}`)
+      }
+      if (response.ok) {
+        setCreationSuccess(true);
+      }
+    } catch (error) {
+      console.log("Error:", error.message);
+    }
   };
 
   return (
@@ -27,24 +74,26 @@ export default function DeleteVendor() {
               Delete Vendor
             </h1>
             <div className="text-center">
-              Please enter the Vendor ID of the Vendor you would like to
+              Please enter the Name of the Vendor you would like to
               delete.
             </div>
+
+            {isSet && (
             <form onSubmit={handleSubmit}>
               <div className="mb-3 mt-3">
-                <label htmlFor="vendorID" className="form-label">
-                  Vendor ID:
+                <label htmlFor="vendorName" className="form-label">
+                  Vendor Name:
                 </label>
                 <input
-                  type="number"
+                  type="text"
                   className="form-control"
-                  id="vendorID"
-                  name="vendorID"
-                  placeholder="12345"
-                  maxLength="10"
+                  id="vendorName"
+                  name="vendorName"
+                  //placeholder="12345"
+                  maxLength="15"
                   required
-                  value={vendorID}
-                  onChange={(e) => setVendorID(e.target.value)}
+                  value={vendorName}
+                  onChange={(e) => setVendorName(e.target.value)}
                 />
               </div>
               <div className="mb-3 mt-3">
@@ -74,7 +123,13 @@ export default function DeleteVendor() {
                   </button>
                 </div>
               </div>
-            </form>
+            </form>)}
+
+            {creationSuccess && (
+              <div className="alert alert-success my-3" role="alert">
+                Attraction Deleted Successfully!
+              </div>
+            )}
           </div>
         </div>
       </div>
