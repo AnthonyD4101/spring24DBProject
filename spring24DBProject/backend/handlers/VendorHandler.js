@@ -130,105 +130,84 @@ function handleUpdateVendor(req, res) {
     req.on("data", (chunk) => {
         requestBody += chunk.toString(); // Convert the chunk to string and append it to the body variable
     });
-    
+
     req.on("end", () => {
-        try{
-            // Parse the body string to JSON
-            const formData = JSON.parse(requestBody);
-            const {
-                name,
-                type,
-                status,
-                department,
-            } = formData;
+        const formData = JSON.parse(requestBody);
+        const {
+            name,
+            type,
+            status,
+            department
+        } = formData;
 
-            let errors = [];
-            let errorFields = [];
+        let errors = [];
+        let errorFields = [];
 
-            if (!name) {
-                errors.push("Name is required.");
-                errorFields.push("name");
-            }
+    if(!name)
+    {
+        errors.push("Name is required");
+        errorFields.push("name");
+    }
+    if(!type)
+    {
+        errors.push("Type is required.");
+        errorFields.push("type");
+    }
+    if (errors.length > 0) {
+      res.writeHead(400, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ errors, errorFields }));
+      return;
+    }
 
-            if (!type) {
-                errors.push("Type is required.");
-                errorFields.push("type");
-            }
+    //Query the database to add the new vendor
+    const pathname = url.parse(req.url).pathname;
+    const pname = decodeURIComponent(pathname.substring("/updateVendor/".length));
 
-            if(errors.length > 0){
-                // Respond with error messages
-                res.writeHead(400, { "Content-Type": "application/json" });
-                res.end(JSON.stringify({ errors, errorFields }));
-            } else{
-                //Query the database to update the vendor
-                const pathname = url.parse(req.url).pathname;
-                const pname = decodeURIComponent(pathname.substring("/updateVendor/".length));
-
-                const query = "UPDATE Vendor SET NameOfVendor=?, VendorType=?, VendorStatus=? WHERE NameOfVendor=?";
-                poolConnection.query(query,
-                    [
-                        name,
-                        type,
-                        status, //active 
-                        'Vendor', //vendor
-                    ],
-                    (error, results, fields) => {
-                        if (error) {
-                            // Handle database query error
-                            console.error("Database error:", error);
-                            res.writeHead(500, { "Content-Type": "application/json" });
-                            res.end(JSON.stringify({ error: "An error occurred while updating the vendor." }));
-                        } else {
-                            // Vendor updated successfully
-                            res.writeHead(200, { "Content-Type": "application/json" });
-                            res.end(JSON.stringify({ message: "Vendor updated successfully." }));
-                        }
-                    }
-                );
-            }
-        } catch(error){
-            // Handle parsing error or other unexpected errors
-            console.error("Error processing request:", error);
-            res.writeHead(500, { "Content-Type": "application/json" });
-            res.end(JSON.stringify({ error: "An unexpected error occurred." }));
+    const query = "UPDATE Vendor SET NameOfVendor=?, VendorType=?, VendorStatus=? WHERE NameOfVendor=?";
+    poolConnection.query(query,
+      [
+        name,
+        type,
+        status,
+        pname
+      ],
+      (error, results) => {
+        if (error) {
+          console.log("Database error:", error);
+          res.writeHead(500, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ message: "Server error" }));
+          return;
         }
 
-    });
+        // Vendor updated successfully
+        res.writeHead(200, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ message: "Vendor updated successfully" }));
+      }
+    );
+  });
 
 }
 
 function handleDeleteVendor(req, res) {
+//Query the database to get all vendors
+const pathname = url.parse(req.url).pathname;
+const name = decodeURIComponent(pathname.substring("/deleteVendor/".length));
 
-    const vendorId = req.body.vendorId || req.query.vendorId;
+const query = "UPDATE Vendor SET VendorStatus=? WHERE NameOfVendor=? AND VendorStatus=?";
+poolConnection.query(query,
+['Inactive', name, 'Active'], 
+(error, results) => {
+  if (error) {
+    console.log("Database error:", error);
+    res.writeHead(500, { "Content-Type": "application/json" });
+    res.end(JSON.stringify({ message: "Server error" }));
+    return;
+  }
 
-    if (!vendorId) {
-        res.writeHead(400, { "Content-Type": "application/json" });
-        return res.end(JSON.stringify({ error: "Vendor ID is required." }));
-    }
-
-    // Query the database to delete the vendor
-    poolConnection.query(
-        "UPDATE Vendor SET VendorStatus=? WHERE NameOfVendor=? AND VendorStatus=?",
-        ['Inactive',name,'Active'],
-        (error, results, fields) => {
-            if (error) {
-                // Handle database query error
-                console.error("Database error:", error);
-                res.writeHead(500, { "Content-Type": "application/json" });
-                res.end(JSON.stringify({ error: "An error occurred while deleting the vendor." }));
-            } else {
-                if (results.affectedRows > 0) {
-                    // Vendor deleted successfully
-                    res.writeHead(200, { "Content-Type": "application/json" });
-                    res.end(JSON.stringify({ message: "Vendor deleted successfully." }));
-                } else {
-                    // Vendor with the given ID not found
-                    res.writeHead(404, { "Content-Type": "application/json" });
-                    res.end(JSON.stringify({ error: "Vendor not found." }));
-                }
-            }
-        }
-    );
+  // Vendor added successfully
+  res.writeHead(200, { "Content-Type": "application/json" });
+  res.end(JSON.stringify({ message: "Vendor deleted successfully" }));
+});
 }
 
 
