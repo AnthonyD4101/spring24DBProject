@@ -38,8 +38,6 @@ const server = http.createServer((req, res) => {
     handleUpdateAttraction(req, res);
   } else if(req.method === "PUT" && url.parse(req.url).pathname.match("^\/deleteAttraction\/.+")) {
     handleDeleteAttraction(req, res);
-  } else if (req.method === "POST" && url.parse(req.url).pathname === "/addEmployee") {
-    handleAddEmployee(req, res);
   } else {
     res.writeHead(404);
     res.end("Not Found");
