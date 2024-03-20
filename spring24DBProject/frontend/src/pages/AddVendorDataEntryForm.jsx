@@ -22,8 +22,8 @@ export default function AddVendor() {
       status,
       department,
     };
-    console.log(formData);
-    alert("Vendor has been added");
+    //console.log(formData);
+    //alert("Vendor has been added");
 
 
   try {
