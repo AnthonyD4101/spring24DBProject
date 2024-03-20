@@ -7,6 +7,10 @@ SELECT *
 FROM customer
 
 -- @block
+SELECT * 
+FROM employee
+
+-- @block
 DROP TABLE IF EXISTS Account;
 CREATE TABLE Account (
     UserID INT AUTO_INCREMENT PRIMARY KEY,

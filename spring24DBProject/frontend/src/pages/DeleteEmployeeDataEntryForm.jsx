@@ -3,19 +3,39 @@ import React, { useState } from "react";
 export default function DeleteEmployee() {
   const [employeeID, setEmployeeID] = useState("");
   const [status, setStatus] = useState("");
+  const [creationSuccess, setCreationSuccess] = useState(false);
 
   const reasons = ["Retired", "Inactive"];
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
+    setCreationSuccess(false);
 
     const formData = {
       employeeID, 
       status
     };
 
-    console.log(formData);
-    alert("Employee has been Deleted");
+    try {
+      const response = await fetch(`http://localhost:3001/deleteEmployee/${encodeURIComponent(employeeID)}`, {
+        method: "PUT",
+        body: JSON.stringify(formData),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const json = await response.json();
+
+      if (!response.ok) {
+        console.log(`Error: ${response.message}`)
+      }
+      if (response.ok) {
+        setCreationSuccess(true);
+      }
+    } catch (error) {
+      console.log("Error:", error.message);
+    }
   };
 
   return (
@@ -75,6 +95,12 @@ export default function DeleteEmployee() {
                 </div>
               </div>
             </form>
+
+            {creationSuccess && (
+              <div className="alert alert-success my-3" role="alert">
+                Employee Deleted Successfully!
+              </div>
+            )}
           </div>
         </div>
       </div>

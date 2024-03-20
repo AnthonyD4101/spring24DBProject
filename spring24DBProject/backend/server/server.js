@@ -6,6 +6,8 @@ const handleEmployeeAccountSignUp = require("../handlers/CreateEmployeeAccountHa
 const handleAddEmployee = require("../handlers/AddEmployeeHandler");
 const handleStaffSignIn = require("../handlers/StaffSignInHandler");
 const { handleAddAttraction, handleGetAllAttractions, handleGetAttraction, handleUpdateAttraction, handleDeleteAttraction } = require('../handlers/AttractionHandler');
+const { handleGetEmployee, handleGetAccount, handleUpdateEmployee, handleDeleteEmployee } = require('../handlers/EmployeeHandler');
+const { handleGetAllDepartments } = require('../handlers/DepartmentHandler');
 
 const server = http.createServer((req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -22,6 +24,12 @@ const server = http.createServer((req, res) => {
     handleGetAllAttractions(req, res);
   } else if(req.method === "GET" && url.parse(req.url).pathname.match("^\/getAttraction\/.+")) {
     handleGetAttraction(req, res);
+  } else if(req.method === "GET" && url.parse(req.url).pathname === "/getDepartments" ) {
+    handleGetAllDepartments(req, res);
+  } else if(req.method === "GET" && url.parse(req.url).pathname.match("^\/getEmployee\/.+")) {
+    handleGetEmployee(req, res);
+  } else if(req.method === "GET" && url.parse(req.url).pathname.match("^\/getAccount\/.+")) {
+    handleGetAccount(req, res);
   } else if (req.method === "POST" && url.parse(req.url).pathname === "/signup") {
     handleSignUp(req, res);
   } else if(req.method === "POST" && url.parse(req.url).pathname === "/signin") {
@@ -36,8 +44,12 @@ const server = http.createServer((req, res) => {
     handleAddAttraction(req, res);
   } else if(req.method === "PUT" && url.parse(req.url).pathname.match("^\/updateAttraction\/.+")) {
     handleUpdateAttraction(req, res);
+  } else if(req.method === "PUT" && url.parse(req.url).pathname.match("^\/updateEmployee\/.+")) {
+    handleUpdateEmployee(req, res);
   } else if(req.method === "PUT" && url.parse(req.url).pathname.match("^\/deleteAttraction\/.+")) {
     handleDeleteAttraction(req, res);
+  } else if(req.method === "PUT" && url.parse(req.url).pathname.match("^\/deleteEmployee\/.+")) {
+    handleDeleteEmployee(req, res);
   } else {
     res.writeHead(404);
     res.end("Not Found");
