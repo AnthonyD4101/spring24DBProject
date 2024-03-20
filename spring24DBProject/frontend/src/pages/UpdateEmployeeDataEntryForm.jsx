@@ -3,70 +3,133 @@ import React, { useState, useEffect } from "react";
 export default function UpdateEmployee() {
   const [employeeId, setEmployeeId] = useState("");
   const [employeeData, setEmployeeData] = useState(null);
+  const [accountData, setAccountData] = useState(null);
   const [isSubmitted, setisSubmitted] = useState(false);
-  const [error, setError] = useState(null);
+  const [errors, setErrors] = useState([]);
+  const [errorFields, setErrorFields] = useState([]);
+  const [departments, setDepartments] = useState(null);
+  const [isSet, setIsSet] = useState(false);
+  const [creationSuccess, setCreationSuccess] = useState(false);
 
-  const positions = ["Admin", "Manager", "Maintenance", "Employee"];
-
-  const departments = ["Attraction", "Vendor", "Maintenance"];
+  const positions = ["Employee", "Maintenance", "Department Manager", "Admin"];
+  const schedules = ["First Shift", "Second Shift"];
+  
+  //var combinedObject = null;
+  const [combinedObject, setCombinedObject] = useState(null);
 
   useEffect(() => {
-    if (employeeId) {
-      /* Fetch employee data from your backend based on the employeeId to be implemented later (backend)
-      fetch(`your_api_endpoint/${employeeId}`)
-        .then((response) => {
-          if (response.ok) {
-            return response.json();
-          } else {
-            throw new Error("Failed to fetch employee data");
-          }
-        })
-        .then((data) => setEmployeeData(data))
-        .catch((error) => setError(error.message));*/
-
-      setEmployeeData({
-        firstName: "John",
-        lastName: "Doe",
-        phoneNumber: "123-456-7890",
-        email: "johndoe@example.com",
-        position: "Manager",
-        supervisorUserId: "12345",
-        salary: "50000",
-        address: {
-          street: "1111 FrostRiver Ln",
-          city: "Houston",
-          state: "TX",
-          zipcode: "12345",
+    const fetchDepartments = async () => {
+      const response = await fetch("http://localhost:3001/getDepartments", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
         },
-        status: "Active",
-        department: "Attraction",
       });
+
+      const json = await response.json();
+
+      if (!response.ok) {
+        console.log("Failed to fetch attraction data");
+      }
+      if (response.ok) {
+        setDepartments(json);
+        setIsSet(true);
+      }
+    };
+
+    fetchDepartments();
+  }, []);
+
+  const handleSubmitOne = async (e) => {
+    e.preventDefault();
+    setEmployeeData(null);
+    setAccountData(null);
+    setCombinedObject(null);
+    setisSubmitted(false);
+    setCreationSuccess(false);
+
+    try {
+      const response = await fetch(
+        `http://localhost:3001/getEmployee/${encodeURIComponent(employeeId)}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      const json = await response.json();
+
+      if (!response.ok) {
+        console.log("Failed to fetch employee data");
+      }
+      if (response.ok) {
+        setEmployeeData(json[0]);
+      }
+
+      const res = await fetch(
+        `http://localhost:3001/getAccount/${encodeURIComponent(employeeId)}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      const js = await res.json();
+      js[0].DateOfBirth = js[0].DateOfBirth.substring(0, 10);
+
+      if (!response.ok) {
+        console.log("Failed to fetch account data");
+      }
+      if (response.ok) {
+        setAccountData(js[0]);
+      }
+    } catch (error) {
+      console.log("Error:", error.message);
     }
-  }, [employeeId]);
-
-  const handleSubmitOne = (e) => {
-    e.preventDefault();
-    setisSubmitted(true);
-    // Form submission logic
-    console.log(employeeData);
   };
 
-  const handleSubmitTwo = (e) => {
-    e.preventDefault();
-    // Form submission logic
-    console.log(employeeData);
-    alert("Employee Information has been Updated");
-  };
+  useEffect(() => {
+    if (employeeData !== null && accountData !== null) {
+        setCombinedObject(Object.assign({}, employeeData, accountData));
+        setisSubmitted(true);
+    }
+  }, [employeeData, accountData]);
 
-  const handleAddressChange = (e) => {
-    const { name, value } = e.target;
-    setEmployeeData((prevData) => ({
-      ...prevData,
-      address: {
-        ...prevData.address,
-        [name]: value,
-      },
-    }));
+  const handleSubmitTwo = async (e) => {
+    e.preventDefault();
+    setCreationSuccess(false);
+
+    const formData = combinedObject;
+
+    try {
+      const response = await fetch(`http://localhost:3001/updateEmployee/${encodeURIComponent(employeeId)}`,
+        {
+          method: "PUT",
+          body: JSON.stringify(formData),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      const json = await response.json();
+
+      if (!response.ok) {
+        setErrors(json.errors);
+        setErrorFields(json.errorFields);
+      }
+      if (response.ok) {
+        setErrors([]);
+        setErrorFields([]);
+        setCreationSuccess(true);
+      }
+    } catch (error) {
+      console.log("Error:", error.message);
+    }
   };
 
   return (
@@ -81,31 +144,38 @@ export default function UpdateEmployee() {
               Please enter the Employee ID of the Employee you would like to
               update.
             </div>
-            <form onSubmit={handleSubmitOne}>
-              <div className="mb-3 mt-3">
-                <label htmlFor="employeeID" className="form-label">
-                  Enter Employee ID:
-                </label>
-                <input
-                  type="number"
-                  className="form-control"
-                  id="employeeID"
-                  name="employeeID"
-                  placeholder="12345"
-                  maxLength="10"
-                  required
-                  value={employeeId}
-                  onChange={(e) => setEmployeeId(e.target.value)}
-                />
-              </div>
-              <div className="flex flex-wrap -mx-3 mt-6">
-                <div className="w-full px-3 text-center">
-                  <button id="button" type="submit" className="btn btn-primary">
-                    Submit
-                  </button>
+
+            {isSet && (
+              <form onSubmit={handleSubmitOne}>
+                <div className="mb-3 mt-3">
+                  <label htmlFor="employeeID" className="form-label">
+                    Enter Employee ID:
+                  </label>
+                  <input
+                    type="number"
+                    className="form-control"
+                    id="employeeID"
+                    name="employeeID"
+                    placeholder="12345"
+                    maxLength="10"
+                    required
+                    value={employeeId}
+                    onChange={(e) => setEmployeeId(e.target.value)}
+                  />
                 </div>
-              </div>
-            </form>
+                <div className="flex flex-wrap -mx-3 mt-6">
+                  <div className="w-full px-3 text-center">
+                    <button
+                      id="button"
+                      type="submit"
+                      className="btn btn-primary"
+                    >
+                      Submit
+                    </button>
+                  </div>
+                </div>
+              </form>
+            )}
 
             {isSubmitted && (
               <form onSubmit={handleSubmitTwo}>
@@ -120,11 +190,32 @@ export default function UpdateEmployee() {
                       id="firstName"
                       name="firstName"
                       maxLength="30"
-                      value={employeeData.firstName}
+                      required
+                      value={combinedObject.FirstName}
                       onChange={(e) =>
-                        setEmployeeData({
-                          ...employeeData,
-                          firstName: e.target.value,
+                        setCombinedObject({
+                          ...combinedObject,
+                          FirstName: e.target.value,
+                        })
+                      }
+                    />
+                  </div>
+                  <div className="col">
+                    <label htmlFor="middleName" className="form-label">
+                      Middle Name:
+                    </label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="middleName"
+                      name="middleName"
+                      placeholder="Doe"
+                      maxLength="30"
+                      value={combinedObject.MiddleName}
+                      onChange={(e) =>
+                        setCombinedObject({
+                          ...combinedObject,
+                          MiddleName: (e.target.value)==="" ? null : e.target.value,
                         })
                       }
                     />
@@ -139,11 +230,12 @@ export default function UpdateEmployee() {
                       id="lastName"
                       name="lastName"
                       maxLength="30"
-                      value={employeeData.lastName}
+                      required
+                      value={combinedObject.LastName}
                       onChange={(e) =>
-                        setEmployeeData({
-                          ...employeeData,
-                          lastName: e.target.value,
+                        setCombinedObject({
+                          ...combinedObject,
+                          LastName: e.target.value,
                         })
                       }
                     />
@@ -151,19 +243,47 @@ export default function UpdateEmployee() {
                 </div>
                 <div className="row mb-3">
                   <div className="col">
+                    <label htmlFor="dateOfBirth" className="form-label">
+                      Date of Birth
+                    </label>
+                    <input
+                      type="date"
+                      className={
+                        errorFields.includes("dateOfBirth")
+                          ? "error form-control"
+                          : "form-control"
+                      }
+                      id="dateOfBirth"
+                      name="dateOfBirth"
+                      required
+                      value={combinedObject.DateOfBirth}
+                      onChange={(e) =>
+                        setCombinedObject({
+                          ...combinedObject,
+                          DateOfBirth: e.target.value,
+                        })
+                      }
+                    />
+                  </div>
+                  <div className="col">
                     <label htmlFor="phoneNumber" className="form-label">
                       Phone Number:
                     </label>
                     <input
                       type="tel"
-                      className="form-control"
+                      className={
+                        errorFields.includes("phoneNumber")
+                          ? "error form-control"
+                          : "form-control"
+                      }
                       id="phoneNumber"
                       name="phoneNumber"
-                      value={employeeData.phoneNumber}
+                      required
+                      value={combinedObject.PhoneNumber}
                       onChange={(e) =>
-                        setEmployeeData({
-                          ...employeeData,
-                          phoneNumber: e.target.value,
+                        setCombinedObject({
+                          ...combinedObject,
+                          PhoneNumber: e.target.value,
                         })
                       }
                     />
@@ -174,14 +294,19 @@ export default function UpdateEmployee() {
                     </label>
                     <input
                       type="email"
-                      className="form-control"
+                      className={
+                        errorFields.includes("email")
+                          ? "error form-control"
+                          : "form-control"
+                      }
                       id="email"
                       name="emaill"
-                      value={employeeData.email}
+                      required
+                      value={combinedObject.Email}
                       onChange={(e) =>
-                        setEmployeeData({
-                          ...employeeData,
-                          email: e.target.value,
+                        setCombinedObject({
+                          ...combinedObject,
+                          Email: e.target.value,
                         })
                       }
                     />
@@ -194,14 +319,19 @@ export default function UpdateEmployee() {
                     </label>
                     <input
                       list="positions"
-                      className="form-control"
+                      className={
+                        errorFields.includes("position")
+                          ? "error form-control"
+                          : "form-control"
+                      }
                       id="position"
                       name="position"
+                      required
                       placeholder="Type to search..."
-                      value={employeeData.position}
+                      value={combinedObject.position}
                       onChange={(e) =>
-                        setEmployeeData({
-                          ...employeeData,
+                        setCombinedObject({
+                          ...combinedObject,
                           position: e.target.value,
                         })
                       }
@@ -221,11 +351,11 @@ export default function UpdateEmployee() {
                       className="form-control"
                       id="supUserID"
                       name="supUserID"
-                      value={employeeData.supervisorUserId}
+                      value={combinedObject.SupUserID}
                       onChange={(e) =>
-                        setEmployeeData({
-                          ...employeeData,
-                          supervisorUserId: e.target.value,
+                        setCombinedObject({
+                          ...combinedObject,
+                          SupUserID: (e.target.value)==="" ? null : e.target.value,
                         })
                       }
                     />
@@ -238,14 +368,19 @@ export default function UpdateEmployee() {
                     </label>
                     <input
                       type="number"
-                      className="form-control"
+                      className={
+                        errorFields.includes("salary")
+                          ? "error form-control"
+                          : "form-control"
+                      }
                       id="salary"
                       name="salary"
-                      value={employeeData.salary}
+                      required
+                      value={combinedObject.Salary}
                       onChange={(e) =>
-                        setEmployeeData({
-                          ...employeeData,
-                          salary: e.target.value,
+                        setCombinedObject({
+                          ...combinedObject,
+                          Salary: e.target.value,
                         })
                       }
                     />
@@ -259,18 +394,48 @@ export default function UpdateEmployee() {
                       className="form-control"
                       id="department"
                       name="department"
+                      required
                       placeholder="Type to search..."
-                      value={employeeData.department}
+                      value={combinedObject.DepName}
                       onChange={(e) =>
-                        setEmployeeData({
-                          ...employeeData,
-                          department: e.target.value,
+                        setCombinedObject({
+                          ...combinedObject,
+                          DepName: e.target.value,
                         })
                       }
                     />
                     <datalist id="departments">
                       {departments.map((department, index) => (
-                        <option key={index} value={department} />
+                        <option key={index} value={department.DepName} />
+                      ))}
+                    </datalist>
+                  </div>
+                  <div className="col">
+                    <label htmlFor="shift" className="form-label">
+                      Shift:
+                    </label>
+                    <input
+                      list="shifts"
+                      className={
+                        errorFields.includes("shift")
+                          ? "error form-control"
+                          : "form-control"
+                      }
+                      id="shift"
+                      name="shift"
+                      placeholder="Type to search..."
+                      required
+                      value={combinedObject.ScheduleType}
+                      onChange={(e) =>
+                        setCombinedObject({
+                          ...combinedObject,
+                          ScheduleType: e.target.value,
+                        })
+                      }
+                    />
+                    <datalist id="shifts">
+                      {schedules.map((position, index) => (
+                        <option key={index} value={position} />
                       ))}
                     </datalist>
                   </div>
@@ -286,8 +451,14 @@ export default function UpdateEmployee() {
                       className="form-control"
                       id="street"
                       name="street"
-                      value={employeeData.address.street}
-                      onChange={handleAddressChange}
+                      required
+                      value={combinedObject.Street}
+                      onChange={(e) =>
+                        setCombinedObject({
+                          ...combinedObject,
+                          Street: e.target.value,
+                        })
+                      }
                     />
                   </div>
                   <div className="col">
@@ -299,8 +470,14 @@ export default function UpdateEmployee() {
                       className="form-control"
                       id="city"
                       name="city"
-                      value={employeeData.address.city}
-                      onChange={handleAddressChange}
+                      required
+                      value={combinedObject.City}
+                      onChange={(e) =>
+                        setCombinedObject({
+                          ...combinedObject,
+                          City: e.target.value,
+                        })
+                      }
                     />
                   </div>
                 </div>
@@ -311,11 +488,21 @@ export default function UpdateEmployee() {
                     </label>
                     <input
                       type="text"
-                      className="form-control"
+                      className={
+                        errorFields.includes("state")
+                          ? "error form-control"
+                          : "form-control"
+                      }
                       id="state"
                       name="state"
-                      value={employeeData.address.state}
-                      onChange={handleAddressChange}
+                      required
+                      value={combinedObject.State}
+                      onChange={(e) =>
+                        setCombinedObject({
+                          ...combinedObject,
+                          State: e.target.value,
+                        })
+                      }
                     />
                   </div>
                   <div className="col">
@@ -324,11 +511,21 @@ export default function UpdateEmployee() {
                     </label>
                     <input
                       type="text"
-                      className="form-control"
+                      className={
+                        errorFields.includes("zipcode")
+                          ? "error form-control"
+                          : "form-control"
+                      }
                       id="zipcode"
                       name="zipcode"
-                      value={employeeData.address.zipcode}
-                      onChange={handleAddressChange}
+                      required
+                      value={combinedObject.ZipCode}
+                      onChange={(e) =>
+                        setCombinedObject({
+                          ...combinedObject,
+                          ZipCode: e.target.value,
+                        })
+                      }
                     />
                   </div>
                 </div>
@@ -343,9 +540,22 @@ export default function UpdateEmployee() {
                     </button>
                   </div>
                 </div>
+                {errors.length > 0 ? (
+                  <ul className="error">
+                    {errors.map((error, index) => (
+                      <li key={index}>{error}</li>
+                    ))}
+                  </ul>
+                ) : (
+                  ""
+                )}
               </form>
             )}
-            {error && <div>Error: {error}</div>}
+            {creationSuccess && (
+              <div className="alert alert-success my-3" role="alert">
+                Employee Updated Successfully!
+              </div>
+            )}
           </div>
         </div>
       </div>
