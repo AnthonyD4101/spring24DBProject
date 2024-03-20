@@ -44,6 +44,9 @@ export default function AddVendor() {
     if (response.ok) {
       setName("");
       setType("");
+      setErrors([]);
+      setErrorFields([]);
+      setCreationSuccess(true);
     }
   } catch (error) {
     console.log("Error:", error.message);
