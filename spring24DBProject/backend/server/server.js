@@ -4,6 +4,7 @@ const handleSignUp = require("../handlers/SignUpHandler");
 const handleSignIn = require("../handlers/SignInHandler");
 const handleEmployeeAccountSignUp = require("../handlers/CreateEmployeeAccountHandler");
 const handleAddEmployee = require("../handlers/AddEmployeeHandler");
+const handleStaffSignIn = require("../handlers/StaffSignInHandler");
 
 const server = http.createServer((req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -31,6 +32,11 @@ const server = http.createServer((req, res) => {
     url.parse(req.url).pathname === "/signin"
   ) {
     handleSignIn(req, res);
+  } else if (
+    req.method === "POST" &&
+    url.parse(req.url).pathname === "/staffsignin"
+  ) {
+    handleStaffSignIn(req, res);
   } else if (
     req.method === "POST" &&
     url.parse(req.url).pathname === "/EmployeeAccountSignUp"

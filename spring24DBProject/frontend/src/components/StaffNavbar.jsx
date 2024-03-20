@@ -1,7 +1,17 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
-export const StaffNavbar = ({ firstName, lastName }) => {
+export const StaffNavbar = () => {
+  const { currentUser, signOut } = useAuth();
+  console.log("Current user:", currentUser);
+
+  const handleSignOut = () => {
+    signOut();
+    // Redirect to sign-in page.
+    window.location.href = "/StaffSignIn";
+  };
   return (
     <nav className="navbar navbar-expand-lg">
       <div className="container">
@@ -29,12 +39,28 @@ export const StaffNavbar = ({ firstName, lastName }) => {
                 Employee Portal
               </a>
             </li>
-            {/* Display "Welcome, {firstName lastName}" on the right side */}
-            <li className="nav-item">
-              <span className="nav-link text-white">
-                Welcome, {firstName} {lastName}
-              </span>
-            </li>
+
+            {currentUser ? (
+              <>
+                <li className="nav-item">
+                  <p className="nav-link text-white">
+                    Welcome, {currentUser.FirstName} {currentUser.LastName}
+                  </p>
+                </li>
+                <li className="nav-item">
+                  <button
+                    type="button"
+                    className="btn text-white"
+                    onClick={handleSignOut}
+                    style={{ textDecoration: "underline", color: "blue" }}
+                  >
+                    Sign Out
+                  </button>
+                </li>
+              </>
+            ) : (
+              <h2>Error</h2>
+            )}
           </ul>
         </div>
       </div>

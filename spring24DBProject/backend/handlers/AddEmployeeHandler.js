@@ -9,6 +9,7 @@ function handleAddEmployee(req, res) {
 
   req.on("end", () => {
     const {
+      userId,
       firstName,
       middleName,
       lastName,
@@ -25,6 +26,7 @@ function handleAddEmployee(req, res) {
     // Assuming your 'Employees' table columns match the variable names directly
     const query = `
       INSERT INTO Employee (
+        userId,
         firstName, 
         middleName, 
         lastName, 
@@ -39,7 +41,7 @@ function handleAddEmployee(req, res) {
         zipcode, 
         status, 
         depName
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
 
     // Make sure to destructure the address object to get street, city, state, and zipcode
@@ -48,6 +50,7 @@ function handleAddEmployee(req, res) {
     poolConnection.query(
       query,
       [
+        userId,
         firstName,
         middleName,
         lastName,
