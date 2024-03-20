@@ -3,6 +3,7 @@ const url = require('url');
 const handleSignUp = require('../handlers/SignUpHandler');
 const handleSignIn = require('../handlers/SignInHandler');
 const { handleAddAttraction, handleGetAllAttractions, handleGetAttraction, handleUpdateAttraction, handleDeleteAttraction } = require('../handlers/AttractionHandler');
+const {handleAddVendor} = require('../handlers/VendorHandler');
 
 
 const server = http.createServer((req, res) => {
