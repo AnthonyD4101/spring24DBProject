@@ -9,8 +9,15 @@ function handleSignUp(req, res, connection) {
   });
 
   req.on("end", () => {
-    const { firstName, middleName, lastName, email, dateOfBirth, phoneNumber, password } =
-      JSON.parse(body);
+    const {
+      firstName,
+      middleName,
+      lastName,
+      email,
+      dateOfBirth,
+      phoneNumber,
+      password,
+    } = JSON.parse(body);
 
     const accountType = "Customer";
 

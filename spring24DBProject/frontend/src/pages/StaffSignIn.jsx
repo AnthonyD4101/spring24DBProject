@@ -1,17 +1,45 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 export default function StaffSignIn() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const navigate = useNavigate();
+  const { signIn } = useAuth();
+
+  const handleStaffSignIn = async (event) => {
+    event.preventDefault();
+    const response = await fetch("http://localhost:3001/staffsignin", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+    });
+
+    const data = await response.json();
+    console.log("Sign-in data:", data);
+
+    if (response.status === 200) {
+      navigate("/adminLanding");
+      signIn({ FirstName: data.firstName, LastName: data.lastName });
+    } else {
+      setErrorMessage(data.message || "Incorrect User ID or Password");
+    }
+  };
+
   return (
     <div>
       <div className="row justify-content-center">
-        <div className="col-md-4 mb-4">
+        <div className="col-md-4 mb-8">
           <div className="card">
             <div className="card-body">
               <h1 className="my-4 text-center" style={{ color: "#2F4858" }}>
-                Staff Portal Sign In
+                Staff Sign In
               </h1>
-              <form>
+              <form onSubmit={handleStaffSignIn}>
                 <div className="mb-3">
                   <label htmlFor="exampleInputEmail" className="form-label">
                     Email address
@@ -21,6 +49,8 @@ export default function StaffSignIn() {
                     className="form-control"
                     id="exampleInputEmail"
                     aria-describedby="emailHelp"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                   />
                 </div>
 
@@ -32,14 +62,22 @@ export default function StaffSignIn() {
                     type="password"
                     className="form-control"
                     id="exampleInputPassword"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                   />
                 </div>
 
-                <div className="mt-5 text-center">
-                  <Link to="/adminLanding" className="btn btn-primary">
+                <div className="mt-3 text-center">
+                  <button type="submit" className="btn btn-primary">
                     Sign In
-                  </Link>
+                  </button>
                 </div>
+
+                {errorMessage && (
+                  <div className="alert alert-danger" role="alert">
+                    {errorMessage}
+                  </div>
+                )}
               </form>
             </div>
           </div>

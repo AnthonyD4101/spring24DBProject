@@ -43,7 +43,7 @@ const StaffSideNavbar = ({ onItemClick }) => {
             <ul className="list-group-submenu">
               <li
                 className="list-group-submenu-item"
-                onClick={() => onItemClick("Add Employee Data Entry Form")}
+                onClick={() => onItemClick("Create Employee Account")}
               >
                 Add Employee
               </li>
@@ -97,7 +97,9 @@ const StaffSideNavbar = ({ onItemClick }) => {
               </li>
               <li
                 className="list-group-submenu-item"
-                onClick={() => onItemClick("Add Attraction Log Data Entry Form")}
+                onClick={() =>
+                  onItemClick("Add Attraction Log Data Entry Form")
+                }
               >
                 Add to Attraction Log
               </li>
