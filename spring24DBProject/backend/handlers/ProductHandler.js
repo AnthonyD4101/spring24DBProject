@@ -1,0 +1,249 @@
+const poolConnection = require('../server/database');
+const url = require('url');
+
+//Adds a product
+function handleAddProduct(req, res) {
+  let requestBody = "";
+  req.on("data", (chunk) => {
+    requestBody += chunk.toString(); // Convert the chunk to string and append it to the body variable
+  });
+
+  req.on("end", () => {
+    // Parse the body string to JSON
+    const formData = JSON.parse(requestBody);
+    const {
+      name,
+      vendor,
+      acquisitionCost,
+      price,
+      description,
+      status,
+    } = formData;
+
+    let errors = [];
+    let errorFields = [];
+
+
+
+    if (name.length > 30) {
+      errors.push("Name must be 30 characters or less");
+      errorFields.push("name");
+    }
+
+    if (vendor.length > 30) {
+      errors.push("Vendor name must be 30 characters or less");
+      errorFields.push("vendor");
+    }
+
+    if (acquisitionCost < 0) {
+      errors.push("Shipment Cost must be non-negative");
+      errorFields.push("acquisitionCost");
+    }
+    else if(acquisitionCost.toFixed(2) != acquisitionCost) {
+      errors.push("Shipment Cost must be to a maximum of 2 decimal places");
+      errorFields.push("acquisitionCost");
+    }
+
+    if (price < 0) {
+      errors.push("Sell Price must be non-negative");
+      errorFields.push("price");
+    }
+    else if(price.toFixed(2) != price) {
+      errors.push("Price must be to a maximum of 2 decimal places");
+      errorFields.push("price");
+    }
+
+    if (errors.length > 0) {
+      res.writeHead(400, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ errors, errorFields }));
+      return;
+    }
+
+    //Query the database to add the new product
+    poolConnection.query(
+      "INSERT INTO Product (NameOfItem, NameOfVendor, AcquisitionCost, SalePrice, Description, ProductStatus) VALUES (?, ?, ?, ?, ?, ?)",
+      [
+        name,
+        vendor,
+        acquisitionCost,
+        price,
+        description,
+        status,
+      ],
+      (error, results) => {
+        if (error) {
+          console.log("Database error:", error);
+          res.writeHead(500, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ message: "Server error" }));
+          return;
+        }
+
+        // Product added successfully
+        res.writeHead(200, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ message: "Product added successfuly" }));
+      }
+    );
+  });
+}
+
+//Retrieves all products
+function handleGetAllProducts(req, res) {
+  //Query the database to get all products
+  const query = "SELECT * FROM Product WHERE ProductStatus=?";
+  poolConnection.query(query,
+  ['Active'], 
+  (error, results) => {
+    if (error) {
+      console.log("Database error:", error);
+      res.writeHead(500, { "Content-Type": "product/json" });
+      res.end(JSON.stringify({ message: "Server error" }));
+      return;
+    }
+
+    // Product added successfully
+    res.writeHead(200, { "Content-Type": "product/json" });
+    res.end(JSON.stringify(results));
+  });
+}
+
+//Retrieves a specific product
+function handleGetProduct(req, res) {
+  //Query the database to get all products
+  const pathname = url.parse(req.url).pathname;
+  const name = decodeURIComponent(pathname.substring("/getProduct/".length));
+
+  const query = "SELECT * FROM Product WHERE ProductStatus=? AND NameOfItem=?";
+  poolConnection.query(query,
+  ['Active', name], 
+  (error, results) => {
+    if (error) {
+      console.log("Database error:", error);
+      res.writeHead(500, { "Content-Type": "product/json" });
+      res.end(JSON.stringify({ message: "Server error" }));
+      return;
+    }
+
+    // Attraction added successfully
+    res.writeHead(200, { "Content-Type": "product/json" });
+    res.end(JSON.stringify(results));
+  });
+}
+
+//Updates a specific product
+function handleUpdateProduct(req, res) {
+  let requestBody = "";
+  req.on("data", (chunk) => {
+    requestBody += chunk.toString(); // Convert the chunk to string and append it to the body variable
+  });
+
+  req.on("end", () => {
+    // Parse the body string to JSON
+    const formData = JSON.parse(requestBody);
+    const {
+      name,
+      vendor,
+      acquisitionCost,
+      price,
+      description,
+      status,
+    } = formData;
+
+    let errors = [];
+    let errorFields = [];
+
+    if (name.length > 30) {
+      errors.push("Name must be 30 characters or less");
+      errorFields.push("name");
+    }
+
+    if (vendor.length > 30) {
+      errors.push("Vendor name must be 30 characters or less");
+      errorFields.push("vendor");
+    }
+
+    if (acquisitionCost < 0) {
+      errors.push("Shipment Cost must be non-negative");
+      errorFields.push("acquisitionCost");
+    }
+    else if(acquisitionCost.toFixed(2) != acquisitionCost) {
+      errors.push("Shipment Cost must be to a maximum of 2 decimal places");
+      errorFields.push("acquisitionCost");
+    }
+
+    if (price < 0) {
+      errors.push("Sell Price must be non-negative");
+      errorFields.push("price");
+    }
+    else if(price.toFixed(2) != price) {
+      errors.push("Price must be to a maximum of 2 decimal places");
+      errorFields.push("price");
+    }
+
+
+    if (errors.length > 0) {
+      res.writeHead(400, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ errors, errorFields }));
+      return;
+    }
+
+    //Query the database to add the new product
+    const pathname = url.parse(req.url).pathname;
+    const pname = decodeURIComponent(pathname.substring("/updateProduct/".length));
+
+    const query = "UPDATE Product SET NameOfItem=?, NameOfVendor=?, AcquisitionCost=?, SalePrice=?, Description=? WHERE ProductStatus=? AND NameOfItem=?";
+    poolConnection.query(query,
+      [
+        NameOfItem, 
+        NameOfVendor, 
+        AcquisitionCost, 
+        SalePrice, 
+        Description, 
+        "Active",
+        pname
+      ],
+      (error, results) => {
+        if (error) {
+          console.log("Database error:", error);
+          res.writeHead(500, { "Content-Type": "product/json" });
+          res.end(JSON.stringify({ message: "Server error" }));
+          return;
+        }
+
+        // Product added successfully
+        res.writeHead(200, { "Content-Type": "product/json" });
+        res.end(JSON.stringify({ message: "Product updated successfuly" }));
+      }
+    );
+  });
+}
+
+//Updates the status of a specific product to 'Inactive'
+function handleDeleteProduct(req, res) {
+  //Query the database to get all products
+  const pathname = url.parse(req.url).pathname;
+  const name = decodeURIComponent(pathname.substring("/deleteProduct/".length));
+
+  const query = "UPDATE Product SET ProductStatus=? WHERE NameOfItem=? AND ProductStatus=?";
+  poolConnection.query(query,
+  ['Inactive', name, 'Active'], 
+  (error, results) => {
+    if (error) {
+      console.log("Database error:", error);
+      res.writeHead(500, { "Content-Type": "product/json" });
+      res.end(JSON.stringify({ message: "Server error" }));
+      return;
+    }
+
+    // Product added successfully
+    res.writeHead(200, { "Content-Type": "product/json" });
+    res.end(JSON.stringify({ message: "Product deleted successfully" }));
+  });
+}
+
+module.exports = {
+  handleAddProduct,
+  handleGetAllProducts,
+  handleGetProduct,
+  handleUpdateProduct,
+  handleDeleteProduct
+};

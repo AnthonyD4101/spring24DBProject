@@ -3,7 +3,7 @@ const url = require('url');
 const handleSignUp = require('../handlers/SignUpHandler');
 const handleSignIn = require('../handlers/SignInHandler');
 const { handleAddAttraction, handleGetAllAttractions, handleGetAttraction, handleUpdateAttraction, handleDeleteAttraction } = require('../handlers/AttractionHandler');
-
+const { handleAddProduct, handleGetAllProducts, handleGetProduct, handleUpdateProduct, handleDeleteProduct } = require('../handlers/ProductHandler');
 
 const server = http.createServer((req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -20,17 +20,27 @@ const server = http.createServer((req, res) => {
     handleGetAllAttractions(req, res);
   } else if(req.method === "GET" && url.parse(req.url).pathname.match("^\/getAttraction\/.+")) {
     handleGetAttraction(req, res);
+  } else if(req.method === "GET" && url.parse(req.url).pathname === "/getProducts") {
+      handleGetAllProducts(req, res);
+  } else if(req.method === "GET" && url.parse(req.url).pathname.match("^\/getProduct\/.+")) {
+      handleGetProduct(req, res);
   } else if (req.method === "POST" && url.parse(req.url).pathname === "/signup") {
     handleSignUp(req, res);
   } else if(req.method === "POST" && url.parse(req.url).pathname === "/signin") {
     handleSignIn(req, res)
   } else if(req.method === "POST" && url.parse(req.url).pathname === "/addAttraction") {
     handleAddAttraction(req, res);
+  } else if(req.method === "POST" && url.parse(req.url).pathname === "/addProduct") {
+    handleAddProduct(req, res);
   } else if(req.method === "PUT" && url.parse(req.url).pathname.match("^\/updateAttraction\/.+")) {
     handleUpdateAttraction(req, res);
   } else if(req.method === "PUT" && url.parse(req.url).pathname.match("^\/deleteAttraction\/.+")) {
     handleDeleteAttraction(req, res);
-  }else {
+  } else if(req.method === "PUT" && url.parse(req.url).pathname.match("^\/updateProduct\/.+")) {
+    handleUpdateProduct(req, res);
+  } else if(req.method === "PUT" && url.parse(req.url).pathname.match("^\/deleteProduct\/.+")) {
+    handleDeleteProduct(req, res);
+  } else {
     res.writeHead(404);
     res.end('Not Found');
   }
