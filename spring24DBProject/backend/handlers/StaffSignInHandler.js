@@ -30,6 +30,14 @@ function handleStaffSignIn(req, res) {
         return;
       }
 
+      if (user.AccountType == "Customer") {
+        res.writeHead(401, { "Content-Type": "application/json" });
+        res.end(
+          JSON.stringify({ message: "Please use Customer Log In Portal" })
+        );
+        return;
+      }
+
       // Query to select the employee's position using UserID
       const positionQuery = "SELECT position FROM Employee WHERE UserID = ?";
 

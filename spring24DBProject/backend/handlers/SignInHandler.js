@@ -23,6 +23,12 @@ function handleSignIn(req, res, connection) {
       const user = results[0];
       const passwordIsValid = bcrypt.compareSync(password, user.Password);
 
+      if (user.AccountType != "Customer") {
+        res.writeHead(401, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ message: "Please use Staff Log In Portal" }));
+        return;
+      }
+
       if (!passwordIsValid) {
         res.writeHead(401, { "Content-Type": "application/json" });
         res.end(JSON.stringify({ message: "Incorrect User ID or Password" }));
