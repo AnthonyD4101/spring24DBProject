@@ -2,17 +2,42 @@ import React, { useState } from "react";
 
 export default function AddDepartment() {
   const [name, setName] = useState("");
+  const [hoursWorked, setHoursWorked] = useState('35');
   const [mggrUserID, setMggrUserID] = useState("");
+  const [creationSuccess, setCreationSuccess] = useState(false);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
+    setCreationSuccess(false);
     // Submit data to backend or perform further processing
     const formData = {
       name,
+      hoursWorked,
       mggrUserID,
     };
-    console.log(formData);
-    alert("Department has been added");
+    
+    try {
+      const response = await fetch("http://localhost:3001/addDepartment", {
+        method: "POST",
+        body: JSON.stringify(formData),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const json = await response.json();
+
+      if (!response.ok) {
+        console.log("There was an error");
+      }
+      if (response.ok) {
+        setName("");
+        setMggrUserID("");
+        setCreationSuccess(true);
+      }
+    } catch (error) {
+      console.log("Error:", error.message);
+    }
   };
 
   return (
@@ -64,6 +89,11 @@ export default function AddDepartment() {
                 </div>
               </div>
             </form>
+            {creationSuccess && (
+              <div className="alert alert-success my-3" role="alert">
+                Department Created Successfully!
+              </div>
+            )}
           </div>
         </div>
       </div>
