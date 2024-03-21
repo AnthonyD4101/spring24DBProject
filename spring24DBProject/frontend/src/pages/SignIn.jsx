@@ -24,7 +24,14 @@ export default function SignIn() {
 
     if (response.status === 200) {
       navigate("/");
-      signIn({ FirstName: data.firstName, LastName: data.lastName });
+      signIn({
+        UserID: data.userID,
+        FirstName: data.firstName,
+        LastName: data.lastName,
+        Email: data.email,
+        AccountType: data.accountType,
+        PhoneNumber: data.phoneNumber,
+      });
     } else {
       setErrorMessage(data.message || "Incorrect User ID or Password");
     }

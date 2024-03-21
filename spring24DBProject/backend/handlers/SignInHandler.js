@@ -1,4 +1,4 @@
-const poolConnection = require('../server/database');
+const poolConnection = require("../server/database");
 const bcrypt = require("bcryptjs");
 
 function handleSignIn(req, res, connection) {
@@ -34,8 +34,12 @@ function handleSignIn(req, res, connection) {
       res.end(
         JSON.stringify({
           message: "Authentication successful",
+          userID: user.UserID,
           firstName: user.FirstName,
-          lastName: user.LastName
+          lastName: user.LastName,
+          email: user.Email,
+          accountType: user.AccountType,
+          phoneNumber: user.PhoneNumber,
         })
       );
     });

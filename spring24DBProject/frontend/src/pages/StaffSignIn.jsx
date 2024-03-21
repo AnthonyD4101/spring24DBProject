@@ -24,7 +24,15 @@ export default function StaffSignIn() {
 
     if (response.status === 200) {
       navigate("/adminLanding");
-      signIn({ FirstName: data.firstName, LastName: data.lastName });
+      signIn({
+        UserID: data.userID,
+        FirstName: data.firstName,
+        LastName: data.lastName,
+        Email: data.email,
+        AccountType: data.accountType,
+        PhoneNumber: data.phoneNumber,
+        Position: data.position,
+      });
     } else {
       setErrorMessage(data.message || "Incorrect User ID or Password");
     }
