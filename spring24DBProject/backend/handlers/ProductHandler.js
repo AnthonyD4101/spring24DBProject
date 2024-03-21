@@ -23,7 +23,7 @@ function handleAddProduct(req, res) {
     let errors = [];
     let errorFields = [];
 
-
+    let profit = price - acquisitionCost;
 
     if (name.length > 30) {
       errors.push("Name must be 30 characters or less");
@@ -39,19 +39,19 @@ function handleAddProduct(req, res) {
       errors.push("Shipment Cost must be non-negative");
       errorFields.push("acquisitionCost");
     }
-    else if(acquisitionCost.toFixed(2) != acquisitionCost) {
-      errors.push("Shipment Cost must be to a maximum of 2 decimal places");
-      errorFields.push("acquisitionCost");
-    }
+
 
     if (price < 0) {
       errors.push("Sell Price must be non-negative");
       errorFields.push("price");
     }
-    else if(price.toFixed(2) != price) {
-      errors.push("Price must be to a maximum of 2 decimal places");
-      errorFields.push("price");
+
+
+    if (profit < 0) {
+      errors.push("Profit must be non-negative");
+      errorFields.push("profit");
     }
+
 
     if (errors.length > 0) {
       res.writeHead(400, { "Content-Type": "application/json" });
@@ -61,12 +61,13 @@ function handleAddProduct(req, res) {
 
     //Query the database to add the new product
     poolConnection.query(
-      "INSERT INTO Product (NameOfItem, NameOfVendor, AcquisitionCost, SalePrice, Description, ProductStatus) VALUES (?, ?, ?, ?, ?, ?)",
+      "INSERT INTO Product (NameOfItem, NameOfVendor, AcquisitionCost, SalePrice, Profit, Description, ProductStatus) VALUES (?, ?, ?, ?, ?, ?, ?)",
       [
         name,
         vendor,
         acquisitionCost,
         price,
+        profit,
         description,
         status,
       ],
@@ -151,6 +152,8 @@ function handleUpdateProduct(req, res) {
     let errors = [];
     let errorFields = [];
 
+    let profit = price - acquisitionCost;
+
     if (name.length > 30) {
       errors.push("Name must be 30 characters or less");
       errorFields.push("name");
@@ -165,18 +168,17 @@ function handleUpdateProduct(req, res) {
       errors.push("Shipment Cost must be non-negative");
       errorFields.push("acquisitionCost");
     }
-    else if(acquisitionCost.toFixed(2) != acquisitionCost) {
-      errors.push("Shipment Cost must be to a maximum of 2 decimal places");
-      errorFields.push("acquisitionCost");
-    }
+
 
     if (price < 0) {
       errors.push("Sell Price must be non-negative");
       errorFields.push("price");
     }
-    else if(price.toFixed(2) != price) {
-      errors.push("Price must be to a maximum of 2 decimal places");
-      errorFields.push("price");
+
+
+    if (profit < 0) {
+      errors.push("Profit must be non-negative");
+      errorFields.push("profit");
     }
 
 
@@ -190,14 +192,15 @@ function handleUpdateProduct(req, res) {
     const pathname = url.parse(req.url).pathname;
     const pname = decodeURIComponent(pathname.substring("/updateProduct/".length));
 
-    const query = "UPDATE Product SET NameOfItem=?, NameOfVendor=?, AcquisitionCost=?, SalePrice=?, Description=? WHERE ProductStatus=? AND NameOfItem=?";
+    const query = "UPDATE Product SET NameOfItem=?, NameOfVendor=?, AcquisitionCost=?, SalePrice=?, Profit=?, Description=? WHERE ProductStatus=? AND NameOfItem=?";
     poolConnection.query(query,
       [
-        NameOfItem, 
-        NameOfVendor, 
-        AcquisitionCost, 
-        SalePrice, 
-        Description, 
+        name, 
+        vendor, 
+        acquisitionCost, 
+        price, 
+        profit,
+        description, 
         "Active",
         pname
       ],

@@ -1,30 +1,63 @@
 import React, { useState } from "react";
 
 export default function AddProduct() {
+  const [creationSuccess, setCreationSuccess] = useState(false);
+
   const [name, setName] = useState("");
   const [vendor, setVendor] = useState("");
-  const [inventory, setInventory] = useState("");
-  const [acquisitinCost, setAcquisitinCost] = useState("");
+  const [acquisitionCost, setAcquisitionCost] = useState("");
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState("Active");
 
+  const [errors, setErrors] = useState([]);
+  const [errorFields, setErrorFields] = useState([]);
+
   const vendors = ["Adventure Bites Eatery", "Fantasy Finds Boutique"];
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
+    setCreationSuccess(false);
     // Submit data to backend or perform further processing
     const formData = {
       name,
       vendor,
-      inventory,
-      acquisitinCost,
+      acquisitionCost,
       price,
       description,
       status,
     };
-    console.log(formData);
-    alert("Product has been added");
+
+    try {
+      const response = await fetch("http://localhost:3001/addProduct", {
+        method: "POST",
+        body: JSON.stringify(formData),
+        headers: {
+          "Content-Type": "product/json",
+        },
+      });
+
+      const json = await response.json();
+
+      if (!response.ok) {
+        setErrors(json.errors);
+        setErrorFields(json.errorFields);
+      }
+      if (response.ok) {
+        setStartOperatingHour("");
+        setEndOperatingHour("");
+        setName("");
+        setType("");
+        setHeight("");
+        setWeight("");
+        setCapacity("");
+        setErrors([]);
+        setErrorFields([]);
+        setCreationSuccess(true);
+      }
+    } catch (error) {
+      console.log("Error:", error.message);
+    }
   };
 
   return (
@@ -75,21 +108,6 @@ export default function AddProduct() {
               </div>
               <div className="row mb-3 mt-3">
                 <div className="col">
-                  <label htmlFor="inventory" className="form-label">
-                    Current Inventory:
-                  </label>
-                  <input
-                    type="number"
-                    className="form-control"
-                    id="inventory"
-                    name="inventory"
-                    placeholder="400"
-                    required
-                    value={inventory}
-                    onChange={(e) => setInventory(e.target.value)}
-                  />
-                </div>
-                <div className="col">
                   <label htmlFor="cost" className="form-label">
                     Acquisition Cost:
                   </label>
@@ -100,8 +118,8 @@ export default function AddProduct() {
                     name="cost"
                     placeholder="5.00"
                     required
-                    value={acquisitinCost}
-                    onChange={(e) => setAcquisitinCost(e.target.value)}
+                    value={acquisitionCost}
+                    onChange={(e) => setAcquisitionCost(e.target.value)}
                   />
                 </div>
               </div>
@@ -144,7 +162,19 @@ export default function AddProduct() {
                   </button>
                 </div>
               </div>
+              {errors.length>0 ?  (
+                <ul className="error">
+                  {errors.map((error, index) => (
+                    <li key={index}>{error}</li>
+                  ))}
+                </ul>
+              ) : ""}
             </form>
+            {creationSuccess && (
+              <div className="alert alert-success my-3" role="alert">
+                Attraction Created Successfully!
+              </div>
+            )}
           </div>
         </div>
       </div>

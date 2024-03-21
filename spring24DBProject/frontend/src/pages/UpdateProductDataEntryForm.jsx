@@ -25,7 +25,6 @@ export default function UpdateProduct() {
       setProductData({
         name: "Pizza Delight Bundle",
         vendor: "Adventure Bites Eatery",
-        inventory: "400",
         acquisitionCost: "5.00",
         salePrice: "15.00",
         description: "This product includes two slices of pizza and a drink.",
@@ -129,24 +128,6 @@ export default function UpdateProduct() {
                   </div>
                 </div>
                 <div className="row mb-3 mt-3">
-                  <div className="col">
-                    <label htmlFor="inventory" className="form-label">
-                      Current Inventory:
-                    </label>
-                    <input
-                      type="number"
-                      className="form-control"
-                      id="inventory"
-                      name="inventory"
-                      value={productData.inventory}
-                      onChange={(e) =>
-                        setProductData({
-                          ...productData,
-                          inventory: e.target.value,
-                        })
-                      }
-                    />
-                  </div>
                   <div className="col">
                     <label htmlFor="cost" className="form-label">
                       Acquisition Cost:
