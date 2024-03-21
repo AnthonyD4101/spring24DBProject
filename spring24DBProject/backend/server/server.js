@@ -8,6 +8,7 @@ const handleStaffSignIn = require("../handlers/StaffSignInHandler");
 const { handleAddAttraction, handleGetAllAttractions, handleGetAttraction, handleUpdateAttraction, handleDeleteAttraction } = require('../handlers/AttractionHandler');
 const { handleGetEmployee, handleGetAccount, handleUpdateEmployee, handleDeleteEmployee } = require('../handlers/EmployeeHandler');
 const { handleGetAllDepartments, handleAddDepartment, handleGetDepartment, handleUpdateDepartment } = require('../handlers/DepartmentHandler');
+const { handleAddWeatherLog } = require('../handlers/WeatherLogHandler');
 
 const server = http.createServer((req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -46,6 +47,8 @@ const server = http.createServer((req, res) => {
     handleAddAttraction(req, res);
   } else if(req.method === "POST" && url.parse(req.url).pathname === "/addDepartment") {
     handleAddDepartment(req, res);
+  } else if(req.method === "POST" && url.parse(req.url).pathname === "/addWeatherLog") {
+    handleAddWeatherLog(req, res);
   } else if(req.method === "PUT" && url.parse(req.url).pathname.match("^\/updateAttraction\/.+")) {
     handleUpdateAttraction(req, res);
   } else if(req.method === "PUT" && url.parse(req.url).pathname.match("^\/updateEmployee\/.+")) {
