@@ -9,7 +9,9 @@ const { handleAddAttraction, handleGetAllAttractions, handleGetAttraction, handl
 const { handleGetEmployee, handleGetAccount, handleUpdateEmployee, handleDeleteEmployee } = require('../handlers/EmployeeHandler');
 const { handleGetAllDepartments, handleAddDepartment, handleGetDepartment, handleUpdateDepartment } = require('../handlers/DepartmentHandler');
 const { handleAddVendor,handleGetAllVendors, handleGetVendor, handleUpdateVendor,handleDeleteVendor } = require('../handlers/VendorHandler');
+const { handleGetAllProducts } = require('../handlers/ProductsHandler');
 const { handleAddWeatherLog } = require('../handlers/WeatherLogHandler');
+const handleTicketPurchase = require('../handlers/TicketPurchaseHandler');
 
 const server = http.createServer((req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -70,6 +72,10 @@ const server = http.createServer((req, res) => {
     handleUpdateVendor(req, res);
   } else if(req.method === "PUT" && url.parse(req.url).pathname.match("^\/deleteVendor\/.+")) {
     handleDeleteVendor(req, res);
+  } else if (req.method === "POST" && url.parse(req.url).pathname === "/ticketPurchase") {
+    handleTicketPurchase(req, res);
+  } else if (req.method === "GET" && url.parse(req.url).pathname === "/ticketPurchase") {
+    handleGetAllProducts(req, res);
   } else {
     res.writeHead(404);
     res.end("Not Found");

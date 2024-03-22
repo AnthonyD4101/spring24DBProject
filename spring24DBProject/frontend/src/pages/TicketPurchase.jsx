@@ -1,71 +1,86 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 export default function TicketPurchase() {
-  // State variables to manage form inputs
   const [numTickets, setNumTickets] = useState("");
-  const [ticketType, setTicketType] = useState([]);
   const [selectedDate, setSelectedDate] = useState("");
-  const [foodBundle, setFoodBundle] = useState([]);
-  const [merchBundle, setMerchBundle] = useState([]);
+  const [ticketDetails, setTicketDetails] = useState([]);
+  const [products, setProducts] = useState([]);
   const [formSubmitted, setFormSubmitted] = useState(false);
-  const [totalPrice, setTotalPrice] = useState("");
+  const [totalPrice, setTotalPrice] = useState(0);
 
-  const prices = new Map([
-    ["GA", 60],
-    ["KI", 40],
-    ["NA", 0],
-    ["AB", 15],
-    ["DF", 25],
-    ["GG", 20],
-    ["FF", 15],
-    ["EE", 25],
-    ["MM", 20],
-  ]);
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch("http://localhost:3001/ticketPurchase");
+        if (!response.ok) {
+          throw new Error("Failed to fetch products");
+        }
+        const data = await response.json();
+        setProducts(data);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    };
 
-  // Function to handle form submission
+    fetchProducts();
+  }, []);
+
+  console.log(products);
+
+  const handleNumTicketsChange = (e) => {
+    const num = parseInt(e.target.value);
+    setNumTickets(num);
+    const newTicketDetails = [];
+    for (let i = 0; i < num; i++) {
+      newTicketDetails.push({
+        ticketType: "",
+        foodBundle: "",
+        merchBundle: "",
+      });
+    }
+    setTicketDetails(newTicketDetails);
+  };
+
+  const handleTicketDetailsChange = (index, field, value) => {
+    const updatedTicketDetails = [...ticketDetails];
+    updatedTicketDetails[index][field] = value;
+    setTicketDetails(updatedTicketDetails);
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    var t = 0;
-    console.log(numTickets, selectedDate);
-    for (let i = 0; i < numTickets; i++) {
-      console.log(ticketType[i], foodBundle[i], merchBundle[i]);
-      t +=
-        prices.get(ticketType[i]) +
-        prices.get(foodBundle[i]) +
-        prices.get(merchBundle[i]);
-    }
+
+    let totalPrice = 0;
+
+    ticketDetails.forEach((ticket) => {
+      const selectedTicket = products.find(
+        (product) => product.NameOfItem === ticket.ticketType
+      );
+
+      if (selectedTicket) {
+        totalPrice += parseFloat(selectedTicket.SalePrice);
+      }
+
+      const selectedFood = products.find(
+        (product) => product.NameOfItem === ticket.foodBundle
+      );
+
+      if (selectedFood) {
+        totalPrice += parseFloat(selectedFood.SalePrice);
+      }
+
+      const selectedMerch = products.find(
+        (product) => product.NameOfItem === ticket.merchBundle
+      );
+
+      if (selectedMerch) {
+        totalPrice += parseFloat(selectedMerch.SalePrice);
+      }
+    });
+
+    setTotalPrice(totalPrice);
+
     setFormSubmitted(true);
-    setTotalPrice(t);
-  };
-
-  // Function to handle changes in number of tickets
-  const handleNumTicketsChange = (e) => {
-    const value = parseInt(e.target.value);
-    setNumTickets(value >= 0 ? value : 0);
-    // Automatically set the first ticket type to "GA"
-    setTicketType(Array(value));
-    setFoodBundle(Array(value));
-    setMerchBundle(Array(value));
-  };
-
-  // Function to handle changes in ticket type
-  const handleTicketTypeChange = (e, index) => {
-    console.log(index);
-    var newTicketType = ticketType;
-    newTicketType[index] = e.target.value;
-    setTicketType(newTicketType);
-  };
-
-  const handleFoodBundleChange = (e, index) => {
-    var newFoodBundle = foodBundle;
-    newFoodBundle[index] = e.target.value;
-    setFoodBundle(newFoodBundle);
-  };
-
-  const handleMerchBundleChange = (e, index) => {
-    var newMerchBundle = merchBundle;
-    newMerchBundle[index] = e.target.value;
-    setMerchBundle(newMerchBundle);
   };
 
   return (
@@ -100,124 +115,112 @@ export default function TicketPurchase() {
                   name="numOfTickets"
                   placeholder="0"
                   value={numTickets}
-                  onChange={(e) => handleNumTicketsChange(e)}
+                  onChange={handleNumTicketsChange}
                   min="0"
                   maxLength="10"
                   required
                 />
               </div>
-              <div className="mt-2 mb-3">
-                <label htmlFor="dateValid" className="form-label">
-                  Date
-                </label>
-                <input
-                  id="dateValid"
-                  name="dateValid"
-                  type="date"
-                  className="form-control"
-                  maxLength="100"
-                  value={selectedDate}
-                  onChange={(e) => setSelectedDate(e.target.value)}
-                  required
-                />
-              </div>
-              <div className="row mb-3">
-                {Array.from({ length: numTickets }, (_, index) => (
-                  <div className="col" key={index}>
+              {ticketDetails.map((ticket, index) => (
+                <div key={index}>
+                  {index > 0 && <hr style={{ borderTop: "4px solid black" }} />}{" "}
+                  {/* Horizontal line */}
+                  <div className="mt-2 mb-3">
                     <label
                       htmlFor={`ticketType${index}`}
-                      className="form-label mb-2"
+                      className="form-label"
                     >
-                      Ticket {index + 1} Type
+                      Ticket Type {index + 1}
                     </label>
-                    <input
+                    <select
                       className="form-control"
-                      list={`datalistOptions${index}`}
                       id={`ticketType${index}`}
-                      placeholder="Type to search..."
-                      value={ticketType[index]}
-                      onChange={(e) => handleTicketTypeChange(e, index)}
+                      name={`ticketType${index}`}
+                      value={ticket.ticketType}
+                      onChange={(e) =>
+                        handleTicketDetailsChange(
+                          index,
+                          "ticketType",
+                          e.target.value
+                        )
+                      }
                       required
-                    ></input>
-                    <datalist id={`datalistOptions${index}`}>
-                      <option value="GA">General Admission (10+)</option>
-                      <option value="KI">Kids (3-10)</option>
-                    </datalist>
+                    >
+                      <option value="">Select Ticket Type</option>
+                      <option value="GA">General Admission (GA)</option>
+                      <option value="KI">Kid (KI)</option>
+                    </select>
                   </div>
-                ))}
-              </div>
-              <div className="row mb-3">
-                {Array.from({ length: numTickets }, (_, index) => (
-                  <div className="col" key={index}>
+                  <div className="mt-2 mb-3">
                     <label
                       htmlFor={`foodBundle${index}`}
-                      className="form-label mb-2"
+                      className="form-label"
                     >
-                      Ticket {index + 1} Food Bundle
+                      Food Bundle {index + 1}
                     </label>
-                    <input
+                    <select
                       className="form-control"
-                      list={`datalistOption${index}`}
                       id={`foodBundle${index}`}
-                      placeholder="Type to search..."
-                      value={foodBundle[index]}
-                      onChange={(e) => handleFoodBundleChange(e, index)}
+                      value={ticket.foodBundle}
+                      onChange={(e) =>
+                        handleTicketDetailsChange(
+                          index,
+                          "foodBundle",
+                          e.target.value
+                        )
+                      }
                       required
-                    ></input>
-                    <datalist id={`datalistOption${index}`}>
-                      <option value="NA">None</option>
-                      <option value="AB">
-                        Adventure Bites Eatery ($15): Includes a burger meal or
-                        pizza meal with a drink.
-                      </option>
-                      <option value="DF">
-                        Dragon's Flame Tavern ($25): Includes a selection of
-                        fire-grilled meats and skewers with a drink.
-                      </option>
-                      <option value="GG">
-                        Galactic Grub Hub ($20): Includes a hearty sandwhch with
-                        chips and a drink.
-                      </option>
-                    </datalist>
+                    >
+                      <option value="">Select Food Bundle</option>
+                      {products
+                        .filter((product) => product.VendorType === "Food") // Filter products by VendorType
+                        .map((product) => (
+                          <option
+                            key={product.ItemID}
+                            value={product.NameOfItem}
+                          >
+                            {product.NameOfItem} - ${product.SalePrice}
+                          </option>
+                        ))}
+                    </select>
                   </div>
-                ))}
-              </div>
-              <div className="row mb-3">
-                {Array.from({ length: numTickets }, (_, index) => (
-                  <div className="col" key={index}>
+                  <div className="mt-2 mb-3">
                     <label
                       htmlFor={`merchBundle${index}`}
-                      className="form-label mb-2"
+                      className="form-label"
                     >
-                      Ticket {index + 1} Merch Bundle
+                      Merch Bundle {index + 1}
                     </label>
-                    <input
+                    <select
                       className="form-control"
-                      list={`datalistMerch${index}`}
                       id={`merchBundle${index}`}
-                      placeholder="Type to search..."
-                      value={merchBundle[index]}
-                      onChange={(e) => handleMerchBundleChange(e, index)}
+                      value={ticket.merchBundle}
+                      onChange={(e) =>
+                        handleTicketDetailsChange(
+                          index,
+                          "merchBundle",
+                          e.target.value
+                        )
+                      }
                       required
-                    ></input>
-                    <datalist id={`datalistMerch${index}`}>
-                      <option value="NA">None</option>
-                      <option value="FF">
-                        Fantasy Finds Boutique ($15): Includes a shirt with a
-                        picture of one of our rides.
-                      </option>
-                      <option value="EE">
-                        Enchanted Emporium ($25): Includes a wizard robe, a
-                        plush toy, and a wand.
-                      </option>
-                      <option value="MM">
-                        Mystic Marvels Marketplace ($20): Includes a specially
-                        crafted mug and a figurine.
-                      </option>
-                    </datalist>
+                    >
+                      <option value="">Select Merch Bundle</option>
+                      {products
+                        .filter(
+                          (product) => product.VendorType === "Merchandise"
+                        ) // Filter products by VendorType
+                        .map((product) => (
+                          <option
+                            key={product.ItemID}
+                            value={product.NameOfItem}
+                          >
+                            {product.NameOfItem} - ${product.SalePrice}
+                          </option>
+                        ))}
+                    </select>
                   </div>
-                ))}
-              </div>
+                </div>
+              ))}
               <div className="flex flex-wrap -mx-3 mt-6">
                 <div className="w-full px-3 text-center">
                   <button id="button" type="submit" className="btn btn-primary">
