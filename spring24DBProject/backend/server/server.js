@@ -10,6 +10,7 @@ const { handleGetEmployee, handleGetAccount, handleUpdateEmployee, handleDeleteE
 const { handleGetAllDepartments, handleAddDepartment, handleGetDepartment, handleUpdateDepartment } = require('../handlers/DepartmentHandler');
 const { handleAddVendor,handleGetAllVendors, handleGetVendor, handleUpdateVendor,handleDeleteVendor } = require('../handlers/VendorHandler');
 const { handleAddWeatherLog } = require('../handlers/WeatherLogHandler');
+const { handleGetEmployeeSupervisor } = require('../handlers/DashboardHandler');
 
 const server = http.createServer((req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -34,6 +35,8 @@ const server = http.createServer((req, res) => {
     handleGetEmployee(req, res);
   } else if(req.method === "GET" && url.parse(req.url).pathname.match("^\/getAccount\/.+")) {
     handleGetAccount(req, res);
+  } else if(req.method === "GET" && url.parse(req.url).pathname.match("^\/getDashboard\/.+")) {
+    handleGetEmployeeSupervisor(req, res);
   } else if (req.method === "POST" && url.parse(req.url).pathname === "/signup") {
     handleSignUp(req, res);
   } else if(req.method === "POST" && url.parse(req.url).pathname === "/signin") {
