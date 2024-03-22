@@ -19,9 +19,10 @@ function handleAddEmployee(req, res) {
       supUserId,
       salary,
       address,
-      status,
       department,
     } = JSON.parse(body);
+
+    let status = "Active";
 
     // Assuming your 'Employees' table columns match the variable names directly
     const query = `
@@ -70,7 +71,7 @@ function handleAddEmployee(req, res) {
         if (error) {
           console.error("Error inserting employee into database:", error);
           res.writeHead(500, { "Content-Type": "application/json" });
-          res.end(JSON.stringify({ message: "Error adding employee" }));
+          res.end(JSON.stringify({ message: "Error adding employee", status }));
           return;
         }
         res.writeHead(200, { "Content-Type": "application/json" });
