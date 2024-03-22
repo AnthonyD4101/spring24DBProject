@@ -21,6 +21,12 @@ export const Navbar = () => {
     }
   };
 
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
   return (
     <nav className="navbar navbar-expand-lg">
       <div className="container">
@@ -63,23 +69,29 @@ export const Navbar = () => {
               </button>
             </li>
             {currentUser ? (
-              <>
-                <li className="nav-item">
-                  <p className="nav-link text-white">
-                    Welcome, {currentUser.FirstName} {currentUser.LastName}
-                  </p>
-                </li>
-                <li className="nav-item">
-                  <button
-                    type="button"
-                    className="btn text-white"
-                    onClick={handleSignOut}
-                    style={{ textDecoration: "underline", color: "blue" }}
-                  >
-                    Sign Out
+              <li className="nav-item dropdown">
+                <button
+                  className="nav-link btn dropdown-toggle text-white"
+                  onClick={toggleDropdown}
+                  aria-haspopup="true"
+                  aria-expanded={isDropdownOpen ? "true" : "false"}
+                  style={{ cursor: "pointer" }}
+                >
+                  Welcome, {currentUser.FirstName} {currentUser.LastName}
+                </button>
+                <div
+                  className={`dropdown-menu ${isDropdownOpen ? "show" : ""}`}
+                  aria-labelledby="navbarDropdown"
+                >
+                  <button className="dropdown-item">
+                    Update Account Information
                   </button>
-                </li>
-              </>
+                  <button className="dropdown-item" onClick={handleSignOut}>
+                    Logout
+                  </button>
+                  {/* Add more menu items here */}
+                </div>
+              </li>
             ) : (
               <li className="nav-item">
                 <button className="btn btn-warning">
