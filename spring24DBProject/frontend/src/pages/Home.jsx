@@ -1,7 +1,17 @@
 import React from "react";
 import classes from "../components/UI/Home.module.css";
+import { useAuth } from "../context/AuthContext";
 
 export default function Home() {
+  const { currentUser } = useAuth();
+
+  const handleBuyTickets = () => {
+    if (!currentUser) {
+      window.alert("You need to sign in to access the Buy Tickets page.");
+    } else {
+      window.location.href = "/ticketPurchase";
+    }
+  };
   return (
     <div className={classes.homepage}>
       <header>
@@ -188,13 +198,8 @@ export default function Home() {
               Wonderland*
             </p>
           </div>
-          <button className={classes.button}>
-            <a
-              href="/ticketPurchase"
-              style={{ textDecoration: "none", color: "inherit" }}
-            >
-              Buy Tickets
-            </a>
+          <button className={classes.button} onClick={handleBuyTickets}>
+            Buy Tickets
           </button>
         </section>
         <section id="contact" className={classes.contact}>
