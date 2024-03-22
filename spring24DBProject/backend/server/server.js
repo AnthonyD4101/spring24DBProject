@@ -11,6 +11,7 @@ const { handleGetAllDepartments, handleAddDepartment, handleGetDepartment, handl
 const { handleAddVendor,handleGetAllVendors, handleGetVendor, handleUpdateVendor,handleDeleteVendor } = require('../handlers/VendorHandler');
 const { handleGetAllProducts } = require('../handlers/ProductsHandler');
 const { handleAddWeatherLog } = require('../handlers/WeatherLogHandler');
+const { handleGetEmployeeSupervisor } = require('../handlers/DashboardHandler');
 const handleTicketPurchase = require('../handlers/TicketPurchaseHandler');
 
 const server = http.createServer((req, res) => {
@@ -36,6 +37,8 @@ const server = http.createServer((req, res) => {
     handleGetEmployee(req, res);
   } else if(req.method === "GET" && url.parse(req.url).pathname.match("^\/getAccount\/.+")) {
     handleGetAccount(req, res);
+  } else if(req.method === "GET" && url.parse(req.url).pathname.match("^\/getDashboard\/.+")) {
+    handleGetEmployeeSupervisor(req, res);
   } else if (req.method === "POST" && url.parse(req.url).pathname === "/signup") {
     handleSignUp(req, res);
   } else if(req.method === "POST" && url.parse(req.url).pathname === "/signin") {
