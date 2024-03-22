@@ -6,6 +6,8 @@ const handleEmployeeAccountSignUp = require("../handlers/CreateEmployeeAccountHa
 const handleAddEmployee = require("../handlers/AddEmployeeHandler");
 const handleStaffSignIn = require("../handlers/StaffSignInHandler");
 const { handleAddAttraction, handleGetAllAttractions, handleGetAttraction, handleUpdateAttraction, handleDeleteAttraction } = require('../handlers/AttractionHandler');
+const { handleGetEmployee, handleGetAccount, handleUpdateEmployee, handleDeleteEmployee } = require('../handlers/EmployeeHandler');
+const { handleGetAllDepartments, handleAddDepartment, handleGetDepartment, handleUpdateDepartment } = require('../handlers/DepartmentHandler');
 const { handleAddVendor,handleGetAllVendors, handleGetVendor, handleUpdateVendor,handleDeleteVendor } = require('../handlers/VendorHandler');
 
 
@@ -26,6 +28,8 @@ const server = http.createServer((req, res) => {
     handleGetAttraction(req, res);
   } else if(req.method === "GET" && url.parse(req.url).pathname === "/getDepartments" ) {
     handleGetAllDepartments(req, res);
+  } else if(req.method === "GET" && url.parse(req.url).pathname.match("^\/getDepartment\/.+")) {
+    handleGetDepartment(req, res);
   } else if(req.method === "GET" && url.parse(req.url).pathname.match("^\/getEmployee\/.+")) {
     handleGetEmployee(req, res);
   } else if(req.method === "GET" && url.parse(req.url).pathname.match("^\/getAccount\/.+")) {
@@ -42,10 +46,14 @@ const server = http.createServer((req, res) => {
     handleEmployeeAccountSignUp(req, res);
   } else if(req.method === "POST" && url.parse(req.url).pathname === "/addAttraction") {
     handleAddAttraction(req, res);
+  } else if(req.method === "POST" && url.parse(req.url).pathname === "/addDepartment") {
+    handleAddDepartment(req, res);
   } else if(req.method === "PUT" && url.parse(req.url).pathname.match("^\/updateAttraction\/.+")) {
     handleUpdateAttraction(req, res);
   } else if(req.method === "PUT" && url.parse(req.url).pathname.match("^\/updateEmployee\/.+")) {
     handleUpdateEmployee(req, res);
+  } else if(req.method === "PUT" && url.parse(req.url).pathname.match("^\/updateDepartment\/.+")) {
+    handleUpdateDepartment(req, res);
   } else if(req.method === "PUT" && url.parse(req.url).pathname.match("^\/deleteAttraction\/.+")) {
     handleDeleteAttraction(req, res);
   } else if(req.method === "PUT" && url.parse(req.url).pathname.match("^\/deleteEmployee\/.+")) {

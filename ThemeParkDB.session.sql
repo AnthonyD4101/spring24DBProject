@@ -23,6 +23,11 @@ SELECT *
 FROM vendor
 
 -- @block INSERT PRODUCT DUMMY DATA
+INSERT INTO Vendor(NameOfVendor, VendorType, VendorStatus, DepName)
+VALUES
+    ('Dominoes', 'Food', 'Active', 'Vendor'),
+    ('Five Guys', 'Food', 'Active', 'Vendor');
+
 INSERT INTO Product(ItemID, NameOfItem, NameOfVendor, AcquisitionCost, SalePrice, Profit, Description, ProductStatus)
 VALUES
     (1, 'Pizza', 'Dominoes', 5, 10, 5, 'Large slice of pepperoni pizza', 'Active'),
