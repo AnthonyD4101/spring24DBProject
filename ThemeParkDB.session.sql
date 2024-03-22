@@ -42,25 +42,43 @@ VALUES
 
 
 -- @block
-DROP TABLE IF EXISTS Account;
-CREATE TABLE Account (
-    UserID INT AUTO_INCREMENT PRIMARY KEY,
-    AccountType ENUM(
-        'Customer',
-        'Employee',
-        'Maintenance',
-        'Department Manager',
-        'Park Manager',
-        'Admin'
-    ) NOT NULL,
-    FirstName VARCHAR(30) NOT NULL,
-    MiddleName VARCHAR(30),
-    LastName VARCHAR(30) NOT NULL,
-    PhoneNumber VARCHAR(14) NOT NULL,
-    DateOfBirth DATE NOT NULL,
-    Email VARCHAR(100) UNIQUE NOT NULL,
-    Password VARCHAR(255) NOT NULL
-);
+SELECT * 
+FROM employee
+
+-- @block
+SELECT * 
+FROM department
+
+-- @block
+SELECT * 
+FROM attraction
+
+-- @block
+SELECT * 
+FROM vendor
+
+-- @block
+SELECT * 
+FROM product
+
+-- @block
+SELECT * 
+FROM sale
+
+-- @block
+SELECT * 
+FROM attractionlog
+
+-- @block
+SELECT * 
+FROM maintenance
+
+-- @block
+SELECT * 
+FROM weatherlog
+
+
+
 -- @block
 DROP DATABASE IF EXISTS parkdb;
 CREATE DATABASE parkDB;

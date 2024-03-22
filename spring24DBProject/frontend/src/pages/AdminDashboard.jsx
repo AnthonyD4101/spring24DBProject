@@ -1,11 +1,15 @@
 import React from "react";
+import { useAuth } from "../context/AuthContext";
 
 export default function AdminDashboard() {
+  const { currentUser, signOut } = useAuth();
+  console.log("Current user:", currentUser);
+
   const personalInfo = {
-    name: "John Doe",
-    position: "Attraction Department Manager",
-    employeeID: "12345",
-    contactInformation: "johndoe@example.com | 123-456-7890",
+    name: `${currentUser.FirstName} ${currentUser.LastName}`,
+    position: `${currentUser.Position}`,
+    employeeID: `${currentUser.UserID}`,
+    contactInformation: `${currentUser.Email} | ${currentUser.PhoneNumber}`,
   };
 
   const feedback = "Remember to greet park visitors with a smile on your face.";
@@ -27,7 +31,7 @@ export default function AdminDashboard() {
   const currentYear = currentDate.getFullYear();
   const currentDay = currentDate.getDate();
   const currentDayOfWeek = currentDate.getDay();
-  console.log(currentDayOfWeek)
+  console.log(currentDayOfWeek);
 
   // Find the starting day of the current week
   const startingDayOfWeek = currentDayOfWeek === 0 ? 0 : currentDayOfWeek;
@@ -68,7 +72,11 @@ export default function AdminDashboard() {
               }`}
             >
               <p>{day}</p>
-              {(index >= 1 && index <= 5) ? <p>{workHours}</p> : <p>Not Scheduled</p>}
+              {index >= 1 && index <= 5 ? (
+                <p>{workHours}</p>
+              ) : (
+                <p>Not Scheduled</p>
+              )}
             </div>
           ))}
         </div>

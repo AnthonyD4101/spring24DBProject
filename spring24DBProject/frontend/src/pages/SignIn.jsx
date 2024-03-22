@@ -24,7 +24,14 @@ export default function SignIn() {
 
     if (response.status === 200) {
       navigate("/");
-      signIn({ FirstName: data.firstName, LastName: data.lastName });
+      signIn({
+        UserID: data.userID,
+        FirstName: data.firstName,
+        LastName: data.lastName,
+        Email: data.email,
+        AccountType: data.accountType,
+        PhoneNumber: data.phoneNumber,
+      });
     } else {
       setErrorMessage(data.message || "Incorrect User ID or Password");
     }
@@ -35,7 +42,7 @@ export default function SignIn() {
       <div className="row justify-content-center">
         <div className="col-md-4 mb-8">
           <div className="card">
-            <div className="card-body">
+            <div className="card-body" style={{ marginBottom: "5%" }}>
               <h1 className="my-4 text-center" style={{ color: "#2F4858" }}>
                 Sign In
               </h1>

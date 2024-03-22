@@ -6,7 +6,8 @@ import AdminDepManagement from "./AdminDepManagement";
 import TicketDataReports from "./TicketDataReports";
 import RideDataReports from "./RideDataReports";
 import RevenueDataReports from "./RevenueDataReports";
-import AddEmployee from "./AddEmployeeDataEntryForm";
+import CreateEmployeeAccount from "./CreateEmployeeAccount";
+import AddEmployee from "./AddEmployee";
 import UpdateEmployee from "./UpdateEmployeeDataEntryForm";
 import DeleteEmployee from "./DeleteEmployeeDataEntryForm";
 import AddAttraction from "./AddAttractionDataEntryForm";
@@ -30,6 +31,13 @@ import GenerateMaintRep from "./GenerateMaintenanceReport";
 
 const AdminLanding = () => {
   const [selectedPage, setSelectedPage] = useState("Dashboard");
+  const [employeeData, setEmployeeData] = useState(null);
+
+  const transitionToAddEmployee = (employeeData) => {
+    console.log("Transitioning with data:", employeeData);
+    setEmployeeData(employeeData);
+    setSelectedPage("Add Employee");
+  };
 
   const handleItemClick = (pageName) => {
     setSelectedPage(pageName);
@@ -49,11 +57,15 @@ const AdminLanding = () => {
             {selectedPage === "Dashboard" && <AdminDashboard />}
             {selectedPage === "Department Management" && <AdminDepManagement />}
             {selectedPage === "Data Reports" && <AdminDataReports />}
-            {selectedPage === "Maintenance Reports" && <AdminMainReports />}
             {selectedPage === "Ticket Data Reports" && <TicketDataReports />}
             {selectedPage === "Ride Data Reports" && <RideDataReports />}
             {selectedPage === "Revenue Data Reports" && <RevenueDataReports />}
-            {selectedPage === "Add Employee Data Entry Form" && <AddEmployee />}
+            {selectedPage === "Create Employee Account" && (
+              <CreateEmployeeAccount onSuccess={transitionToAddEmployee} />
+            )}
+            {selectedPage === "Add Employee" && (
+              <AddEmployee employeeData={employeeData} />
+            )}
             {selectedPage === "Update Employee Data Entry Form" && (
               <UpdateEmployee />
             )}

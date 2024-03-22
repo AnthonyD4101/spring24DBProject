@@ -1,21 +1,80 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-export default function AddEmployee() {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [email, setEmail] = useState("");
-  const [position, setPosition] = useState("");
-  const [supervisorUserId, setSupervisorUserId] = useState("");
-  const [salary, setSalary] = useState("");
-  const [address, setAddress] = useState({
+export default function AddEmployee({ employeeData = {} }) {
+  console.log("Received employeeData:", employeeData);
+  const {
+    userId: initialUserID = "",
+    firstName = "",
+    middleName = "",
+    lastName = "",
+    phoneNumber = "",
+    email = "",
+  } = employeeData;
+
+  const navigate = useNavigate();
+
+  // Initialize state with the destructured values
+  const [userIDState, setUserIDState] = useState(initialUserID);
+  const [firstNameState, setFirstName] = useState(firstName);
+  const [middleNameState, setMiddleName] = useState(middleName);
+  const [lastNameState, setLastName] = useState(lastName);
+  const [phoneNumberState, setPhoneNumber] = useState(phoneNumber);
+  const [emailState, setEmail] = useState(email);
+  const [positionState, setPosition] = useState("");
+  const [supervisorUserIdState, setSupervisorUserId] = useState("");
+  const [salaryState, setSalary] = useState("");
+  const [departmentState, setDepartment] = useState("");
+
+  const [addressState, setAddress] = useState({
     street: "",
     city: "",
     state: "",
     zipcode: "",
   });
-  const [status, setStatus] = useState("Active");
-  const [department, setDepartment] = useState("");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const employee = {
+      userId: userIDState,
+      firstName: firstNameState,
+      middleName: middleNameState,
+      lastName: lastNameState,
+      phoneNumber: phoneNumberState,
+      email: emailState,
+      position: positionState,
+      supervisorUserId: supervisorUserIdState,
+      salary: salaryState,
+      address: addressState,
+      department: departmentState,
+      // status and department were not included in the destructuring,
+      // Assuming they are handled elsewhere or not needed for initialization.
+    };
+
+    // Proceed with your fetch request as before...
+
+    try {
+      const response = await fetch("http://localhost:3001/addEmployee", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(employee),
+      });
+
+      if (response.ok) {
+        const responseData = await response.json();
+        console.log("Employee added successfully:", responseData);
+        // Navigate to another route upon success
+        navigate("/staffSignIn");
+      } else {
+        // Handle server-side validation errors or other issues
+        console.error("Failed to add employee.");
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    }
+  };
 
   const handleAddressChange = (e) => {
     const { name, value } = e.target;
@@ -25,26 +84,7 @@ export default function AddEmployee() {
     }));
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    // Submit data to backend or perform further processing
-    const formData = {
-      firstName,
-      lastName,
-      phoneNumber,
-      email,
-      position,
-      supervisorUserId,
-      salary,
-      address,
-      status,
-      department,
-    };
-    console.log(formData);
-    alert("Employee has been added");
-  };
-
-  const positions = ["Admin", "Manager", "Maintenance", "Employee"];
+  const positions = ["Manager", "Developer", "Designer"];
 
   return (
     <div className="row justify-content-center">
@@ -55,6 +95,23 @@ export default function AddEmployee() {
               Add Employee
             </h1>
             <form onSubmit={handleSubmit}>
+              <div className="row mb-3">
+                <div className="col">
+                  <label htmlFor="userID" className="form-label">
+                    User ID: {/* Step 3: Create the UserID input field */}
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="userID"
+                    name="userID"
+                    placeholder="User ID"
+                    required
+                    value={userIDState} // Use the renamed state variable
+                    onChange={(e) => setUserIDState(e.target.value)} // Use the renamed setter function
+                  />
+                </div>
+              </div>
               <div className="row mb-3 mt-3">
                 <div className="col">
                   <label htmlFor="firstName" className="form-label">
@@ -68,8 +125,23 @@ export default function AddEmployee() {
                     placeholder="John"
                     maxLength="30"
                     required
-                    value={firstName}
+                    value={firstNameState} // Use the state variable
                     onChange={(e) => setFirstName(e.target.value)}
+                  />
+                </div>
+                <div className="col">
+                  <label htmlFor="middleName" className="form-label">
+                    Middle Name:
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="middleName"
+                    name="middleName"
+                    placeholder="Bro"
+                    maxLength="30"
+                    value={middleName}
+                    onChange={(e) => setLastName(e.target.value)}
                   />
                 </div>
                 <div className="col">
@@ -113,7 +185,7 @@ export default function AddEmployee() {
                     type="email"
                     className="form-control"
                     id="email"
-                    name="emaill"
+                    name="email"
                     placeholder="johndoe@example.com"
                     required
                     value={email}
@@ -133,7 +205,7 @@ export default function AddEmployee() {
                     name="position"
                     placeholder="Type to search..."
                     required
-                    value={position}
+                    value={positionState}
                     onChange={(e) => setPosition(e.target.value)}
                   />
                   <datalist id="positions">
@@ -153,7 +225,7 @@ export default function AddEmployee() {
                     name="supUserID"
                     placeholder="12345"
                     required
-                    value={supervisorUserId}
+                    value={supervisorUserIdState}
                     onChange={(e) => setSupervisorUserId(e.target.value)}
                   />
                 </div>
@@ -170,7 +242,7 @@ export default function AddEmployee() {
                     name="salary"
                     placeholder="65000"
                     required
-                    value={salary}
+                    value={salaryState}
                     onChange={(e) => setSalary(e.target.value)}
                   />
                 </div>
@@ -183,9 +255,9 @@ export default function AddEmployee() {
                     className="form-control"
                     id="department"
                     name="department"
-                    placeholder="Attractions"
+                    placeholder="e.g., Human Resources"
                     required
-                    value={department}
+                    value={departmentState}
                     onChange={(e) => setDepartment(e.target.value)}
                   />
                 </div>
@@ -203,12 +275,14 @@ export default function AddEmployee() {
                     name="street"
                     placeholder="1111 FrostRiver Ln"
                     required
-                    value={address.street}
+                    value={addressState.street}
                     onChange={handleAddressChange}
                   />
                 </div>
                 <div className="col">
-                  <label htmlFor="city" className="form-label">City:</label>
+                  <label htmlFor="city" className="form-label">
+                    City:
+                  </label>
                   <input
                     type="text"
                     className="form-control"
@@ -216,14 +290,16 @@ export default function AddEmployee() {
                     name="city"
                     placeholder="City"
                     required
-                    value={address.city}
+                    value={addressState.city}
                     onChange={handleAddressChange}
                   />
                 </div>
               </div>
               <div className="row mb-3">
                 <div className="col">
-                  <label htmlFor="state" className="form-label">State:</label>
+                  <label htmlFor="state" className="form-label">
+                    State:
+                  </label>
                   <input
                     type="text"
                     className="form-control"
@@ -231,12 +307,14 @@ export default function AddEmployee() {
                     name="state"
                     placeholder="State"
                     required
-                    value={address.state}
+                    value={addressState.state}
                     onChange={handleAddressChange}
                   />
                 </div>
                 <div className="col">
-                  <label htmlFor="zipcode" className="form-label">Zipcode:</label>
+                  <label htmlFor="zipcode" className="form-label">
+                    Zipcode:
+                  </label>
                   <input
                     type="text"
                     className="form-control"
@@ -244,14 +322,14 @@ export default function AddEmployee() {
                     name="zipcode"
                     placeholder="Zipcode"
                     required
-                    value={address.zipcode}
+                    value={addressState.zipcode}
                     onChange={handleAddressChange}
                   />
                 </div>
               </div>
               <div className="flex flex-wrap -mx-3 mt-6">
                 <div className="w-full px-3 text-center">
-                  <button id="button" type="submit" className="btn btn-primary">
+                  <button type="submit" className="btn btn-primary">
                     Add Employee
                   </button>
                 </div>
