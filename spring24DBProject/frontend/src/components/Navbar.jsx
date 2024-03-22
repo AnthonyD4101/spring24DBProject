@@ -29,7 +29,7 @@ export const Navbar = () => {
 
   return (
     <nav className="navbar navbar-expand-lg">
-      <div className="container">
+      <div className="container-fluid">
         <a className="navbar-brand text-white" href="/">
           Wonderland
         </a>
