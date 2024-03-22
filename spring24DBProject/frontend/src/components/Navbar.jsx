@@ -1,17 +1,26 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 
 export const Navbar = () => {
   const { currentUser, signOut } = useAuth();
-  console.log("Current user:", currentUser);
+  const navigate = useNavigate();
 
   const handleSignOut = () => {
     signOut();
     // Redirect to sign-in page.
-    window.location.href = "/signIn";
+    navigate("/signIn");
   };
+
+  const handleBuyTickets = () => {
+    if (!currentUser) {
+      window.alert("You need to sign in to access the Buy Tickets page.");
+    } else {
+      navigate("/ticketPurchase");
+    }
+  };
+
   return (
     <nav className="navbar navbar-expand-lg">
       <div className="container">
@@ -45,9 +54,13 @@ export const Navbar = () => {
               </a>
             </li>
             <li className="nav-item">
-              <a className="nav-link text-white" href="/ticketPurchase">
+              <button
+                className="nav-link btn text-white"
+                onClick={handleBuyTickets}
+                style={{ cursor: "pointer" }}
+              >
                 Buy Tickets
-              </a>
+              </button>
             </li>
             {currentUser ? (
               <>
