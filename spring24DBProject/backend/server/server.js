@@ -7,6 +7,8 @@ const handleAddEmployee = require("../handlers/AddEmployeeHandler");
 const handleStaffSignIn = require("../handlers/StaffSignInHandler");
 const { handleAddAttraction, handleGetAllAttractions, handleGetAttraction, handleUpdateAttraction, handleDeleteAttraction } = require('../handlers/AttractionHandler');
 const { handleAddVendor,handleGetAllVendors, handleGetVendor, handleUpdateVendor,handleDeleteVendor } = require('../handlers/VendorHandler');
+const handleTicketPurchase = require('../handlers/TicketPurchaseHandler');
+const { handleGetAllProducts } = require('../handlers/ProductsHandler');
 
 
 const server = http.createServer((req, res) => {
@@ -60,6 +62,10 @@ const server = http.createServer((req, res) => {
     handleUpdateVendor(req, res);
   } else if(req.method === "PUT" && url.parse(req.url).pathname.match("^\/deleteVendor\/.+")) {
     handleDeleteVendor(req, res);
+  } else if (req.method === "POST" && url.parse(req.url).pathname === "/ticketPurchase") {
+    handleTicketPurchase(req, res);
+  } else if (req.method === "GET" && url.parse(req.url).pathname === "/ticketPurchase") {
+    handleGetAllProducts(req, res);
   } else {
     res.writeHead(404);
     res.end("Not Found");
