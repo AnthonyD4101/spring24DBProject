@@ -22,16 +22,21 @@ FROM attraction
 SELECT * 
 FROM vendor
 
+-- @block
+DELETE FROM vendor
+
 -- @block INSERT PRODUCT DUMMY DATA
 INSERT INTO Vendor(NameOfVendor, VendorType, VendorStatus, DepName)
 VALUES
     ('Dominoes', 'Food', 'Active', 'Vendor'),
-    ('Five Guys', 'Food', 'Active', 'Vendor');
+    ('Five Guys', 'Food', 'Active', 'Vendor'),
+    ('Crocs', 'Merchandise', 'Active', 'Vendor');
 
 INSERT INTO Product(ItemID, NameOfItem, NameOfVendor, AcquisitionCost, SalePrice, Profit, Description, ProductStatus)
 VALUES
     (1, 'Pizza', 'Dominoes', 5, 10, 5, 'Large slice of pepperoni pizza', 'Active'),
-    (2, 'Burger', 'Five Guys', 5, 9, 4, 'All classic, American burger', 'Active');
+    (2, 'Burger', 'Five Guys', 5, 9, 4, 'All classic, American burger', 'Active'),
+    (3, 'Park Crocs', 'Crocs', 6, 12, 6, 'Comfortable park wear', 'Active');
 
 -- @block
 SELECT * 
@@ -161,18 +166,22 @@ DROP TABLE IF EXISTS Sale;
 CREATE TABLE Sale (
     SaleID INT AUTO_INCREMENT PRIMARY KEY,
     UserID INT,
-    Type ENUM('GA', 'KI', 'DG', 'DK') NOT NULL,
     DateValid DATE NOT NULL,
     DateTimeSold DATETIME NOT NULL,
-    Price DECIMAL(6, 2) NOT NULL,
+    TotalPrice DECIMAL(6, 2) NOT NULL,
+    FOREIGN KEY (UserID) REFERENCES Account(UserID) ON DELETE SET NULL ON UPDATE CASCADE
+);
+DROP TABLE IF EXISTS Ticket;
+CREATE TABLE Ticket (
+    TicketID INT AUTO_INCREMENT PRIMARY KEY,
+    SaleID INT,
+    TicketType ENUM('Food', 'Merchandise', 'Other') NOT NULL,
     FoodItemID INT,
     MerchItemID INT,
-    FOREIGN KEY (UserID) REFERENCES Account(UserID) ON DELETE
-    SET NULL ON UPDATE CASCADE,
-        FOREIGN KEY (FoodItemID) REFERENCES Product(ItemID) ON DELETE
-    SET NULL ON UPDATE CASCADE,
-        FOREIGN KEY (MerchItemID) REFERENCES Product(ItemID) ON DELETE
-    SET NULL ON UPDATE CASCADE
+    TicketPrice DECIMAL(6, 2) NOT NULL,
+    FOREIGN KEY (SaleID) REFERENCES Sale(SaleID) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (FoodItemID) REFERENCES Product(ItemID) ON DELETE SET NULL ON UPDATE CASCADE,
+    FOREIGN KEY (MerchItemID) REFERENCES Product(ItemID) ON DELETE SET NULL ON UPDATE CASCADE
 );
 DROP TABLE IF EXISTS AttractionLog;
 CREATE TABLE AttractionLog (
