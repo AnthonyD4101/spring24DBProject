@@ -22,9 +22,18 @@ FROM attraction
 SELECT * 
 FROM vendor
 
+-- @block INSERT PRODUCT DUMMY DATA
+INSERT INTO Product(ItemID, NameOfItem, NameOfVendor, AcquisitionCost, SalePrice, Profit, Description, ProductStatus)
+VALUES
+    (1, 'Pizza', 'Dominoes', 5, 10, 5, 'Large slice of pepperoni pizza', 'Active'),
+    (2, 'Burger', 'Five Guys', 5, 9, 4, 'All classic, American burger', 'Active');
+
 -- @block
 SELECT * 
 FROM product
+
+-- @block
+DELETE FROM product
 
 -- @block
 SELECT * 
