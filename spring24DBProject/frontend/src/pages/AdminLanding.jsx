@@ -39,6 +39,10 @@ const AdminLanding = () => {
     setSelectedPage("Add Employee");
   };
 
+  const handleFormSubmissionSuccess = () => {
+    setSelectedPage("Dashboard");
+  };
+
   const handleItemClick = (pageName) => {
     setSelectedPage(pageName);
   };
@@ -64,8 +68,12 @@ const AdminLanding = () => {
               <CreateEmployeeAccount onSuccess={transitionToAddEmployee} />
             )}
             {selectedPage === "Add Employee" && (
-              <AddEmployee employeeData={employeeData} />
+              <AddEmployee
+                employeeData={employeeData}
+                onSuccess={handleFormSubmissionSuccess}
+              />
             )}
+
             {selectedPage === "Update Employee Data Entry Form" && (
               <UpdateEmployee />
             )}

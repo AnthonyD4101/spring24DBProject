@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import AdminLanding from "./AdminLanding";
 
-export default function AddEmployee({ employeeData = {} }) {
+export default function AddEmployee({ employeeData = {}, onSuccess }) {
   console.log("Received employeeData:", employeeData);
   const {
     userId: initialUserID = "",
@@ -13,6 +15,7 @@ export default function AddEmployee({ employeeData = {} }) {
   } = employeeData;
 
   const navigate = useNavigate();
+  const { currentUser } = useAuth();
 
   // Initialize state with the destructured values
   const [userIDState, setUserIDState] = useState(initialUserID);
@@ -65,8 +68,10 @@ export default function AddEmployee({ employeeData = {} }) {
       if (response.ok) {
         const responseData = await response.json();
         console.log("Employee added successfully:", responseData);
-        // Navigate to another route upon success
-        navigate("/staffSignIn");
+
+        if (onSuccess) {
+          onSuccess();
+        }
       } else {
         // Handle server-side validation errors or other issues
         console.error("Failed to add employee.");
@@ -198,21 +203,22 @@ export default function AddEmployee({ employeeData = {} }) {
                   <label htmlFor="position" className="form-label">
                     Position:
                   </label>
-                  <input
-                    list="positions"
-                    className="form-control"
-                    id="position"
-                    name="position"
-                    placeholder="Type to search..."
+                  <select
+                    class="form-select"
+                    aria-label="Select Position"
                     required
                     value={positionState}
                     onChange={(e) => setPosition(e.target.value)}
-                  />
-                  <datalist id="positions">
-                    {positions.map((position, index) => (
-                      <option key={index} value={position} />
-                    ))}
-                  </datalist>
+                  >
+                    <option selected>Select Position</option>
+                    <option value="Admin">Admin</option>
+                    <option value="Park Manager">Park Manager</option>
+                    <option value="Department Manager">
+                      Department Manager
+                    </option>
+                    <option value="Maintenance">Maintenance</option>
+                    <option value="Employee">Employee</option>
+                  </select>
                 </div>
                 <div className="col">
                   <label htmlFor="supUserID" className="form-label">
@@ -224,7 +230,6 @@ export default function AddEmployee({ employeeData = {} }) {
                     id="supUserID"
                     name="supUserID"
                     placeholder="12345"
-                    required
                     value={supervisorUserIdState}
                     onChange={(e) => setSupervisorUserId(e.target.value)}
                   />
