@@ -32,6 +32,7 @@ export default function StaffSignIn() {
         AccountType: data.accountType,
         PhoneNumber: data.phoneNumber,
         Position: data.position,
+        Department: data.depname,
       });
     } else {
       setErrorMessage(data.message || "Incorrect User ID or Password");

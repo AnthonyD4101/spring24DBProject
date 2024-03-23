@@ -37,20 +37,25 @@ function handleStaffSignIn(req, res) {
         return;
       }
 
-      const positionQuery = "SELECT position FROM Employee WHERE UserID = ?";
+      // Modified query to fetch position and depname
+      const positionQuery =
+        "SELECT position, depname FROM Employee WHERE UserID = ?";
 
       poolConnection.query(
         positionQuery,
         [user.UserID],
         (error, positionResults) => {
           if (error || positionResults.length === 0) {
-            console.error("Error fetching employee position", error);
+            console.error(
+              "Error fetching employee position and department name",
+              error
+            );
           }
 
-          const position =
+          const employeeDetails =
             positionResults.length > 0
-              ? positionResults[0].position
-              : "Not specified";
+              ? positionResults[0]
+              : { position: "Not specified", depname: "Not specified" };
 
           res.writeHead(200, { "Content-Type": "application/json" });
           res.end(
@@ -62,7 +67,8 @@ function handleStaffSignIn(req, res) {
               email: user.Email,
               accountType: user.AccountType,
               phoneNumber: user.PhoneNumber,
-              position: position,
+              position: employeeDetails.position, // Included position
+              depname: employeeDetails.depname, // Included depname
             })
           );
         }
