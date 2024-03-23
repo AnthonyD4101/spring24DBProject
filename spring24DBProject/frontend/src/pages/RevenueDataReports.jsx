@@ -1,51 +1,106 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Form, Table } from "react-bootstrap";
 
 export default function RevenueDataReports() {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [revenueSource, setRevenueSource] = useState("All");
-  const [ticketType, setTicketType] = useState("NA");
-  const [foodBundleType, setFoodBundleType] = useState("NA"); // New state for Food bundle type
-  const [merchBundleType, setMerchBundleType] = useState("NA"); // New state for Merchandise bundle type
+  const [ticketType, setTicketType] = useState("All");
+  const [foodBundleType, setFoodBundleType] = useState("All"); // New state for Food bundle type
+  const [merchBundleType, setMerchBundleType] = useState("All"); // New state for Merchandise bundle type
+  const [fetchedData, setFetchedData] = useState([]);
   const [revenueData, setRevenueData] = useState([]);
   const [totalRevenue, setTotalRevenue] = useState(0);
+  const [isSet, setIsSet] = useState(false);
+
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch("http://localhost:3001/ticketPurchase");
+        if (!response.ok) {
+          throw new Error("Failed to fetch products");
+        }
+        const data = await response.json();
+        let newFoodObj = {NameOfItem: "All", VendorType: "Food" }
+        let newMerchObj = {NameOfItem: "All", VendorType: "Merchandise" }
+        data.unshift(newFoodObj);
+        data.unshift(newMerchObj);
+        setProducts(data);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  useEffect(() => {
+    const fetchRevenueData = async () => {
+      const response = await fetch("http://localhost:3001/getRevenueReport", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const json = await response.json();
+      console.log(json);
+
+      if (!response.ok) {
+        console.log("Failed to fetch attraction data");
+      }
+      if (response.ok) {
+        setFetchedData(json);
+        setIsSet(true);
+      }
+    };
+
+    fetchRevenueData();
+  }, []);
 
   const handleGenerateReport = () => {
-    // Data fetching logic
-    const fetchedData = [
-      { date: "2024-03-10", source: "Tickets", type: "GA", revenue: 55 },
-      { date: "2024-03-10", source: "Food", type: "AB", revenue: 15 },
-      { date: "2024-03-10", source: "Food", type: "DF", revenue: 25 },
-      { date: "2024-03-10", source: "Merchandise", type: "FF", revenue: 15 },
-      { date: "2024-03-11", source: "Merchandise", type: "MM", revenue: 20 },
-      { date: "2024-03-12", source: "Tickets", type: "KI", revenue: 35 },
-      { date: "2024-03-12", source: "Food", type: "GG", revenue: 20 },
-      { date: "2024-03-12", source: "Merchandise", type: "EE", revenue: 25 },
-    ];
-
     // Filter fetched data based on date range and revenue source
     let filteredData = [...fetchedData];
+    const startDateObject = new Date(startDate);
+    const endDateObject = new Date(endDate);
+    const startDateWithoutTime = new Date(
+      startDateObject.getFullYear(),
+      startDateObject.getMonth(),
+      startDateObject.getDate() + 1
+    );
+    const endDateWithoutTime = new Date(
+      endDateObject.getFullYear(),
+      endDateObject.getMonth(),
+      endDateObject.getDate() + 1
+    );
+    filteredData = filteredData.filter(
+      (entry) =>
+        new Date(entry.Date) >= new Date(startDateWithoutTime) &&
+        new Date(entry.Date) <= new Date(endDateWithoutTime)
+    );
+
     if (revenueSource !== "All") {
       filteredData = filteredData.filter(
-        (entry) => entry.source === revenueSource
+        (entry) => entry.Source === revenueSource
       );
     }
 
-    if (revenueSource === "Tickets" && ticketType !== "NA") {
-      filteredData = filteredData.filter((entry) => entry.type === ticketType);
-    } else if (revenueSource === "Food" && foodBundleType !== "NA") {
+    if (revenueSource === "Tickets" && ticketType !== "All") {
+      filteredData = filteredData.filter((entry) => entry.Type === ticketType);
+    } else if (revenueSource === "Food" && foodBundleType !== "All") {
       filteredData = filteredData.filter(
-        (entry) => entry.type === foodBundleType
+        (entry) => entry.Type === foodBundleType
       );
-    } else if (revenueSource === "Merchandise" && merchBundleType !== "NA") {
+    } else if (revenueSource === "Merchandise" && merchBundleType !== "All") {
       filteredData = filteredData.filter(
-        (entry) => entry.type === merchBundleType
+        (entry) => entry.Type === merchBundleType
       );
     }
 
     // Calculate total revenue
-    const total = filteredData.reduce((acc, curr) => acc + curr.revenue, 0);
+    const total = filteredData.reduce((acc, curr) => acc + curr.Revenue, 0);
     setTotalRevenue(total);
 
     // Set revenue data
@@ -91,7 +146,7 @@ export default function RevenueDataReports() {
               value={ticketType}
               onChange={(e) => setTicketType(e.target.value)}
             >
-              <option value="NA">All</option>
+              <option value="All">All</option>
               <option value="GA">General Admission</option>
               <option value="KI">Kid Tickets</option>
             </Form.Select>
@@ -104,10 +159,13 @@ export default function RevenueDataReports() {
               value={foodBundleType}
               onChange={(e) => setFoodBundleType(e.target.value)}
             >
-              <option value="NA">All</option>
-              <option value="AB">Adventure Bites Eatery Bundle</option>
-              <option value="DF">Dragon's Flame Tavern Bundle</option>
-              <option value="GG">Galactic Grub Hub Bundle</option>
+              {products
+                .filter((product) => product.VendorType === "Food")
+                .map((product) => (
+                  <option key={product.ItemID} value={product.NameOfItem}>
+                    {product.NameOfItem}
+                  </option>
+                ))}
             </Form.Select>
           </Form.Group>
         )}
@@ -118,10 +176,13 @@ export default function RevenueDataReports() {
               value={merchBundleType}
               onChange={(e) => setMerchBundleType(e.target.value)}
             >
-              <option value="NA">All</option>
-              <option value="FF">Fantasy Finds Boutique Bundle</option>
-              <option value="EE">Enchanted Emporium Bundle</option>
-              <option value="MM">Mystic Marvels Marketplace Bundle</option>
+              {products
+                .filter((product) => product.VendorType === "Merchandise")
+                .map((product) => (
+                  <option key={product.ItemID} value={product.NameOfItem}>
+                    {product.NameOfItem}
+                  </option>
+                ))}
             </Form.Select>
           </Form.Group>
         )}
@@ -147,10 +208,10 @@ export default function RevenueDataReports() {
         <tbody>
           {revenueData.map((entry, index) => (
             <tr key={index}>
-              <td>{entry.date}</td>
-              <td>{entry.source}</td>
-              <td>{entry.type}</td>
-              <td>${entry.revenue}</td>
+              <td>{entry.Date.substring(0, 10)}</td>
+              <td>{entry.Source}</td>
+              <td>{entry.Type}</td>
+              <td>${entry.Revenue}</td>
             </tr>
           ))}
           <tr>
