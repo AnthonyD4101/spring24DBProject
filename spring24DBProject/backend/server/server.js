@@ -38,6 +38,7 @@ const handleTicketPurchase = require("../handlers/TicketPurchaseHandler");
 const handleMaintenanceRequest = require("../handlers/MaintenanceRequestFormHandler");
 const fetchMaintenanceInfo = require("../handlers/FetchMaintenanceInfo");
 const handleMaintenanceUpdateRequest = require("../handlers/MaintenanceUpdateRequestHandler");
+const { handleGetRevenueReport } = require("../handlers/RevenueReportHandler");
 
 const server = http.createServer((req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -83,6 +84,11 @@ const server = http.createServer((req, res) => {
     url.parse(req.url).pathname === "/getDepartments"
   ) {
     handleGetAllDepartments(req, res);
+  } else if (
+    req.method === "GET" &&
+    url.parse(req.url).pathname === "/getRevenueReport"
+  ) {
+    handleGetRevenueReport(req, res);
   } else if (
     req.method === "GET" &&
     url.parse(req.url).pathname.match("^/getDepartment/.+")
