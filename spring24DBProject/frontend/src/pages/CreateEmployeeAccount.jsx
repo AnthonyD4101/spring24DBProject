@@ -21,12 +21,11 @@ export default function CreateEmployeeAccount({ onSuccess }) {
       );
 
       if (response.ok) {
-        const responseData = await response.json(); // Ensure this line is called only once per response
+        const responseData = await response.json();
         console.log("Account Creation Success Data:", responseData);
-        onSuccess(responseData); // Use responseData here and make sure not to call .json() on the response again
+        onSuccess(responseData);
       } else {
-        // If the response is not ok, you might not need to read the body, or you should handle it carefully
-        const errorData = await response.json(); // Call .json() here only if it wasn't called above
+        const errorData = await response.json();
         setErrorMessage(
           errorData.message || "Signup unsuccessful, try again later."
         );
@@ -36,8 +35,6 @@ export default function CreateEmployeeAccount({ onSuccess }) {
       setErrorMessage("Signup unsuccessful, try again later.");
     }
   };
-
-  const positions = ["Admin", "Manager", "Maintenance", "Employee"];
 
   return (
     <div className="row justify-content-center">

@@ -35,7 +35,6 @@ function handleSignIn(req, res, connection) {
         return;
       }
 
-      // Modify or add token generation here if necessary for your authentication logic
       res.writeHead(200, { "Content-Type": "application/json" });
       res.end(
         JSON.stringify({

@@ -45,9 +45,21 @@ function handleMaintenanceUpdateRequest(req, res) {
         if (error) {
           console.error("Failed to insert maintenance request:", error);
           res.writeHead(500, { "Content-Type": "application/json" });
-          res.end(
-            JSON.stringify({ message: "Failed to submit maintenance request" })
-          );
+
+          if (error.code === "ER_DUP_ENTRY") {
+            res.end(
+              JSON.stringify({
+                message:
+                  "Please select the request with latest State ID to proceed.",
+              })
+            );
+          } else {
+            res.end(
+              JSON.stringify({
+                message: "Failed to submit maintenance request",
+              })
+            );
+          }
           return;
         }
 

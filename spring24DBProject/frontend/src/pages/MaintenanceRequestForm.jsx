@@ -28,7 +28,7 @@ export default function MaintenanceRequestForm({ onSuccess }) {
     event.preventDefault();
     const updatedFormData = {
       ...formData,
-      submissionDate: SubmissionDate.toISOString().split("T")[0], // Format to YYYY-MM-DD
+      submissionDate: SubmissionDate.toISOString().split("T")[0],
       completionDate: CompletionDate.toISOString().split("T")[0],
     };
 

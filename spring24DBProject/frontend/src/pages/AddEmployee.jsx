@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import AdminLanding from "./AdminLanding";
 
 export default function AddEmployee({ employeeData = {}, onSuccess }) {
   console.log("Received employeeData:", employeeData);
@@ -17,7 +16,6 @@ export default function AddEmployee({ employeeData = {}, onSuccess }) {
   const navigate = useNavigate();
   const { currentUser } = useAuth();
 
-  // Initialize state with the destructured values
   const [userIDState, setUserIDState] = useState(initialUserID);
   const [firstNameState, setFirstName] = useState(firstName);
   const [middleNameState, setMiddleName] = useState(middleName);
@@ -50,11 +48,7 @@ export default function AddEmployee({ employeeData = {}, onSuccess }) {
       salary: salaryState,
       address: addressState,
       department: departmentState,
-      // status and department were not included in the destructuring,
-      // Assuming they are handled elsewhere or not needed for initialization.
     };
-
-    // Proceed with your fetch request as before...
 
     try {
       const response = await fetch("http://localhost:3001/addEmployee", {
@@ -73,7 +67,6 @@ export default function AddEmployee({ employeeData = {}, onSuccess }) {
           onSuccess();
         }
       } else {
-        // Handle server-side validation errors or other issues
         console.error("Failed to add employee.");
       }
     } catch (error) {
@@ -89,8 +82,6 @@ export default function AddEmployee({ employeeData = {}, onSuccess }) {
     }));
   };
 
-  const positions = ["Manager", "Developer", "Designer"];
-
   return (
     <div className="row justify-content-center">
       <div className="col md-4 mb-4">
@@ -103,7 +94,7 @@ export default function AddEmployee({ employeeData = {}, onSuccess }) {
               <div className="row mb-3">
                 <div className="col">
                   <label htmlFor="userID" className="form-label">
-                    User ID: {/* Step 3: Create the UserID input field */}
+                    User ID:
                   </label>
                   <input
                     type="text"
@@ -112,8 +103,8 @@ export default function AddEmployee({ employeeData = {}, onSuccess }) {
                     name="userID"
                     placeholder="User ID"
                     required
-                    value={userIDState} // Use the renamed state variable
-                    onChange={(e) => setUserIDState(e.target.value)} // Use the renamed setter function
+                    value={userIDState}
+                    onChange={(e) => setUserIDState(e.target.value)}
                   />
                 </div>
               </div>
@@ -130,7 +121,7 @@ export default function AddEmployee({ employeeData = {}, onSuccess }) {
                     placeholder="John"
                     maxLength="30"
                     required
-                    value={firstNameState} // Use the state variable
+                    value={firstNameState}
                     onChange={(e) => setFirstName(e.target.value)}
                   />
                 </div>

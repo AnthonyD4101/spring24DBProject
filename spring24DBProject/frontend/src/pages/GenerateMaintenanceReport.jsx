@@ -5,30 +5,32 @@ import Form from "react-bootstrap/Form";
 export default function MaintenanceDataReports() {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-  const [FilterBy, setFilterBy] = useState("all");
+  const [filterBy, setFilterBy] = useState("all");
   const [maintenanceFilter, setMaintenanceFilter] = useState("");
-  const [EmployeeFilter, setEmployeeFilter] = useState("");
-  const [AttractionFilter, setAttractionFilter] = useState("");
-  const [StatusFilter, setStatusFilter] = useState("");
-  const [CostFilter, setCostFilter] = useState("");
-  /*const [maintenanceIds, setMaintenanceIds] = useState([]);
-  const [employeeIds, setEmployeeIds] = useState([]);
-  const [attractionNames, setAttractionNames] = useState([]);
-  const [reason, setReason] = useState(0);*/
-  const [Status, setStatus] = useState();
+  const [employeeFilter, setEmployeeFilter] = useState("");
+  const [attractionFilter, setAttractionFilter] = useState("");
+  const [statusFilter, setStatusFilter] = useState("");
+  const [costFilter, setCostFilter] = useState("");
   const [maintenanceData, setMaintenanceData] = useState([]);
   const [totalCost, setTotalCost] = useState(0);
   const [employeeOptions, setEmployeeOptions] = useState([]);
   const [maintenanceOptions, setMaintenanceOptions] = useState([]);
   const [attractionOptions, setAttractionOptions] = useState([]);
   const [statusOptions, setStatusOptions] = useState([]);
+  const [displayedMaintenanceData, setDisplayedMaintenanceData] = useState([]);
 
   const costOptions = [
     "$0-$500",
-    "$501-$1000",
-    "$1001-$1500",
-    "$1501-$2000",
-    "$2001+",
+    "$500-$1000",
+    "$1000-$1500",
+    "$1500-$2000",
+    "$2000-2500",
+    "$2500-5000",
+    "$5000-10000",
+    "$10000-20000",
+    "$20000-40000",
+    "$50000-100000",
+    "$100000+",
   ];
 
   const handleClearForm = () => {
@@ -39,42 +41,46 @@ export default function MaintenanceDataReports() {
     setEmployeeFilter("");
     setAttractionFilter("");
     setStatusFilter("");
-    setMaintenanceData([]);
+    setCostFilter("");
     setTotalCost(0);
+    setDisplayedMaintenanceData([]);
   };
 
   const handleGenerateReport = () => {
-    let filteredData = fetchedData.filter((item) => {
-      // Filter by Start and End Date if selected
+    let filteredData = maintenanceData.filter((item) => {
       const isStartDateMatch = startDate
-        ? new Date(item.startDate) >= new Date(startDate)
+        ? new Date(item.submissionDate) >= new Date(startDate)
         : true;
       const isEndDateMatch = endDate
-        ? new Date(item.endDate) <= new Date(endDate)
+        ? new Date(item.completionDate) <= new Date(endDate)
         : true;
-
-      // Additional filters based on form selection
       const isMaintenanceIdMatch = maintenanceFilter
         ? item.maintenanceIds.toString() === maintenanceFilter
         : true;
-      const isEmployeeIdMatch = EmployeeFilter
-        ? item.employeeIds.toString() === EmployeeFilter
+      const isEmployeeIdMatch = employeeFilter
+        ? item.employeeIds.toString() === employeeFilter
         : true;
-      const isAttractionNameMatch = AttractionFilter
-        ? item.attractionNames === AttractionFilter
+      const isAttractionNameMatch = attractionFilter
+        ? item.attractionNames === attractionFilter
         : true;
-      const isStatusMatch = StatusFilter ? item.Status === StatusFilter : true;
-      const isCostMatch = CostFilter
-        ? (([min, max]) => {
+      const isStatusMatch = statusFilter ? item.status === statusFilter : true;
+      const isCostMatch = costFilter
+        ? (() => {
+            let minCost, maxCost;
+            if (costFilter.includes("+")) {
+              minCost = parseFloat(costFilter.replace(/\D/g, ""));
+              maxCost = Infinity;
+            } else {
+              let parts = costFilter
+                .split("-")
+                .map((part) => parseFloat(part.replace(/\D/g, "")));
+              [minCost, maxCost] =
+                parts.length === 2 ? parts : [parseFloat(parts[0]), Infinity];
+            }
+
             const cost = parseFloat(item.totalCost);
-            return cost >= min && (max === null || cost <= max);
-          })(
-            CostFilter.split("-").map((value, index, array) =>
-              index === array.length - 1 && value.includes("+")
-                ? [parseFloat(value), null]
-                : parseFloat(value.replace(/\D/g, ""))
-            )
-          )
+            return cost >= minCost && cost <= maxCost;
+          })()
         : true;
 
       return (
@@ -88,152 +94,53 @@ export default function MaintenanceDataReports() {
       );
     });
 
-    // Update state with the filtered data
-    setMaintenanceData(filteredData);
-
+    setDisplayedMaintenanceData(filteredData);
     const total = filteredData.reduce((acc, curr) => acc + curr.totalCost, 0);
     setTotalCost(total);
   };
 
-  const fetchedData = [
-    {
-      maintenanceIds: 123,
-      employeeIds: 987,
-      attractionNames: "Twister",
-      startDate: "2024-03-10",
-      endDate: "2024-03-16",
-      Status: "Pending",
-      totalCost: 1500,
-      reason: "The ride was shaking too much",
-    },
-    {
-      maintenanceIds: 814,
-      employeeIds: 904,
-      attractionNames: "Smile",
-      startDate: "2023-11-07",
-      endDate: "2023-11-12",
-      Status: "Completed",
-      totalCost: 1042.81,
-      reason: "Mission behind to difficult leg.",
-    },
-    {
-      maintenanceIds: 815,
-      employeeIds: 905,
-      attractionNames: "Joyride",
-      startDate: "2023-11-10",
-      endDate: "2023-11-14",
-      Status: "Cancelled",
-      totalCost: 1300.8,
-      reason: "Unexpected repair needed.",
-    },
-
-    {
-      maintenanceIds: 816,
-      employeeIds: 906,
-      attractionNames: "Thunderbolt",
-      startDate: "2023-11-11",
-      endDate: "2023-11-13",
-      Status: "In Progress",
-      totalCost: 1361.09,
-      reason: "Enhancement for visitor experience.",
-    },
-
-    {
-      maintenanceIds: 817,
-      employeeIds: 907,
-      attractionNames: "Merry-Go-Round",
-      startDate: "2023-11-08",
-      endDate: "2023-11-12",
-      Status: "Completed",
-      totalCost: 884.0,
-      reason: "Unexpected repair needed.",
-    },
-
-    {
-      maintenanceIds: 818,
-      employeeIds: 908,
-      attractionNames: "Sky High",
-      startDate: "2023-11-10",
-      endDate: "2023-11-15",
-      Status: "Scheduled",
-      totalCost: 1451.2,
-      reason: "Safety inspection.",
-    },
-
-    {
-      maintenanceIds: 819,
-      employeeIds: 909,
-      attractionNames: "Dreamland",
-      startDate: "2023-11-08",
-      endDate: "2023-11-10",
-      Status: "Scheduled",
-      totalCost: 1027.56,
-      reason: "Damage repair due to weather.",
-    },
-
-    {
-      maintenanceIds: 820,
-      employeeIds: 910,
-      attractionNames: "Adventure Falls",
-      startDate: "2023-11-11",
-      endDate: "2023-11-14",
-      Status: "Cancelled",
-      totalCost: 658.06,
-      reason: "Damage repair due to weather.",
-    },
-
-    {
-      maintenanceIds: 821,
-      employeeIds: 911,
-      attractionNames: "Splash Zone",
-      startDate: "2023-11-08",
-      endDate: "2023-11-14",
-      Status: "In Progress",
-      totalCost: 809.93,
-      reason: "Operational efficiency improvement.",
-    },
-
-    {
-      maintenanceIds: 822,
-      employeeIds: 912,
-      attractionNames: "Echo Cave",
-      startDate: "2023-11-07",
-      endDate: "2023-11-11",
-      Status: "Cancelled",
-      totalCost: 887.91,
-      reason: "Enhancement for visitor experience.",
-    },
-  ];
-
   useEffect(() => {
-    // Create a unique set of employeeIds to avoid duplicate options
-    const uniqueEmployeeIds = Array.from(
-      new Set(fetchedData.map((item) => item.employeeIds))
-    );
-    // Update employeeOptions state
-    setEmployeeOptions(uniqueEmployeeIds);
+    const fetchMaintenanceData = async () => {
+      try {
+        const response = await fetch("http://localhost:3001/maintenanceInfo");
+        const data = await response.json();
+        const transformedData = data.map((item) => ({
+          maintenanceIds: item.RequestID,
+          employeeIds: item.UserID,
+          attractionNames: item.NameOfAttraction,
+          startDate: item.Date,
+          endDate: item.DateCompleted,
+          status: item.MaintenanceStatus,
+          totalCost: item.Expense || 0,
+          reason: item.DescriptionOfRequest || "No reason provided",
+          stateId: item.StateID,
+        }));
 
-    // Create a unique set of maintenanceIds to avoid duplicate options
-    const uniqueMaintenanceIds = Array.from(
-      new Set(fetchedData.map((item) => item.maintenanceIds))
-    );
-    // Update maintenanenceOptions state
-    setMaintenanceOptions(uniqueMaintenanceIds);
+        setMaintenanceData(transformedData);
 
-    // Create a unique set of attractionNames to avoid duplicate options
-    const uniqueAttractionNames = Array.from(
-      new Set(fetchedData.map((item) => item.attractionNames))
-    );
-    // Update maintenanenceOptions state
-    setAttractionOptions(uniqueAttractionNames);
+        setEmployeeOptions(
+          Array.from(new Set(transformedData.map((item) => item.employeeIds)))
+        );
+        setMaintenanceOptions(
+          Array.from(
+            new Set(transformedData.map((item) => item.maintenanceIds))
+          )
+        );
+        setAttractionOptions(
+          Array.from(
+            new Set(transformedData.map((item) => item.attractionNames))
+          )
+        );
+        setStatusOptions(
+          Array.from(new Set(transformedData.map((item) => item.status)))
+        );
+      } catch (error) {
+        console.error("Error fetching maintenance data:", error);
+      }
+    };
 
-    // Create a unique set of Status to avoid duplicate options
-    const uniqueStatus = Array.from(
-      new Set(fetchedData.map((item) => item.Status))
-    );
-    // Update maintenanenceOptions state
-    setStatusOptions(uniqueStatus);
-  }, [fetchedData]);
+    fetchMaintenanceData();
+  }, []);
 
   return (
     <div className="maintenance-report-container">
@@ -258,7 +165,7 @@ export default function MaintenanceDataReports() {
         <Form.Group controlId="FilterBy" className="mb-3">
           <Form.Label>Filter By</Form.Label>
           <Form.Select
-            value={FilterBy}
+            value={filterBy}
             onChange={(e) => setFilterBy(e.target.value)}
           >
             <option value="all">All</option>
@@ -270,16 +177,16 @@ export default function MaintenanceDataReports() {
           </Form.Select>
         </Form.Group>
 
-        {FilterBy === "Maintenance ID" && (
+        {filterBy === "Maintenance ID" && (
           <Form.Group controlId="MaintenanceFilter" className="mb-3">
             <Form.Label>Maintenance ID</Form.Label>
             <Form.Select
               value={maintenanceFilter}
               onChange={(e) => {
                 setMaintenanceFilter(e.target.value);
-                setEmployeeFilter(""); // Clear Employee Filter
-                setAttractionFilter(""); // Clear Attraction Filter
-                setStatusFilter(""); // Clear Status Filter
+                setEmployeeFilter("");
+                setAttractionFilter("");
+                setStatusFilter("");
               }}
             >
               <option value="">Select Maintenance ID</option>
@@ -296,16 +203,16 @@ export default function MaintenanceDataReports() {
           </Form.Group>
         )}
 
-        {FilterBy === "Employee ID" && (
+        {filterBy === "Employee ID" && (
           <Form.Group controlId="EmployeeFilter" className="mb-3">
             <Form.Label>Employee ID</Form.Label>
             <Form.Select
-              value={EmployeeFilter}
+              value={employeeFilter}
               onChange={(e) => {
                 setEmployeeFilter(e.target.value);
-                setMaintenanceFilter(""); // Clear Maintenance Filter
-                setAttractionFilter(""); // Clear Attraction Filter
-                setStatusFilter(""); // Clear Status Filter
+                setMaintenanceFilter("");
+                setAttractionFilter("");
+                setStatusFilter("");
               }}
             >
               <option value="">Select Employee ID</option>
@@ -322,16 +229,16 @@ export default function MaintenanceDataReports() {
           </Form.Group>
         )}
 
-        {FilterBy === "Attraction Name" && (
+        {filterBy === "Attraction Name" && (
           <Form.Group controlId="AttractionFilter" className="mb-3">
             <Form.Label>Attraction ID</Form.Label>
             <Form.Select
-              value={AttractionFilter}
+              value={attractionFilter}
               onChange={(e) => {
                 setAttractionFilter(e.target.value);
-                setMaintenanceFilter(""); // Clear Maintenance Filter
-                setEmployeeFilter(""); // Clear Employee Filter
-                setStatusFilter(""); // Clear Status Filter
+                setMaintenanceFilter("");
+                setEmployeeFilter("");
+                setStatusFilter("");
               }}
             >
               <option value="">Select Attraction ID</option>
@@ -348,16 +255,16 @@ export default function MaintenanceDataReports() {
           </Form.Group>
         )}
 
-        {FilterBy === "Status" && (
+        {filterBy === "Status" && (
           <Form.Group controlId="StatusFilter" className="mb-3">
             <Form.Label>Status</Form.Label>
             <Form.Select
-              value={StatusFilter}
+              value={statusFilter}
               onChange={(e) => {
                 setStatusFilter(e.target.value);
-                setMaintenanceFilter(""); // Clear Maintenance Filter
-                setEmployeeFilter(""); // Clear Employee Filter
-                setAttractionFilter(""); // Clear Attraction Filter
+                setMaintenanceFilter("");
+                setEmployeeFilter("");
+                setAttractionFilter("");
               }}
             >
               <option value="">Select Status</option>
@@ -374,17 +281,17 @@ export default function MaintenanceDataReports() {
           </Form.Group>
         )}
 
-        {FilterBy === "Cost of Maintenance" && (
+        {filterBy === "Cost of Maintenance" && (
           <Form.Group controlId="CostFilter" className="mb-3">
             <Form.Label>Cost Range</Form.Label>
             <Form.Select
-              value={CostFilter}
+              value={costFilter}
               onChange={(e) => {
                 setCostFilter(e.target.value);
-                setMaintenanceFilter(""); // Clear Maintenance Filter
-                setEmployeeFilter(""); // Clear Employee Filter
-                setAttractionFilter(""); // Clear Attraction Filter
-                setStatusFilter(""); // Clear Status Filter
+                setMaintenanceFilter("");
+                setEmployeeFilter("");
+                setAttractionFilter("");
+                setStatusFilter("");
               }}
             >
               <option value="">Select Cost Range</option>
@@ -421,6 +328,7 @@ export default function MaintenanceDataReports() {
         <thead>
           <tr>
             <th>Maintenance ID</th>
+            <th>State ID</th>
             <th>Employee ID</th>
             <th>Attraction Name</th>
             <th>Start Date</th>
@@ -431,14 +339,15 @@ export default function MaintenanceDataReports() {
           </tr>
         </thead>
         <tbody>
-          {maintenanceData.map((entry, index) => (
+          {displayedMaintenanceData.map((entry, index) => (
             <tr key={index}>
               <td>{entry.maintenanceIds}</td>
+              <td>{entry.stateId}</td>
               <td>{entry.employeeIds}</td>
               <td>{entry.attractionNames}</td>
               <td>{entry.startDate}</td>
               <td>{entry.endDate}</td>
-              <td>{entry.Status}</td>
+              <td>{entry.status}</td>
               <td>${entry.totalCost.toFixed(2)}</td>
               <td>{entry.reason}</td>
             </tr>
@@ -450,7 +359,7 @@ export default function MaintenanceDataReports() {
             <td>
               <b>${totalCost.toFixed(2)}</b>
             </td>
-            <td></td> {/* Assuming there's no total for reason */}
+            <td></td>
           </tr>
         </tbody>
       </Table>

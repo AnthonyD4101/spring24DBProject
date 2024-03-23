@@ -41,7 +41,6 @@ function handleEmployeeAccountSignUp(req, res, connection) {
         if (error) {
           console.error("Error inserting user into the database:", error);
           res.writeHead(500, { "Content-Type": "application/json" });
-          // Providing more specific error message based on known error codes
           const message =
             error.code === "ER_DUP_ENTRY"
               ? "Email already exists."

@@ -8,6 +8,7 @@ export default function MaintUpReq({ onSuccess }) {
   const [selectedRequest, setSelectedRequest] = useState("");
   const [requestsData, setRequestsData] = useState([]);
   const { currentUser } = useAuth();
+  const [errorMessage, setErrorMessage] = useState("");
 
   const [formData, setFormData] = useState({
     userID: currentUser.UserID,
@@ -18,8 +19,8 @@ export default function MaintUpReq({ onSuccess }) {
     completionDate: new Date(),
     maintenanceStatus: "",
     estimatedCost: "",
-    StateID: "", // Added StateID
-    RequestID: "", // Added RequestID
+    StateID: "",
+    RequestID: "",
   });
 
   useEffect(() => {
@@ -31,7 +32,7 @@ export default function MaintUpReq({ onSuccess }) {
         }
         const data = await response.json();
         console.log("Fetched maintenance requests data:", data);
-        setRequestsData(data); // Save the full data
+        setRequestsData(data);
       } catch (error) {
         console.error("Error fetching maintenance requests:", error);
       }
@@ -45,10 +46,10 @@ export default function MaintUpReq({ onSuccess }) {
   };
 
   const handleSelectChange = (event) => {
-    const requestId = Number(event.target.value);
-    console.log("Selected Request ID:", requestId);
+    const [requestId, stateId] = event.target.value.split("_").map(Number);
+    console.log("Selected Request ID:", requestId, "State ID:", stateId);
     const selectedRequestData = requestsData.find(
-      (item) => item.RequestID === requestId
+      (item) => item.RequestID === requestId && item.StateID === stateId
     );
 
     if (selectedRequestData) {
@@ -68,8 +69,8 @@ export default function MaintUpReq({ onSuccess }) {
           : new Date(),
         maintenanceStatus: selectedRequestData.MaintenanceStatus || "",
         estimatedCost: selectedRequestData.Expense || "",
-        StateID: selectedRequestData.StateID, // Set StateID
-        RequestID: selectedRequestData.RequestID, // Set RequestID
+        StateID: selectedRequestData.StateID,
+        RequestID: selectedRequestData.RequestID,
       });
     } else {
       console.error("No matching request data found.");
@@ -85,12 +86,13 @@ export default function MaintUpReq({ onSuccess }) {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setErrorMessage("");
     const { submissionDate, completionDate, ...restOfFormData } = formData;
 
     const updatedFormData = {
       ...restOfFormData,
-      submissionDate: submissionDate.toISOString().split("T")[0], // Correct variable reference
-      completionDate: completionDate.toISOString().split("T")[0], // Correct variable reference
+      submissionDate: submissionDate.toISOString().split("T")[0],
+      completionDate: completionDate.toISOString().split("T")[0],
     };
 
     console.log("Submitting:", updatedFormData);
@@ -114,11 +116,19 @@ export default function MaintUpReq({ onSuccess }) {
           onSuccess();
         }
       } else {
-        console.error("Failed to update request.");
+        const responseData = await response.json();
+        const message = responseData.message || "Failed to update request.";
+        setErrorMessage(message);
+        console.error("Failed to update request:", message);
+        return;
       }
     } catch (error) {
       console.error("Error submitting maintenance request:", error);
     }
+  };
+
+  const BackButtonClick = () => {
+    setSelectedRequest("");
   };
 
   if (selectedRequest) {
@@ -301,11 +311,12 @@ export default function MaintUpReq({ onSuccess }) {
                           <div style={{ marginBottom: "10px" }}>
                             <select
                               className="form-select"
+                              name="maintenanceStatus"
                               aria-label="Maintenance Status"
-                              defaultValue=""
+                              value={formData.maintenanceStatus}
                               onChange={handleChange}
                             >
-                              <option defaultValue>Select Menu</option>
+                              <option value="">Select Menu</option>
                               <option value="Pending">Pending</option>
                               <option value="Active">Active</option>
                               <option value="Completed" disabled>
@@ -340,9 +351,24 @@ export default function MaintUpReq({ onSuccess }) {
                       </div>
                     </div>
                   </div>
+
+                  {errorMessage && (
+                    <div className="alert alert-danger" role="alert">
+                      {errorMessage}
+                    </div>
+                  )}
+
                   <div className="d-grid gap-2 col-6 mx-auto">
                     <button className="btn btn-primary" type="submit">
                       Submit
+                    </button>
+                    <button
+                      type="button"
+                      className="btn btn-link"
+                      style={{ textDecoration: "underline", color: "blue" }}
+                      onClick={BackButtonClick}
+                    >
+                      Back
                     </button>
                   </div>
                 </form>
@@ -380,8 +406,13 @@ export default function MaintUpReq({ onSuccess }) {
               onChange={handleSelectChange}
             >
               <option defaultValue="">Select Maintenance ID to Update</option>
-              {requestIDs.map((id) => (
-                <option key={id} value={id}>{`${id}`}</option>
+              {requestsData.map((item) => (
+                <option
+                  key={`${item.RequestID}_${item.StateID}`}
+                  value={`${item.RequestID}_${item.StateID}`}
+                >
+                  {`Request ID: ${item.RequestID} - State ID: ${item.StateID}`}
+                </option>
               ))}
             </select>
 

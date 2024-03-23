@@ -11,7 +11,6 @@ function handleStaffSignIn(req, res) {
   req.on("end", () => {
     const { email, password } = JSON.parse(body);
 
-    // Query to select the user account
     const accountQuery = "SELECT * FROM Account WHERE email = ?";
 
     poolConnection.query(accountQuery, [email], (error, results) => {
@@ -38,7 +37,6 @@ function handleStaffSignIn(req, res) {
         return;
       }
 
-      // Query to select the employee's position using UserID
       const positionQuery = "SELECT position FROM Employee WHERE UserID = ?";
 
       poolConnection.query(
@@ -46,9 +44,7 @@ function handleStaffSignIn(req, res) {
         [user.UserID],
         (error, positionResults) => {
           if (error || positionResults.length === 0) {
-            // Handle the error or case where the employee does not have a position recorded
             console.error("Error fetching employee position", error);
-            // Optionally send a response indicating the issue, or proceed without the position.
           }
 
           const position =
@@ -56,7 +52,6 @@ function handleStaffSignIn(req, res) {
               ? positionResults[0].position
               : "Not specified";
 
-          // Sending the response with the position included
           res.writeHead(200, { "Content-Type": "application/json" });
           res.end(
             JSON.stringify({

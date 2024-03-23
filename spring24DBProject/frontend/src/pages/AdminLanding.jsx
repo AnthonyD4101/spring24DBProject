@@ -123,7 +123,7 @@ const AdminLanding = () => {
               <MaintenanceUpReq onSuccess={handleFormSubmissionSuccess} />
             )}
             {selectedPage === "Complete Existing Maintenance Request" && (
-              <MaintenanceCompReq />
+              <MaintenanceCompReq onSuccess={handleFormSubmissionSuccess} />
             )}
             {selectedPage === "Maintenance Reporting Portal" && (
               <GenerateMaintRep />
