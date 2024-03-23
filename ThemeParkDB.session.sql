@@ -48,8 +48,14 @@ SELECT *
 FROM sale
 
 -- @block
+DELETE FROM sale
+
+-- @block
 SELECT *
 FROM ticket
+
+-- @block
+DELETE FROM ticket
 
 -- @block
 SELECT * 
