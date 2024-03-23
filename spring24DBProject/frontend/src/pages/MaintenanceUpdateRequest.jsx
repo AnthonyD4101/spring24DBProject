@@ -4,7 +4,7 @@ import { useAuth } from "../context/AuthContext";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-export default function MaintUpReq() {
+export default function MaintUpReq({ onSuccess }) {
   const [selectedRequest, setSelectedRequest] = useState("");
   const [requestsData, setRequestsData] = useState([]);
   const { currentUser } = useAuth();
@@ -109,6 +109,10 @@ export default function MaintUpReq() {
       if (response.ok) {
         const responseData = await response.json();
         console.log("Request updated successfully:", responseData);
+
+        if (onSuccess) {
+          onSuccess();
+        }
       } else {
         console.error("Failed to update request.");
       }
