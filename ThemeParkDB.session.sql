@@ -166,7 +166,6 @@ DROP TABLE IF EXISTS Sale;
 CREATE TABLE Sale (
     SaleID INT AUTO_INCREMENT PRIMARY KEY,
     UserID INT,
-    DateValid DATE NOT NULL,
     DateTimeSold DATETIME NOT NULL,
     TotalPrice DECIMAL(6, 2) NOT NULL,
     FOREIGN KEY (UserID) REFERENCES Account(UserID) ON DELETE SET NULL ON UPDATE CASCADE
@@ -296,3 +295,30 @@ MODIFY COLUMN TicketType ENUM('GA', 'KI') NOT NULL;
 -- @block
 ALTER TABLE Sale
 DROP COLUMN DateValid;
+
+-- @block
+DROP TRIGGER IF EXISTS saleDiscount;
+
+-- @block DISCOUNT TRIGGER
+CREATE TRIGGER saleDiscount
+BEFORE INSERT ON Sale
+FOR EACH ROW
+BEGIN
+    DECLARE spentAmount DECIMAL(6, 2);
+    DECLARE discountPercent DECIMAL(6, 2);
+    DECLARE newTotal DECIMAL(6, 2);
+
+    -- Calculate total amount spent by the customer
+    SELECT SUM(TotalPrice) INTO spentAmount
+    FROM Sale
+    WHERE UserID = NEW.UserID;
+
+    IF spentAmount >= 120 THEN
+        -- Apply percent discount
+        SET discountPercent = 25;
+        SET newTotal = NEW.TotalPrice * (1 - discountPercent / 100);
+
+        -- Update final sale price, including discount reduction
+        SET NEW.TotalPrice = newTotal;
+    END IF;
+END;

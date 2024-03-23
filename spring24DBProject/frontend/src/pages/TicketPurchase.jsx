@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { useAuth } from "../context/AuthContext";
 
 const TICKET_PRICES = {
   GA: 60,
@@ -104,7 +103,18 @@ export default function TicketPurchase() {
       if (!response.ok) {
         throw new Error("Failed to purchase tickets");
       }
-      alert("Tickets have been purchased!");
+
+      const data = await response.json();
+
+      if (data.discountApplied) {
+        alert(
+          `Congratulations! You've received a 25% discount on your purchase because you've spent $120 or more!\n\nDiscount applied: $${data.discountAmount.toFixed(
+            2
+          )}\nNew total: $${data.newTotal.toFixed(2)}`
+        );
+      } else {
+        alert("Tickets have been purchased!");
+      }
     } catch (error) {
       console.error("Error purchasing tickets:", error);
       alert("Failed to purchase tickets");

@@ -62,8 +62,19 @@ function handleTicketPurchase(req, res) {
             });
           });
 
+          let discountApplied = false;
+          let discountAmount = 0;
+          let newTotal = totalPrice;
+
+          if(totalPrice > 120) {
+            discountApplied = true;
+            const discountPercentage = 0.25;
+            discountAmount = totalPrice * discountPercentage;
+            newTotal = totalPrice - discountAmount;
+          }
+
           res.writeHead(200, { "Content-Type": "application/json" });
-          res.end(JSON.stringify({ message: "Ticket purchase processed successfully", saleId }));
+          res.end(JSON.stringify({ message: "Ticket purchase processed successfully", saleId, discountApplied, discountAmount, newTotal }));
         }
       });
     });
