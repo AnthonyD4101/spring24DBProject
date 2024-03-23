@@ -11,6 +11,7 @@ import ParkInformation from "./pages/ParkInformation";
 import StaffSignIn from "./pages/StaffSignIn";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/signUp";
+import UpdateAccount from "./pages/UpdateAccount";
 import TicketPurchase from "./pages/TicketPurchase";
 
 import AdminLanding from "./pages/AdminLanding";
@@ -65,6 +66,7 @@ function App() {
           <Route path="/staffSignIn" element={<StaffSignIn />} />
           <Route path="/signIn" element={<SignIn />} />
           <Route path="/signUp" element={<SignUp />} />
+          <Route path="/updateaccount" element={<UpdateAccount />} />
           <Route path="/ticketPurchase" element={<TicketPurchase />} />
           <Route
             path="/staffticketpurchase"

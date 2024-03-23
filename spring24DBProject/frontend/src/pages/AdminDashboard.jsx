@@ -4,12 +4,13 @@ import { useAuth } from "../context/AuthContext";
 export default function AdminDashboard() {
   const { currentUser, signOut } = useAuth();
   const [isComplete, setIsComplete] = useState(false);
+  const [isSet, setIsSet] = useState(false);
 
   const [personalInfo, setPersonalInfo] = useState({
-    name: `${currentUser.FirstName} ${currentUser.LastName}`,
-    position: `${currentUser.Position}`,
-    employeeID: `${currentUser.UserID}`,
-    contactInformation: `${currentUser.Email} | ${currentUser.PhoneNumber}`,
+    name: "",
+    position: "",
+    employeeID: "",
+    contactInformation: "",
     Supervisor: "",
     Salary: "",
     Address: "",
@@ -19,98 +20,158 @@ export default function AdminDashboard() {
   });
 
   useEffect(() => {
-    const fetchEmployeeInfo = async () => {
-      const results = await fetch(
-        `http://localhost:3001/getEmployee/${encodeURIComponent(
-          currentUser.UserID
-        )}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      const json = await results.json();
-
-      if (!results.ok) {
-        console.log("Failed to fetch employee data");
-      }
-      if (results.ok) {
-        setPersonalInfo((prevInfo) => ({
-          ...prevInfo,
-          Salary: `$${json[0].Salary}`,
-          Address: `${json[0].Street} ${json[0].City}, ${json[0].State} ${json[0].ZipCode}`,
-          Department: `${json[0].DepName}`,
-          Schedule: json[0].ScheduleType,
-        }));
-      }
-    };
-
-    fetchEmployeeInfo();
-  }, []);
+    if (currentUser) {
+      setPersonalInfo({
+        name: `${currentUser.FirstName} ${currentUser.LastName}`,
+        position: `${currentUser.Position}`,
+        employeeID: `${currentUser.UserID}`,
+        contactInformation: `${currentUser.Email} | ${currentUser.PhoneNumber}`,
+        Supervisor: "",
+        Salary: "",
+        Address: "",
+        Department: "",
+        Schedule: "",
+        DateOfBirth: "",
+      });
+      setIsSet(true);
+    }
+  }, [currentUser]);
 
   useEffect(() => {
-    const fetchAccountInfo = async () => {
-      const results = await fetch(
-        `http://localhost:3001/getAccount/${encodeURIComponent(
-          currentUser.UserID
-        )}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
+    if (
+      currentUser &&
+      personalInfo.employeeID &&
+      personalInfo.name &&
+      personalInfo.position &&
+      personalInfo.contactInformation
+    ) {
+      const fetchEmployeeInfo = async () => {
+        const results = await fetch(
+          `http://localhost:3001/getEmployee/${encodeURIComponent(
+            currentUser.UserID
+          )}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        const json = await results.json();
+
+        if (!results.ok) {
+          console.log("Failed to fetch employee data");
         }
-      );
+        if (results.ok) {
+          setPersonalInfo((prevInfo) => ({
+            ...prevInfo,
+            Salary: `$${json[0].Salary}`,
+            Address: `${json[0].Street} ${json[0].City}, ${json[0].State} ${json[0].ZipCode}`,
+            Department: `${json[0].DepName}`,
+            Schedule: json[0].ScheduleType,
+          }));
+        }
+      };
 
-      const json = await results.json();
-
-      if (!results.ok) {
-        console.log("Failed to fetch employee data");
-      }
-      if (results.ok) {
-        setPersonalInfo((prevInfo) => ({
-          ...prevInfo,
-          DateOfBirth: `${json[0].DateOfBirth.substring(0, 10)}`,
-        }));
-      }
-    };
-
-    fetchAccountInfo();
-  }, []);
+      fetchEmployeeInfo();
+    }
+  }, [
+    currentUser,
+    personalInfo.employeeID,
+    personalInfo.name,
+    personalInfo.position,
+    personalInfo.contactInformation,
+  ]);
 
   useEffect(() => {
-    const fetchSupervisorInfo = async () => {
-      const results = await fetch(
-        `http://localhost:3001/getDashboard/${encodeURIComponent(
-          currentUser.UserID
-        )}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
+    if (
+      currentUser &&
+      personalInfo.employeeID &&
+      personalInfo.name &&
+      personalInfo.position &&
+      personalInfo.contactInformation
+    ) {
+      const fetchAccountInfo = async () => {
+        const results = await fetch(
+          `http://localhost:3001/getAccount/${encodeURIComponent(
+            currentUser.UserID
+          )}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        const json = await results.json();
+
+        if (!results.ok) {
+          console.log("Failed to fetch employee data");
         }
-      );
+        if (results.ok) {
+          setPersonalInfo((prevInfo) => ({
+            ...prevInfo,
+            DateOfBirth: `${json[0].DateOfBirth.substring(0, 10)}`,
+          }));
+        }
+      };
 
-      const json = await results.json();
+      fetchAccountInfo();
+    }
+  }, [
+    currentUser,
+    personalInfo.employeeID,
+    personalInfo.name,
+    personalInfo.position,
+    personalInfo.contactInformation,
+  ]);
 
-      if (!results.ok) {
-        console.log("Failed to fetch employee data");
-      }
-      if (results.ok) {
-        setPersonalInfo((prevInfo) => ({
-          ...prevInfo,
-          Supervisor: `${json[0].FirstName} ${json[0].LastName}`,
-        }));
-        setIsComplete(true);
-      }
-    };
+  useEffect(() => {
+    if (
+      currentUser &&
+      personalInfo.employeeID &&
+      personalInfo.name &&
+      personalInfo.position &&
+      personalInfo.contactInformation
+    ) {
+      const fetchSupervisorInfo = async () => {
+        const results = await fetch(
+          `http://localhost:3001/getDashboard/${encodeURIComponent(
+            currentUser.UserID
+          )}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
 
-    fetchSupervisorInfo();
-  }, []);
+        const json = await results.json();
+
+        if (!results.ok) {
+          console.log("Failed to fetch employee data");
+        }
+        if (results.ok) {
+          setPersonalInfo((prevInfo) => ({
+            ...prevInfo,
+            Supervisor: (json[0] ? `${json[0].FirstName} ${json[0].LastName}`: "None"),
+          }));
+          setIsComplete(true);
+        }
+      };
+
+      fetchSupervisorInfo();
+    }
+  }, [
+    currentUser,
+    personalInfo.employeeID,
+    personalInfo.name,
+    personalInfo.position,
+    personalInfo.contactInformation,
+  ]);
 
   const feedback = "Remember to greet park visitors with a smile on your face.";
 
@@ -146,7 +207,8 @@ export default function AdminDashboard() {
   }
 
   return (
-    isComplete && (
+    isComplete &&
+    isSet && (
       <div className="dashboard">
         <h1>Dashboard</h1>
         <div className="personal-info">

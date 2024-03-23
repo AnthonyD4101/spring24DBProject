@@ -6,41 +6,6 @@ FROM account
 SELECT *
 FROM customer
 
--- @block TicketPurchase Dummy Data 
-INSERT TO Account (UserID, AccountType, FirstName, MiddleName, LastName, PhoneNumber, DateOfBirth, Email, Password)
-VALUES
-    (1, 'Customer', 'Anthony', 'S', 'Delgado', )
-    ()
-    ()
-
-INSERT TO Customer (UserID, FirstName, LastName, DateOfBirth)
-VALUES
-    ()
-    ()
-    ()
-
-INSERT INTO Vendor (NameOfVendor, VendorType, VendorStatus, DepName)
-VALUES 
-    ('Food Vendor 1', 'Food', 'Active', 'Food Department'),
-    ('Food Vendor 2', 'Food', 'Active', 'Food Department'),
-    ('Merchandise Vendor 1', 'Merchandise', 'Active', 'Merchandise Department'),
-    ('Merchandise Vendor 2', 'Merchandise', 'Active', 'Merchandise Department');
-
-INSERT INTO Product (NameOfItem, NameOfVendor, AcquisitionCost, SalePrice, Profit, Description, ProductStatus)
-VALUES 
-    ('Hot Dog', 'Food Vendor 1', 2.50, 5.00, 2.50, 'Delicious hot dog', 'Active'),
-    ('Hamburger', 'Food Vendor 1', 3.50, 6.00, 2.50, 'Classic hamburger', 'Active'),
-    ('T-Shirt', 'Merchandise Vendor 1', 8.00, 15.00, 7.00, 'Park branded t-shirt', 'Active'),
-    ('Cap', 'Merchandise Vendor 1', 5.00, 10.00, 5.00, 'Park branded cap', 'Active');
-
-INSERT INTO Sale (UserID, Type, DateValid, DateTimeSold, Price, FoodItemID, MerchItemID)
-VALUES 
-    (1, 'GA', '2024-03-19', '2024-03-19 12:30:00', 5.00, 1, NULL),
-    (2, 'KI', '2024-03-19', '2024-03-19 13:45:00', 6.00, 2, NULL),
-    (3, 'DG', '2024-03-19', '2024-03-19 15:00:00', 15.00, NULL, 3),
-    (4, 'DK', '2024-03-19', '2024-03-19 16:30:00', 10.00, NULL, 4);
-
-
 -- @block
 SELECT * 
 FROM employee
@@ -308,7 +273,7 @@ ADD CONSTRAINT chk_AttractionStatus CHECK (
 ALTER TABLE Attraction
 ADD CONSTRAINT chk_AttractionType CHECK (AttractionType IN ('Ride', 'Show'));
 ALTER TABLE Sale
-ADD CONSTRAINT chk_PricePositive CHECK (Price > 0);
+ADD CONSTRAINT chk_PricePositive CHECK (TotalPrice > 0);
 ALTER TABLE AttractionLog
 ADD CONSTRAINT chk_NumberOfOperationsPositive CHECK (NumberOfOperations > 0);
 ALTER TABLE Maintenance
