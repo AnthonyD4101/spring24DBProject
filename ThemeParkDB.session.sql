@@ -1,7 +1,6 @@
 -- @block
 SELECT *
 FROM account 
-
 -- @block
 SELECT *
 FROM customer
@@ -26,16 +25,11 @@ FROM vendor
 DELETE FROM vendor
 
 -- @block INSERT PRODUCT DUMMY DATA
-INSERT INTO Department(DepName, HoursWorked)
-VALUES
-    ('Vendor', 0);
-
 INSERT INTO Vendor(NameOfVendor, VendorType, VendorStatus, DepName)
 VALUES
     ('Dominoes', 'Food', 'Active', 'Vendor'),
     ('Five Guys', 'Food', 'Active', 'Vendor'),
     ('Crocs', 'Merchandise', 'Active', 'Vendor');
-
 INSERT INTO Product(ItemID, NameOfItem, NameOfVendor, AcquisitionCost, SalePrice, Profit, Description, ProductStatus)
 VALUES
     (1, 'Pizza', 'Dominoes', 5, 10, 5, 'Large slice of pepperoni pizza', 'Active'),
@@ -54,14 +48,8 @@ SELECT *
 FROM sale
 
 -- @block
-DELETE FROM sale
-
--- @block
 SELECT *
 FROM ticket
-
--- @block
-DELETE FROM ticket
 
 -- @block
 SELECT * 
@@ -74,8 +62,6 @@ FROM maintenance
 -- @block
 SELECT * 
 FROM weatherlog
-
-
 
 -- @block
 DROP DATABASE IF EXISTS parkdb;
@@ -283,7 +269,7 @@ ADD CONSTRAINT chk_AttractionStatus CHECK (
 ALTER TABLE Attraction
 ADD CONSTRAINT chk_AttractionType CHECK (AttractionType IN ('Ride', 'Show'));
 ALTER TABLE Sale
-ADD CONSTRAINT chk_PricePositive CHECK (TotalPrice > 0);
+ADD CONSTRAINT chk_PricePositive CHECK (Price > 0);
 ALTER TABLE AttractionLog
 ADD CONSTRAINT chk_NumberOfOperationsPositive CHECK (NumberOfOperations > 0);
 ALTER TABLE Maintenance

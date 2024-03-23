@@ -1,4 +1,10 @@
 import React, { useState, useEffect } from "react";
+import { useAuth } from "../context/AuthContext";
+
+const TICKET_PRICES = {
+  GA: 60,
+  KI: 40,
+};
 
 export default function TicketPurchase() {
   const [numTickets, setNumTickets] = useState("");
@@ -7,6 +13,9 @@ export default function TicketPurchase() {
   const [products, setProducts] = useState([]);
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [totalPrice, setTotalPrice] = useState(0);
+  const [ticketPrices, setTicketPrices] = useState([]);
+
+  const userID = JSON.parse(localStorage.getItem("user")).UserID;
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -24,8 +33,6 @@ export default function TicketPurchase() {
 
     fetchProducts();
   }, []);
-
-  console.log(products);
 
   const handleNumTicketsChange = (e) => {
     const num = parseInt(e.target.value);
@@ -47,40 +54,61 @@ export default function TicketPurchase() {
     setTicketDetails(updatedTicketDetails);
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
+  const getTotalCost = () => {
     let totalPrice = 0;
+    const ticketPrices = []; // Array to store individual ticket prices
 
     ticketDetails.forEach((ticket) => {
-      const selectedTicket = products.find(
-        (product) => product.NameOfItem === ticket.ticketType
-      );
-
-      if (selectedTicket) {
-        totalPrice += parseFloat(selectedTicket.SalePrice);
-      }
+      const ticketTypeCost = TICKET_PRICES[ticket.ticketType];
+      let ticketPrice = ticketTypeCost;
 
       const selectedFood = products.find(
         (product) => product.NameOfItem === ticket.foodBundle
       );
-
-      if (selectedFood) {
-        totalPrice += parseFloat(selectedFood.SalePrice);
+      if (selectedFood && ticket.foodBundle !== "None") {
+        ticketPrice += parseFloat(selectedFood.SalePrice);
       }
 
       const selectedMerch = products.find(
         (product) => product.NameOfItem === ticket.merchBundle
       );
-
-      if (selectedMerch) {
-        totalPrice += parseFloat(selectedMerch.SalePrice);
+      if (selectedMerch && ticket.merchBundle !== "None") {
+        ticketPrice += parseFloat(selectedMerch.SalePrice);
       }
+
+      totalPrice += ticketPrice; // Add ticket price to total price
+      ticketPrices.push(ticketPrice); // Add ticket price to the array
     });
 
+    console.log(ticketPrices);
+    setTicketPrices(ticketPrices);
     setTotalPrice(totalPrice);
-
     setFormSubmitted(true);
+  };
+
+  const buyTicket = async () => {
+    try {
+      const response = await fetch("http://localhost:3001/ticketPurchase", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userID,
+          totalPrice,
+          ticketPrices,
+          ticketDetails,
+          purchaseDate: selectedDate,
+        }),
+      });
+      if (!response.ok) {
+        throw new Error("Failed to purchase tickets");
+      }
+      alert("Tickets have been purchased!");
+    } catch (error) {
+      console.error("Error purchasing tickets:", error);
+      alert("Failed to purchase tickets");
+    }
   };
 
   return (
@@ -103,7 +131,20 @@ export default function TicketPurchase() {
               **Customers under the age of 3 do not need a ticket and have free
               admission to Wonderland.
             </div>
-            <form onSubmit={handleSubmit}>
+            <div className="mt-2 mb-3">
+              <label htmlFor="purchaseDate" className="form-label">
+                Choose Date
+              </label>
+              <input
+                type="date"
+                className="form-control"
+                id="purchaseDate"
+                value={selectedDate}
+                onChange={(e) => setSelectedDate(e.target.value)}
+                required
+              />
+            </div>
+            <form onSubmit={(e) => e.preventDefault()}>
               <div className="mt-2 mb-3">
                 <label htmlFor="numOfTickets" className="form-label">
                   Number of Tickets
@@ -171,9 +212,12 @@ export default function TicketPurchase() {
                       }
                       required
                     >
-                      <option value="">Select Food Bundle</option>
+                      <option value="" disable hidden>
+                        Select Food Bundle
+                      </option>
+                      <option value="None">None</option>
                       {products
-                        .filter((product) => product.VendorType === "Food") // Filter products by VendorType
+                        .filter((product) => product.VendorType === "Food")
                         .map((product) => (
                           <option
                             key={product.ItemID}
@@ -204,11 +248,14 @@ export default function TicketPurchase() {
                       }
                       required
                     >
-                      <option value="">Select Merch Bundle</option>
+                      <option value="" disabled hidden>
+                        Select Merch Bundle
+                      </option>
+                      <option value="None">None</option>
                       {products
                         .filter(
                           (product) => product.VendorType === "Merchandise"
-                        ) // Filter products by VendorType
+                        )
                         .map((product) => (
                           <option
                             key={product.ItemID}
@@ -223,7 +270,12 @@ export default function TicketPurchase() {
               ))}
               <div className="flex flex-wrap -mx-3 mt-6">
                 <div className="w-full px-3 text-center">
-                  <button id="button" type="submit" className="btn btn-primary">
+                  <button
+                    id="button"
+                    type="button"
+                    className="btn btn-primary"
+                    onClick={getTotalCost}
+                  >
                     Get Total Cost
                   </button>
                 </div>
@@ -237,7 +289,7 @@ export default function TicketPurchase() {
                 <div className="w-full px-3 text-center">
                   <button
                     className="btn btn-primary mx-auto mt-3"
-                    onClick={() => alert("Tickets have been purchased!")}
+                    onClick={buyTicket}
                   >
                     Purchase
                   </button>
