@@ -189,7 +189,7 @@ const StaffSideNavbar = ({ onItemClick }) => {
                 className="list-group-submenu-item"
                 onClick={() => onItemClick("Edit Existing Maintenance Request")}
               >
-                Edit Existing Request
+                Update Existing Request
               </li>
               <li
                 className="list-group-submenu-item"
