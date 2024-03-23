@@ -85,6 +85,10 @@ SELECT *
 FROM sale
 
 -- @block
+SELECT *
+FROM ticket
+
+-- @block
 SELECT * 
 FROM attractionlog
 
