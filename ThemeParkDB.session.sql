@@ -26,6 +26,10 @@ FROM vendor
 DELETE FROM vendor
 
 -- @block INSERT PRODUCT DUMMY DATA
+INSERT INTO Department(DepName, HoursWorked)
+VALUES
+    ('Vendor', 0);
+
 INSERT INTO Vendor(NameOfVendor, VendorType, VendorStatus, DepName)
 VALUES
     ('Dominoes', 'Food', 'Active', 'Vendor'),
@@ -48,6 +52,16 @@ DELETE FROM product
 -- @block
 SELECT * 
 FROM sale
+
+-- @block
+DELETE FROM sale
+
+-- @block
+SELECT *
+FROM ticket
+
+-- @block
+DELETE FROM ticket
 
 -- @block
 SELECT * 
@@ -288,3 +302,11 @@ ALTER TABLE Product
 ADD CONSTRAINT chk_Profit CHECK (Profit >= 0);
 ALTER TABLE Product
 ADD CONSTRAINT chk_ProductStatus CHECK (ProductStatus IN ('Active', 'Inactive'));
+
+-- @block
+ALTER TABLE Ticket
+MODIFY COLUMN TicketType ENUM('GA', 'KI') NOT NULL;
+
+-- @block
+ALTER TABLE Sale
+DROP COLUMN DateValid;
