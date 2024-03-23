@@ -1,16 +1,124 @@
 import React from "react";
-import { useState } from "react";
-import MaintenanceFormTemplate from "../components/MaintenanceFormTemplate";
+import { useState, useEffect } from "react";
+import { useAuth } from "../context/AuthContext";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
-export default function MaintUpReq() {
+export default function MaintUpReq({ onSuccess }) {
   const [selectedRequest, setSelectedRequest] = useState("");
+  const [requestsData, setRequestsData] = useState([]);
+  const { currentUser } = useAuth();
 
-  const handleSelectChange = (event) => {
-    setSelectedRequest(event.target.value);
+  const [formData, setFormData] = useState({
+    userID: currentUser.UserID,
+    departmentName: "",
+    attractionName: "",
+    reasonForRequest: "",
+    submissionDate: new Date(),
+    completionDate: new Date(),
+    maintenanceStatus: "",
+    estimatedCost: "",
+    StateID: "", // Added StateID
+    RequestID: "", // Added RequestID
+  });
+
+  useEffect(() => {
+    const fetchMaintenanceIDs = async () => {
+      try {
+        const response = await fetch("http://localhost:3001/maintenanceInfo");
+        if (!response.ok) {
+          throw new Error("Error retrieving maintenance info");
+        }
+        const data = await response.json();
+        console.log("Fetched maintenance requests data:", data);
+        setRequestsData(data); // Save the full data
+      } catch (error) {
+        console.error("Error fetching maintenance requests:", error);
+      }
+    };
+
+    fetchMaintenanceIDs();
+  }, []);
+
+  const isValidDate = (date) => {
+    return date instanceof Date && !isNaN(date);
   };
 
-  const handleSubmit = (formData) => {
-    // Handle the submitted form data specifically for Page 1
+  const handleSelectChange = (event) => {
+    const requestId = Number(event.target.value);
+    console.log("Selected Request ID:", requestId);
+    const selectedRequestData = requestsData.find(
+      (item) => item.RequestID === requestId
+    );
+
+    if (selectedRequestData) {
+      const submissionDate = new Date(selectedRequestData.Date);
+      const completionDate = new Date(selectedRequestData.DateCompleted);
+      setSelectedRequest(requestId);
+      setFormData({
+        userID: currentUser.UserID,
+        departmentName: selectedRequestData.DepName || "",
+        attractionName: selectedRequestData.NameOfAttraction || "",
+        reasonForRequest: selectedRequestData.DescriptionOfRequest || "",
+        submissionDate: isValidDate(submissionDate)
+          ? submissionDate
+          : new Date(),
+        completionDate: isValidDate(completionDate)
+          ? completionDate
+          : new Date(),
+        maintenanceStatus: selectedRequestData.MaintenanceStatus || "",
+        estimatedCost: selectedRequestData.Expense || "",
+        StateID: selectedRequestData.StateID, // Set StateID
+        RequestID: selectedRequestData.RequestID, // Set RequestID
+      });
+    } else {
+      console.error("No matching request data found.");
+    }
+  };
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const requestIDs = requestsData.map((item) => item.RequestID);
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const { submissionDate, completionDate, ...restOfFormData } = formData;
+
+    const updatedFormData = {
+      ...restOfFormData,
+      submissionDate: submissionDate.toISOString().split("T")[0], // Correct variable reference
+      completionDate: completionDate.toISOString().split("T")[0], // Correct variable reference
+    };
+
+    console.log("Submitting:", updatedFormData);
+
+    try {
+      const response = await fetch(
+        "http://localhost:3001/maintenanceUpdateRequest",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(updatedFormData),
+        }
+      );
+      if (response.ok) {
+        const responseData = await response.json();
+        console.log("Request updated successfully:", responseData);
+
+        if (onSuccess) {
+          onSuccess();
+        }
+      } else {
+        console.error("Failed to update request.");
+      }
+    } catch (error) {
+      console.error("Error submitting maintenance request:", error);
+    }
   };
 
   if (selectedRequest) {
@@ -22,7 +130,223 @@ export default function MaintUpReq() {
               <h1 className="my-2 text-center" style={{ color: "#2F4858" }}>
                 Update Maintenance Request {selectedRequest}
               </h1>
-              <MaintenanceFormTemplate onSubmit={handleSubmit} />
+              <>
+                <form onSubmit={handleSubmit}>
+                  <div className="row">
+                    <div className="col-md-6">
+                      <div className="mb-2">
+                        <label
+                          htmlFor="userID"
+                          className="form-label"
+                          style={{
+                            color: "#2F4858",
+                            fontSize: "18px",
+                            fontWeight: "bold",
+                          }}
+                        >
+                          Employee ID*
+                        </label>
+                        <input
+                          className="form-control"
+                          type="text"
+                          placeholder="Numeric ID assigned to each employee"
+                          aria-label="Numeric ID assigned to each employee"
+                          value={currentUser.UserID}
+                          onChange={handleChange}
+                        ></input>
+                      </div>
+
+                      <div className="mb-2">
+                        <label
+                          htmlFor="departmentName"
+                          className="form-label"
+                          style={{
+                            color: "#2F4858",
+                            fontSize: "18px",
+                            fontWeight: "bold",
+                          }}
+                        >
+                          Department Name*
+                        </label>
+                        <input
+                          className="form-control"
+                          type="text"
+                          name="departmentName"
+                          placeholder="Name of Department"
+                          aria-label="Name of Department"
+                          value={formData.departmentName}
+                          onChange={handleChange}
+                        ></input>
+                      </div>
+
+                      <div className="mb-2">
+                        <label
+                          htmlFor="attractionName"
+                          className="form-label"
+                          style={{
+                            color: "#2F4858",
+                            fontSize: "18px",
+                            fontWeight: "bold",
+                          }}
+                        >
+                          Attraction Name*
+                        </label>
+                        <input
+                          className="form-control"
+                          type="text"
+                          name="attractionName"
+                          placeholder="Name of Attraction"
+                          aria-label="Name of Attraction"
+                          value={formData.attractionName}
+                          onChange={handleChange}
+                        ></input>
+                      </div>
+
+                      <div className="mb-2">
+                        <label
+                          htmlFor="reasonForRequest"
+                          className="form-label"
+                          style={{
+                            color: "#2F4858",
+                            fontSize: "18px",
+                            fontWeight: "bold",
+                          }}
+                        >
+                          Reason for Request*
+                        </label>
+                        <div className="mb-3">
+                          <textarea
+                            className="form-control"
+                            name="reasonForRequest"
+                            rows="3"
+                            value={formData.reasonForRequest}
+                            onChange={handleChange}
+                          ></textarea>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="col-md-6">
+                      <div className="mb-0">
+                        <label
+                          htmlFor="datePicker"
+                          className="form-label"
+                          style={{
+                            color: "#2F4858",
+                            fontSize: "18px",
+                            fontWeight: "bold",
+                          }}
+                        >
+                          Date Submitted*
+                        </label>
+                      </div>
+                      <div>
+                        <div style={{ marginBottom: "10px" }}>
+                          <DatePicker
+                            selected={
+                              isValidDate(new Date(formData.submissionDate))
+                                ? new Date(formData.submissionDate)
+                                : new Date()
+                            }
+                            onChange={(date) =>
+                              setFormData({ ...formData, submissionDate: date })
+                            }
+                            className="form-control"
+                            dateFormat="MMMM d, yyyy"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="mb-0">
+                        <label
+                          htmlFor="datePicker"
+                          className="form-label"
+                          style={{
+                            color: "#2F4858",
+                            fontSize: "18px",
+                            fontWeight: "bold",
+                          }}
+                        >
+                          Expected Completion Date*
+                        </label>
+                      </div>
+                      <div>
+                        <div style={{ marginBottom: "10px" }}>
+                          <DatePicker
+                            selected={
+                              isValidDate(new Date(formData.completionDate))
+                                ? new Date(formData.completionDate)
+                                : new Date()
+                            }
+                            onChange={(date) =>
+                              setFormData({ ...formData, completionDate: date })
+                            }
+                            className="form-control"
+                            dateFormat="MMMM d, yyyy"
+                          />
+                        </div>
+
+                        <div className="mb-2">
+                          <label
+                            htmlFor="attractionID"
+                            className="form-label"
+                            style={{
+                              color: "#2F4858",
+                              fontSize: "18px",
+                              fontWeight: "bold",
+                            }}
+                          >
+                            Maintenance Status*
+                          </label>
+                          <div style={{ marginBottom: "10px" }}>
+                            <select
+                              className="form-select"
+                              aria-label="Maintenance Status"
+                              defaultValue=""
+                              onChange={handleChange}
+                            >
+                              <option defaultValue>Select Menu</option>
+                              <option value="Pending">Pending</option>
+                              <option value="Active">Active</option>
+                              <option value="Completed" disabled>
+                                Completed
+                              </option>
+                            </select>
+                          </div>
+
+                          <div className="mb-2">
+                            <label
+                              htmlFor="attractionID"
+                              className="form-label"
+                              style={{
+                                color: "#2F4858",
+                                fontSize: "18px",
+                                fontWeight: "bold",
+                              }}
+                            >
+                              Estimated Cost of Maintenance*
+                            </label>
+                            <input
+                              className="form-control"
+                              type="text"
+                              name="estimatedCost"
+                              placeholder="$"
+                              aria-label="$"
+                              value={formData.estimatedCost}
+                              onChange={handleChange}
+                            ></input>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="d-grid gap-2 col-6 mx-auto">
+                    <button className="btn btn-primary" type="submit">
+                      Submit
+                    </button>
+                  </div>
+                </form>
+              </>
             </div>
           </div>
         </div>
@@ -50,15 +374,15 @@ export default function MaintUpReq() {
               Request ID*
             </label>
             <select
-              class="form-select"
+              className="form-select"
               aria-label="Default select example"
               value={selectedRequest}
               onChange={handleSelectChange}
             >
-              <option selected>Select Maintenance ID to Edit</option>
-              <option value="1">One</option>
-              <option value="2">Two</option>
-              <option value="3">Three</option>
+              <option defaultValue="">Select Maintenance ID to Update</option>
+              {requestIDs.map((id) => (
+                <option key={id} value={id}>{`${id}`}</option>
+              ))}
             </select>
 
             <div className="mt-3 text-center">

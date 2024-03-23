@@ -117,10 +117,10 @@ const AdminLanding = () => {
             )}
             {selectedPage === "Purchase Tickets" && <StaffTicketPurchase />}
             {selectedPage === "Create New Maintenance Request" && (
-              <MaintenanceRequestForm />
+              <MaintenanceRequestForm onSuccess={handleFormSubmissionSuccess} />
             )}
             {selectedPage === "Edit Existing Maintenance Request" && (
-              <MaintenanceUpReq />
+              <MaintenanceUpReq onSuccess={handleFormSubmissionSuccess} />
             )}
             {selectedPage === "Complete Existing Maintenance Request" && (
               <MaintenanceCompReq />
