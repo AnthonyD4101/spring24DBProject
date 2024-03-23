@@ -11,6 +11,8 @@ const StaffSideNavbar = ({ onItemClick }) => {
   const { currentUser } = useAuth();
   const role = currentUser?.Position;
 
+  const roletype = currentUser?.Department;
+
   const toggleDataReportsDropdown = () => {
     setIsDataReportsOpen(!isDataReportsOpen);
   };
@@ -30,7 +32,7 @@ const StaffSideNavbar = ({ onItemClick }) => {
           className="list-group-item"
           onClick={() => onItemClick("Dashboard")}
         >
-          Dashboard
+          Dashboard {currentUser.Department}
         </li>
 
         <li
@@ -70,7 +72,9 @@ const StaffSideNavbar = ({ onItemClick }) => {
                 >
                   Delete Employee
                 </li>
-                <li
+                {(roletype === "Attraction" || role === "Admin") && (
+                  <>
+                  <li
                   className="list-group-submenu-item"
                   onClick={() => onItemClick("Add Attraction Data Entry Form")}
                 >
@@ -92,6 +96,10 @@ const StaffSideNavbar = ({ onItemClick }) => {
                 >
                   Delete Attraction
                 </li>
+                  </>
+                )}
+                {(roletype === "Vendor" || role === "Admin") && (
+                  <>
                 <li
                   className="list-group-submenu-item"
                   onClick={() => onItemClick("Add Vendor Data Entry Form")}
@@ -110,6 +118,10 @@ const StaffSideNavbar = ({ onItemClick }) => {
                 >
                   Delete Vendor
                 </li>
+                </>
+                )}
+                {(roletype === "Attraction" || role === "Admin") && (
+                  <>
                 <li
                   className="list-group-submenu-item"
                   onClick={() =>
@@ -118,6 +130,8 @@ const StaffSideNavbar = ({ onItemClick }) => {
                 >
                   Add to Attraction Log
                 </li>
+                </>
+                )}
 
                 {(role === "Admin" || role === "Park Manager") && (
                   <>
@@ -147,7 +161,8 @@ const StaffSideNavbar = ({ onItemClick }) => {
                     </li>
                   </>
                 )}
-
+                {(roletype === "Vendor" || role === "Admin") && (
+                  <>
                 <li
                   className="list-group-submenu-item"
                   onClick={() => onItemClick("Add Product Data Entry Form")}
@@ -166,6 +181,8 @@ const StaffSideNavbar = ({ onItemClick }) => {
                 >
                   Delete Product
                 </li>
+                </>
+                )}
               </ul>
             )}
           </li>
