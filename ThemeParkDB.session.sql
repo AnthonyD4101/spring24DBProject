@@ -1,75 +1,4 @@
--- @block
-SELECT *
-FROM account 
--- @block
-SELECT *
-FROM customer
-
--- @block
-SELECT * 
-FROM employee
-
--- @block
-SELECT * 
-FROM department
-
--- @block
-SELECT * 
-FROM attraction
-
--- @block
-SELECT * 
-FROM vendor
-
--- @block
-DELETE FROM vendor
-
--- @block INSERT PRODUCT DUMMY DATA
-INSERT INTO Vendor(NameOfVendor, VendorType, VendorStatus, DepName)
-VALUES
-    ('Dominoes', 'Food', 'Active', 'Vendor'),
-    ('Five Guys', 'Food', 'Active', 'Vendor'),
-    ('Crocs', 'Merchandise', 'Active', 'Vendor');
-INSERT INTO Product(ItemID, NameOfItem, NameOfVendor, AcquisitionCost, SalePrice, Profit, Description, ProductStatus)
-VALUES
-    (1, 'Pizza', 'Dominoes', 5, 10, 5, 'Large slice of pepperoni pizza', 'Active'),
-    (2, 'Burger', 'Five Guys', 5, 9, 4, 'All classic, American burger', 'Active'),
-    (3, 'Park Crocs', 'Crocs', 6, 12, 6, 'Comfortable park wear', 'Active');
-
--- @block
-SELECT * 
-FROM product
-
--- @block
-DELETE FROM product
-
--- @block
-SELECT * 
-FROM sale
-
--- @block
-DELETE FROM sale
-
--- @block
-SELECT *
-FROM ticket
-
--- @block
-DELETE FROM ticket
-
--- @block
-SELECT * 
-FROM attractionlog
-
--- @block
-SELECT * 
-FROM maintenance
-
--- @block
-SELECT * 
-FROM weatherlog
-
--- @block
+-- @block CREATE DATABASE
 DROP DATABASE IF EXISTS parkdb;
 CREATE DATABASE parkDB;
 USE parkDB;
@@ -104,6 +33,7 @@ DROP TABLE IF EXISTS Employee;
 CREATE TABLE Employee (
     UserID INT PRIMARY KEY,
     FirstName VARCHAR(30) NOT NULL,
+    MiddleName VARCHAR(10),
     LastName VARCHAR(30) NOT NULL,
     PhoneNumber VARCHAR(14) NOT NULL,
     Email VARCHAR(100) UNIQUE NOT NULL,
@@ -180,7 +110,7 @@ DROP TABLE IF EXISTS Ticket;
 CREATE TABLE Ticket (
     TicketID INT AUTO_INCREMENT PRIMARY KEY,
     SaleID INT,
-    TicketType ENUM('Food', 'Merchandise', 'Other') NOT NULL,
+    TicketType ENUM('GA', 'KI') NOT NULL,
     FoodItemID INT,
     MerchItemID INT,
     TicketPrice DECIMAL(6, 2) NOT NULL,
@@ -274,7 +204,7 @@ ADD CONSTRAINT chk_AttractionStatus CHECK (
 ALTER TABLE Attraction
 ADD CONSTRAINT chk_AttractionType CHECK (AttractionType IN ('Ride', 'Show'));
 ALTER TABLE Sale
-ADD CONSTRAINT chk_PricePositive CHECK (Price > 0);
+ADD CONSTRAINT chk_PricePositive CHECK (TotalPrice > 0);
 ALTER TABLE AttractionLog
 ADD CONSTRAINT chk_NumberOfOperationsPositive CHECK (NumberOfOperations > 0);
 ALTER TABLE Maintenance
@@ -294,15 +224,7 @@ ADD CONSTRAINT chk_Profit CHECK (Profit >= 0);
 ALTER TABLE Product
 ADD CONSTRAINT chk_ProductStatus CHECK (ProductStatus IN ('Active', 'Inactive'));
 
--- @block
-ALTER TABLE Ticket
-MODIFY COLUMN TicketType ENUM('GA', 'KI') NOT NULL;
-
--- @block
-ALTER TABLE Sale
-DROP COLUMN DateValid;
-
--- @block
+-- @block DELETE DISCOUNT TRIGGER
 DROP TRIGGER IF EXISTS saleDiscount;
 
 -- @block DISCOUNT TRIGGER
@@ -328,3 +250,108 @@ BEGIN
         SET NEW.TotalPrice = newTotal;
     END IF;
 END;
+
+-- @block Update Initial to Admin
+UPDATE Account
+SET AccountType = 'Employee'
+WHERE UserID = 1;
+
+-- @block
+INSERT INTO Employee(UserID, FirstName, LastName, PhoneNumber, Email, Position, Salary, Status, DepName, ScheduleType)
+VALUES
+    (1, 'Robert', 'Johnson', '8321111111', 'wonderlandadmin@gmail.com', 'Admin', 700000, 'Active', 'Central', 'First Shift');
+
+-- @block Delete Account Entries
+DELETE FROM Account;
+
+-- @block Inserting Departments
+INSERT INTO Department(DepName, HoursWorked)
+VALUES
+    ('Vendor', 0),
+    ('Attraction', 0),
+    ('Central', 0);
+
+-- @block Delete Departments
+DELETE FROM Department
+
+-- @block Vendor and Product Bundle Dummy Data for Checkpoint 3
+INSERT INTO Vendor(NameOfVendor, VendorType, VendorStatus, DepName)
+VALUES
+    ('Wonder Burgers', 'Food', 'Active', 'Vendor'),
+    ('Wonder Delicacies', 'Food', 'Active', 'Vendor'),
+    ('Wonderland Gift Shop', 'Merchandise', 'Active', 'Vendor');
+
+INSERT INTO Product(ItemID, NameOfItem, NameOfVendor, AcquisitionCost, SalePrice, Profit, Description, ProductStatus)
+VALUES
+    (1, 'Double Cheeseburger Bundle', 'Wonder Burgers', 6, 11, 5, 'Double cheeseburger with a side of curly fries!', 'Active'),
+    (2, 'Loaded Bacon Burger Bundle', 'Wonder Burgers', 8, 14, 6, 'More bacon than ever, comes with a side of fries and a small drink!', 'Active'),
+    (3, 'Cold Sweets Bundle', 'Wonder Delicacies', 6, 15, 9, 'Comes with an soft serve ice-cream, banana split sundae, and 3 popsicles of your choice!', 'Active'),
+    (4, 'Candy Bundle', 'Wonder Delicacies', 5, 10, 5, 'Get your hands on chocolate covered almonds, gummies and our trademark laffy taffy!', 'Active'),
+    (5, 'Wonderland Summer Day Survival Pack', 'Wonderland Gift Shop', 5, 9, 4, 'Stay cool from the heat with our park sunglasses, small fan and lightweight tee!', 'Active'),
+    (6, 'Wonderland Souvenir Pack', 'Wonderland Gift Shop', 7, 20, 13, 'Trademark park tee and shorts to march!', 'Active');
+
+-- @block Delete Vendor and Product
+DELETE FROM Vendor;
+DELETE FROM Product;
+
+-- @block
+SELECT *
+FROM account 
+-- @block
+SELECT *
+FROM customer
+
+-- @block
+DELETE FROM customer
+
+-- @block
+SELECT * 
+FROM employee
+
+-- @block
+SELECT * 
+FROM department
+
+-- @block
+SELECT * 
+FROM attraction
+
+-- @block
+SELECT * 
+FROM vendor
+
+-- @block
+DELETE FROM vendor
+
+-- @block
+SELECT * 
+FROM product
+
+-- @block
+DELETE FROM product
+
+-- @block
+SELECT * 
+FROM sale
+
+-- @block
+DELETE FROM sale
+
+-- @block
+SELECT *
+FROM ticket
+
+-- @block
+DELETE FROM ticket
+
+-- @block
+SELECT * 
+FROM attractionlog
+
+-- @block
+SELECT * 
+FROM maintenance
+
+-- @block
+SELECT * 
+FROM weatherlog
