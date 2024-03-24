@@ -1,17 +1,25 @@
 import React, { useState, useEffect } from "react";
 
 export default function UpdateProduct() {
-  const [productID, setProductID] = useState("");
+  const [itemID, setItemID] = useState("");
   const [productData, setProductData] = useState(null);
   const [isSubmitted, setisSubmitted] = useState(false);
   const [error, setError] = useState(null);
 
   const vendors = ["Adventure Bites Eatery", "Fantasy Finds Boutique"];
-
+  
+  const [products, setProducts] = useState(null);
+  const [isSet, setIsSet] = useState(false);
+  const [creationSuccess, setCreationSuccess] = useState(false);
+  const [errors, setErrors] = useState([]);
+  const [errorFields, setErrorFields] = useState([]);
+  
   useEffect(() => {
-    if (productID) {
-      /* Fetch product data from your backend based on the productID to be implemented later (backend)
-          fetch(`your_api_endpoint/${productID}`)
+
+    /*
+    if (itemID) {
+      /* Fetch product data from your backend based on the itemID to be implemented later (backend)
+          fetch(`your_api_endpoint/${itemID}`)
             .then((response) => {
               if (response.ok) {
                 return response.json();
@@ -21,7 +29,7 @@ export default function UpdateProduct() {
             })
             .then((data) => setProductData(data))
             .catch((error) => setError(error.message));*/
-
+/*
       setProductData({
         name: "Pizza Delight Bundle",
         vendor: "Adventure Bites Eatery",
@@ -31,20 +39,88 @@ export default function UpdateProduct() {
         status: "Active",
       });
     }
-  }, [productID]);
+    */
+    const fetchProducts = async () => {
+      const response = await fetch("http://localhost:3001/getProducts", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
-  const handleSubmitOne = (e) => {
+      const json = await response.json();
+      console.log(json);
+
+      if (!response.ok) {
+        console.log("Failed to fetch product data");
+      }
+      if (response.ok) {
+        setProducts(json);
+        setIsSet(true);
+      }
+    };
+
+    fetchProducts();
+  },[]);// [itemID]);
+
+  const handleSubmitOne = async (e) => {
     e.preventDefault();
-    setisSubmitted(true);
+    setProductData(null);
+    setisSubmitted(false);
     // Form submission logic
-    console.log(productData);
+
+    try {
+      const response = await fetch(`http://localhost:3001/getProduct/${encodeURIComponent(itemID)}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const json = await response.json();
+      console.log(json);
+
+      if (!response.ok) {
+        console.log("Failed to fetch product data");
+      }
+      if (response.ok) {
+        setProductData(json[0]);
+        setisSubmitted(true);
+      }
+    } catch (error) {
+      console.log("Error:", error.message);
+    }
   };
 
-  const handleSubmitTwo = (e) => {
+  const handleSubmitTwo = async (e) => {
     e.preventDefault();
-    // Form submission logic
-    console.log(productData);
-    alert("Product Information has been Updated");
+    setCreationSuccess(false);
+
+    const formData = productData;
+
+    try {
+      const response = await fetch(`http://localhost:3001/updateProduct/${encodeURIComponent(itemID)}`, {
+        method: "PUT",
+        body: JSON.stringify(formData),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const json = await response.json();
+
+      if (!response.ok) {
+        setErrors(json.errors);
+        setErrorFields(json.errorFields);
+      }
+      if (response.ok) {
+        setErrors([]);
+        setErrorFields([]);
+        setCreationSuccess(true);
+      }
+    } catch (error) {
+      console.log("Error:", error.message);
+    }
   };
 
   return (
@@ -59,22 +135,30 @@ export default function UpdateProduct() {
               Please enter the Product ID of the Product you would like to
               update.
             </div>
+
+            {isSet && (
             <form onSubmit={handleSubmitOne}>
               <div className="mb-3 mt-3">
-                <label htmlFor="productID" className="form-label">
+                <label htmlFor="itemID" className="form-label">
                   Enter Product ID:
                 </label>
                 <input
+                  list="products"
                   type="number"
                   className="form-control"
-                  id="productID"
-                  name="productID"
+                  id="itemID"
+                  name="itemID"
                   placeholder="12345"
                   maxLength="10"
                   required
-                  value={productID}
-                  onChange={(e) => setProductID(e.target.value)}
+                  value={itemID}
+                  onChange={(e) => setItemID(e.target.value)}
                 />
+                <datalist id="products">
+                  {products.map((type, index) => (
+                    <option key={index} value={type.ItemID} />
+                  ))}
+                </datalist>
               </div>
               <div className="flex flex-wrap -mx-3 mt-6">
                 <div className="w-full px-3 text-center">
@@ -83,7 +167,7 @@ export default function UpdateProduct() {
                   </button>
                 </div>
               </div>
-            </form>
+            </form>)}
 
             {isSubmitted && (
               <form onSubmit={handleSubmitTwo}>
@@ -94,12 +178,12 @@ export default function UpdateProduct() {
                     </label>
                     <input
                       type="text"
-                      className="form-control"
+                      className={errorFields.includes("NameOfItem") ? "error form-control" : "form-control"}
                       id="name"
                       name="name"
-                      value={productData.name}
+                      value={productData.NameOfItem}
                       onChange={(e) =>
-                        setProductData({ ...productData, name: e.target.value })
+                        setProductData({ ...productData, NameOfItem: e.target.value })
                       }
                     />
                   </div>
@@ -109,14 +193,14 @@ export default function UpdateProduct() {
                     </label>
                     <input
                       list="vendors"
-                      className="form-control"
+                      className={errorFields.includes("NameOfVendor") ? "error form-control" : "form-control"}
                       id="vendor"
                       name="vendor"
-                      value={productData.vendor}
+                      value={productData.NameOfVendor}
                       onChange={(e) =>
                         setProductData({
                           ...productData,
-                          vendor: e.target.value,
+                          NameOfVendor: e.target.value,
                         })
                       }
                     />
@@ -134,14 +218,14 @@ export default function UpdateProduct() {
                     </label>
                     <input
                       type="number"
-                      className="form-control"
+                      className={errorFields.includes("AcquisitionCost") ? "error form-control" : "form-control"}
                       id="cost"
                       name="cost"
                       value={productData.acquisitionCost}
                       onChange={(e) =>
                         setProductData({
                           ...productData,
-                          acquisitionCost: e.target.value,
+                          AcquisitionCost: e.target.value,
                         })
                       }
                     />
@@ -154,7 +238,7 @@ export default function UpdateProduct() {
                     </label>
                     <input
                       type="number"
-                      className="form-control"
+                      className={errorFields.includes("SalePrice") ? "error form-control" : "form-control"}
                       id="price"
                       name="price"
                       placeholder="15.00"
@@ -163,7 +247,7 @@ export default function UpdateProduct() {
                       onChange={(e) =>
                         setProductData({
                           ...productData,
-                          salePrice: e.target.value,
+                          SalePrice: e.target.value,
                         })
                       }
                     />
@@ -173,7 +257,7 @@ export default function UpdateProduct() {
                       Description of Product:
                     </label>
                     <textarea
-                      className="form-control"
+                      className={errorFields.includes("Description") ? "error form-control" : "form-control"}
                       id="desc"
                       name="desc"
                       rows="5"
@@ -181,7 +265,7 @@ export default function UpdateProduct() {
                       onChange={(e) =>
                         setProductData({
                           ...productData,
-                          description: e.target.value,
+                          Description: e.target.value,
                         })
                       }
                     />
@@ -198,9 +282,20 @@ export default function UpdateProduct() {
                     </button>
                   </div>
                 </div>
+                {errors.length>0 ?  (
+                <ul className="error">
+                  {errors.map((error, index) => (
+                    <li key={index}>{error}</li>
+                  ))}
+                </ul>
+              ) : ""}
               </form>
             )}
-            {error && <div>Error: {error}</div>}
+            {creationSuccess && (
+              <div className="alert alert-success my-3" role="alert">
+                Product Updated Successfully!
+              </div>
+            )}
           </div>
         </div>
       </div>

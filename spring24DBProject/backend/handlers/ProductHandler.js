@@ -113,7 +113,7 @@ function handleGetProduct(req, res) {
   const pathname = url.parse(req.url).pathname;
   const name = decodeURIComponent(pathname.substring("/getProduct/".length));
 
-  const query = "SELECT * FROM Product WHERE ProductStatus=? AND NameOfItem=?";
+  const query = "SELECT * FROM Product WHERE ProductStatus=? AND ItemID=?";
   poolConnection.query(query,
   ['Active', name], 
   (error, results) => {
@@ -124,7 +124,7 @@ function handleGetProduct(req, res) {
       return;
     }
 
-    // Attraction added successfully
+    // Product added successfully
     res.writeHead(200, { "Content-Type": "product/json" });
     res.end(JSON.stringify(results));
   });
@@ -141,36 +141,40 @@ function handleUpdateProduct(req, res) {
     // Parse the body string to JSON
     const formData = JSON.parse(requestBody);
     const {
-      name,
-      vendor,
-      acquisitionCost,
-      price,
-      description,
-      status,
+      ItemID, //ignored
+      NameOfItem,
+      NameOfVendor,
+      AcquisitionCost,
+      SalePrice,
+      Profit, //ignored
+      Description,
+      ProductStatus,
     } = formData;
+
+    
 
     let errors = [];
     let errorFields = [];
 
-    let profit = price - acquisitionCost;
+    let profit = SalePrice - AcquisitionCost;
 
-    if (name.length > 30) {
+    if (NameOfItem.length > 30) {
       errors.push("Name must be 30 characters or less");
       errorFields.push("name");
     }
 
-    if (vendor.length > 30) {
+    if (NameOfVendor.length > 30) {
       errors.push("Vendor name must be 30 characters or less");
       errorFields.push("vendor");
     }
 
-    if (acquisitionCost < 0) {
+    if (AcquisitionCost < 0) {
       errors.push("Shipment Cost must be non-negative");
       errorFields.push("acquisitionCost");
     }
 
 
-    if (price < 0) {
+    if (SalePrice < 0) {
       errors.push("Sell Price must be non-negative");
       errorFields.push("price");
     }
@@ -192,15 +196,15 @@ function handleUpdateProduct(req, res) {
     const pathname = url.parse(req.url).pathname;
     const pname = decodeURIComponent(pathname.substring("/updateProduct/".length));
 
-    const query = "UPDATE Product SET NameOfItem=?, NameOfVendor=?, AcquisitionCost=?, SalePrice=?, Profit=?, Description=? WHERE ProductStatus=? AND NameOfItem=?";
+    const query = "UPDATE Product SET NameOfItem=?, NameOfVendor=?, AcquisitionCost=?, SalePrice=?, Profit=?, Description=? WHERE ProductStatus=? AND ItemID=?";
     poolConnection.query(query,
       [
-        name, 
-        vendor, 
-        acquisitionCost, 
-        price, 
+        NameOfItem, 
+        NameOfVendor, 
+        AcquisitionCost, 
+        SalePrice, 
         profit,
-        description, 
+        Description, 
         "Active",
         pname
       ],
@@ -226,7 +230,7 @@ function handleDeleteProduct(req, res) {
   const pathname = url.parse(req.url).pathname;
   const name = decodeURIComponent(pathname.substring("/deleteProduct/".length));
 
-  const query = "UPDATE Product SET ProductStatus=? WHERE NameOfItem=? AND ProductStatus=?";
+  const query = "UPDATE Product SET ProductStatus=? WHERE ItemID=? AND ProductStatus=?";
   poolConnection.query(query,
   ['Inactive', name, 'Active'], 
   (error, results) => {

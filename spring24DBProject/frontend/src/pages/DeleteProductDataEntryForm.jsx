@@ -1,21 +1,70 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 export default function DeleteProduct() {
   const [productID, setProductID] = useState("");
   const [status, setStatus] = useState("");
 
+  const [products, setProducts] = useState(null);
+  const [isSet, setIsSet] = useState(false);
+  const [creationSuccess, setCreationSuccess] = useState(false);
+
+
   const reasons = ["Out of Order", "Inactive"];
 
-  const handleSubmit = (event) => {
+  useEffect(() => {
+    // Fetch product data from your backend based on the productID to be implemented later (backend)
+    const fetchProducts = async () => {
+      const response = await fetch("http://localhost:3001/getProducts", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const json = await response.json();
+      console.log(json);
+
+      if (!response.ok) {
+        console.log("Failed to fetch product data");
+      }
+      if (response.ok) {
+        setProducts(json);
+        setIsSet(true);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
+    setCreationSuccess(false);
 
     const formData = {
       productID,
       status,
     };
 
-    console.log(formData);
-    alert("Product has been Deleted");
+    try {
+      const response = await fetch(`http://localhost:3001/deleteProduct/${encodeURIComponent(productID)}`, {
+        method: "PUT",
+        body: JSON.stringify(formData),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const json = await response.json();
+
+      if (!response.ok) {
+        console.log(`Error: ${response.message}`)
+      }
+      if (response.ok) {
+        setCreationSuccess(true);
+      }
+    } catch (error) {
+      console.log("Error:", error.message);
+    }
   };
 
   return (
@@ -30,6 +79,7 @@ export default function DeleteProduct() {
               Please enter the Product ID of the Product you would like to
               delete.
             </div>
+            {isSet && (
             <form onSubmit={handleSubmit}>
               <div className="mb-3 mt-3">
                 <label htmlFor="productID" className="form-label">
@@ -74,7 +124,13 @@ export default function DeleteProduct() {
                   </button>
                 </div>
               </div>
-            </form>
+            </form>)}
+
+            {creationSuccess && (
+              <div className="alert alert-success my-3" role="alert">
+                Product Deleted Successfully!
+              </div>
+            )}
           </div>
         </div>
       </div>

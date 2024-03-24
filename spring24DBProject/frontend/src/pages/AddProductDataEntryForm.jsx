@@ -172,7 +172,7 @@ export default function AddProduct() {
             </form>
             {creationSuccess && (
               <div className="alert alert-success my-3" role="alert">
-                Attraction Created Successfully!
+                Product Created Successfully!
               </div>
             )}
           </div>
